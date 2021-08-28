@@ -1,0 +1,49 @@
+<template>
+  <div>
+    <div class="label">
+      <label :for="name">{{ label }}:</label>
+    </div>
+    <div class="input">
+      <input class="input-box"
+             :type="getType(isPassword)"
+             :id="name"
+             :value="modelValue"
+             @input="$emit('update:model-value',$event.target.value)">
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "InfoInput",
+  props: ["label", "isPassword", 'name', 'modelValue'],
+  emits: ['update:model-value'],
+  methods: {
+    getType(isPassword) {
+      return isPassword === "true" ? "password" : "text"
+    }
+  }
+}
+</script>
+
+<style scoped>
+.label {
+  display: inline-block;
+  width: 100px;
+  font-weight: 700;
+}
+
+.input {
+  display: inline-block;
+}
+
+.input-box {
+  border-radius: 20px;
+  border-width: 0;
+  outline-style: none;
+  background-color: #eeeeee;
+  width: 200px;
+  height: 40px;
+  padding-left: 20px;
+}
+</style>
