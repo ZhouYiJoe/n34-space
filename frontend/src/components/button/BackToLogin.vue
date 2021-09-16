@@ -17,5 +17,6 @@ export default {
 
 .container:hover {
   color: blue;
+  cursor: pointer;
 }
 </style>

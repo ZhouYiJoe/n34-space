@@ -7,20 +7,24 @@
       <input class="input-box"
              :type="getType(isPassword)"
              :id="name"
-             :value="modelValue"
-             @input="$emit('update:model-value',$event.target.value)">
-    </div>
+             v-model="text">
+    </div><br>
+    <div id="tip">{{ tip }}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: "InfoInput",
-  props: ["label", "isPassword", 'name', 'modelValue'],
-  emits: ['update:model-value'],
+  props: ["label", "isPassword", 'name', 'tip'],
+  data() {
+    return {
+      text: ""
+    }
+  },
   methods: {
     getType(isPassword) {
-      return isPassword === "true" ? "password" : "text"
+      return isPassword === true ? "password" : "text"
     }
   }
 }
@@ -45,5 +49,15 @@ export default {
   width: 200px;
   height: 40px;
   padding-left: 20px;
+}
+
+#tip {
+  color: gray;
+  margin-top: 10px;
+  margin-left: 100px;
+  width: 200px;
+  text-align: center;
+  font-size: 10px;
+  height: fit-content;
 }
 </style>

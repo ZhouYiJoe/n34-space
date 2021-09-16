@@ -20,6 +20,7 @@ button {
 
 button:hover {
   background-color: #49a03e;
+  cursor: pointer;
 }
 
 button:active {

@@ -5,6 +5,8 @@ import Register from "@/views/Register";
 import User from "@/views/User";
 import Home from "@/views/Home";
 import axios from "axios";
+import Posts from "@/views/Posts";
+import FourOFour from "@/views/FourOFour";
 
 Vue.use(VueRouter)
 
@@ -25,6 +27,14 @@ const router = new VueRouter({
         {
             path: "/home",
             component: Home
+        },
+        {
+            path: "/posts/:username",
+            component: Posts
+        },
+        {
+            path: "/404",
+            component: FourOFour
         }
     ],
     mode: "history"
