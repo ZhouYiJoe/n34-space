@@ -1,0 +1,56 @@
+version: "3.2"
+services:
+  n34_mysql:
+    image: mysql
+    container_name: n34_mysql
+    networks:
+      - n34
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_conf:/etc/mysql/conf
+      - mysql_logs:/logs
+      - mysql_data:/var/lib/mysql
+    env_file:
+      - mysql.env
+
+  backend:
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - n34_mysql
+    container_name: n34_backend
+    networks:
+      - n34
+    ports:
+      - "8080:8080"
+
+  n34_frontend:
+    image: nginx
+    container_name: n34_frontend
+    networks:
+      - n34
+    ports:
+      - "80:80"
+    volumes:
+      - nginx_conf:/etc/nginx
+      - nginx_logs:/var/log/nginx
+      - ./frontend/dist:/usr/share/nginx/html/
+
+volumes:
+  mysql_conf:
+    external: true
+  mysql_logs:
+    external: true
+  mysql_data:
+    external: true
+  nginx_conf:
+    external: true
+  nginx_logs:
+    external: true
+
+networks:
+  n34:
+    external: true

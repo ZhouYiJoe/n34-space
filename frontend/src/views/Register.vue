@@ -54,7 +54,7 @@ export default {
         return;
       }
 
-      axios.post("/register", {
+      axios.post("/api/register", {
         username: username,
         password: password,
         email: email,

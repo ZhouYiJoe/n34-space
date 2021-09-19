@@ -37,7 +37,7 @@ const router = new VueRouter({
             component: FourOFour
         }
     ],
-    mode: "history"
+    mode: "hash"
 })
 
 router.beforeEach((to, from, next) => {
@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => {
         next()
     } else {
         let token = localStorage.getItem("token")
-        axios.get("/check-token", {
+        axios.get("/api/check-token", {
             headers: {
                 token: token
             }

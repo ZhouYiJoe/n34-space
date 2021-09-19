@@ -1,6 +1,15 @@
 module.exports = {
     devServer: {
-        port: 9000
+        port: 9000,
+        proxy: {
+            "/api" : {
+                target: "http://localhost:8080",
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/api': '/'
+                }
+            }
+        }
     },
     chainWebpack: config => {
         config
@@ -10,5 +19,5 @@ module.exports = {
                 return args
             })
     },
-
+    publicPath: "./"
 }

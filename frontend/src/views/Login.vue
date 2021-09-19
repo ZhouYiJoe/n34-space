@@ -37,7 +37,7 @@ export default {
         return;
       }
 
-      axios.get('/login', {
+      axios.get('/api/login', {
         headers: {
           username: username,
           password: password
