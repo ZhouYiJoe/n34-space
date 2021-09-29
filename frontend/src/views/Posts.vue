@@ -70,10 +70,10 @@ export default {
       const username = this.$route.params.username;
 
       //获取所有的posts
-      axios.get("/api/posts/" + username).then(response => {
+      axios.get("/posts/" + username).then(response => {
         //若输入的url中的用户名不存在，则转到404页面
         if (response.data.userFound === false) {
-          self.$router.replace("/404");
+          self.$router.push("/404");
         } else {
           //根据发布时间对posts进行排序
           self.posts = response.data.posts.sort((a, b) => {
@@ -86,10 +86,10 @@ export default {
       });
 
       //获取所有可能感兴趣的用户
-      axios.get("/api/users").then(response => {
-          self.$refs.interestedUserList.interestedUsers
-              = response.data.filter(x =>
-              x.username !== localStorage.getItem("username"));
+      axios.get("/users").then(response => {
+        self.$refs.interestedUserList.interestedUsers
+            = response.data.filter(x =>
+            x.username !== localStorage.getItem("username"));
       });
     },
 
@@ -103,7 +103,7 @@ export default {
       }
       const username = localStorage.getItem("username");
 
-      axios.post("/api/posts/" + username, {
+      axios.post("/posts/" + username, {
         timeCreated: new Date(),
         body: newPostBody
       }).then(response => {
@@ -123,7 +123,7 @@ export default {
 
     removePost(postId) {
       let self = this;
-      axios.delete("/api/posts/" + postId).then(response => {
+      axios.delete("/posts/" + postId).then(response => {
         if (response.data === true) {
           self.posts = self.posts.filter(x => x.id !== postId);
         } else {

@@ -1,11 +1,8 @@
 <template>
   <div id="login">
-    <LoginForm ref="login-form"
-               @register="switchToRegister"
-               @login="login"/>
+    <LoginForm ref="login-form" @login="login"/>
   </div>
 </template>
-
 <script>
 import LoginForm from "@/components/block/LoginForm";
 import axios from "axios";
@@ -14,10 +11,6 @@ export default {
   name: "Login",
   components: {LoginForm},
   methods: {
-    switchToRegister() {
-      this.$router.replace("register")
-    },
-
     login() {
       let self = this;
       const username = this.$refs["login-form"]
@@ -37,7 +30,7 @@ export default {
         return;
       }
 
-      axios.get('/api/login', {
+      axios.get('/login', {
         headers: {
           username: username,
           password: password
@@ -51,7 +44,7 @@ export default {
         } else if (state === "LOGIN_SUCCESSFULLY") {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("username", username);
-          self.$router.replace("/posts/" + username);
+          self.$router.push("/posts/" + username);
         }
       })
     }

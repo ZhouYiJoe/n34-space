@@ -1,20 +1,20 @@
 <template>
   <li class="nav-item dropdown">
-    <div class="nav-link dropdown-toggle"
-         data-bs-toggle="dropdown"
-         role="button"
-         aria-expanded="false">{{ username }}
+    <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+         role="button" aria-expanded="false">
+      {{ username }}
     </div>
     <ul class="dropdown-menu">
       <li>
-        <div class="dropdown-item"
-             @click="switchToOwnPage">我的主页
-        </div>
+        <router-link class="dropdown-item" tag="div"
+                     :to="'/posts/' + username">
+          我的主页
+        </router-link>
       </li>
       <li>
-        <div class="dropdown-item"
-             @click="backToLogin">退出
-        </div>
+        <router-link class="dropdown-item" tag="div" to="/login">
+          退出
+        </router-link>
       </li>
     </ul>
   </li>
@@ -23,17 +23,7 @@
 <script>
 export default {
   name: "Me",
-  props: ["username"],
-  methods: {
-    switchToOwnPage() {
-      this.$router.replace("/posts/"
-          + localStorage.getItem("username"));
-    },
-
-    backToLogin() {
-      this.$router.replace("/login");
-    }
-  }
+  props: ["username"]
 }
 </script>
 

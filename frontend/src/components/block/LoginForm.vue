@@ -18,9 +18,9 @@
     <div class="component">
       <LoginButton @login="$emit('login')"/>
     </div>
-    <div class="component">
-      <RegisterButton @register="$emit('register')"/>
-    </div>
+    <router-link class="component" tag="div" to="/register">
+      <RegisterButton/>
+    </router-link>
   </div>
 </template>
 

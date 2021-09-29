@@ -1,5 +1,5 @@
 <template>
-  <div class="container" @click="$emit('back-to-login')">已有账号，直接登录>></div>
+  <router-link tag="div" class="container" to="/login">已有账号，直接登录>></router-link>
 </template>
 
 <script>

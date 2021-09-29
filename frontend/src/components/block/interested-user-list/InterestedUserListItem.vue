@@ -1,19 +1,15 @@
 <template>
-    <div id="interested-user-list-item" @click="switchToInterestedUser">
+    <router-link tag="div" :to="'/posts/' + username"
+                 id="interested-user-list-item">
       <div id="nickname">{{ nickname }}</div>
       <div id="username">{{ username }}</div>
-    </div>
+    </router-link>
 </template>
 
 <script>
 export default {
   name: "InterestedUserListItem",
-  props: ["username", "nickname"],
-  methods: {
-    switchToInterestedUser() {
-      this.$router.replace("/posts/" + this.username);
-    }
-  }
+  props: ["username", "nickname"]
 }
 </script>
 

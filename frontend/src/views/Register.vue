@@ -1,8 +1,7 @@
 <template>
   <div id="register">
     <RegisterForm ref="register-form"
-                  @register="register"
-                  @back-to-login="backToLogin"/>
+                  @register="register"/>
   </div>
 </template>
 
@@ -14,10 +13,6 @@ export default {
   name: "Register",
   components: {RegisterForm},
   methods: {
-    backToLogin() {
-      this.$router.replace("/login")
-    },
-
     register() {
       let self = this
       const username = this.$refs["register-form"]
@@ -54,7 +49,7 @@ export default {
         return;
       }
 
-      axios.post("/api/register", {
+      axios.post("/register", {
         username: username,
         password: password,
         email: email,
@@ -67,7 +62,7 @@ export default {
           alert("邮箱已被注册")
         } else if (state === "REGISTER_SUCCESSFULLY") {
           alert("注册成功，请进行登录")
-          self.$router.replace("/login")
+          self.$router.push("/login")
         }
       })
     }

@@ -32,7 +32,7 @@
       <RegisterButton @register="$emit('register')"/>
     </div>
     <div class="back-to-login">
-      <BackToLogin @back-to-login="$emit('back-to-login')"/>
+      <BackToLogin/>
     </div>
   </div>
 </template>

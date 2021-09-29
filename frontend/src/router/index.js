@@ -2,8 +2,6 @@ import Vue from 'vue'
 import VueRouter from "vue-router";
 import Login from "@/views/Login";
 import Register from "@/views/Register";
-import User from "@/views/User";
-import Home from "@/views/Home";
 import axios from "axios";
 import Posts from "@/views/Posts";
 import FourOFour from "@/views/FourOFour";
@@ -13,20 +11,16 @@ Vue.use(VueRouter)
 const router = new VueRouter({
     routes: [
         {
+            path: "/",
+            redirect: "/posts/" + localStorage.getItem("username")
+        },
+        {
             path: "/login",
             component: Login
         },
         {
             path: "/register",
             component: Register
-        },
-        {
-            path: "/user",
-            component: User
-        },
-        {
-            path: "/home",
-            component: Home
         },
         {
             path: "/posts/:username",
@@ -37,7 +31,7 @@ const router = new VueRouter({
             component: FourOFour
         }
     ],
-    mode: "hash"
+    mode: "history"
 })
 
 router.beforeEach((to, from, next) => {
@@ -48,7 +42,7 @@ router.beforeEach((to, from, next) => {
         next()
     } else {
         let token = localStorage.getItem("token")
-        axios.get("/api/check-token", {
+        axios.get("/check-token", {
             headers: {
                 token: token
             }
