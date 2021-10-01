@@ -1,10 +1,14 @@
 <template>
-  <div id="login">
-    <LoginForm ref="login-form" @login="login"/>
-  </div>
+  <b-container fluid id="login-container">
+    <b-row id="vertical-center">
+      <b-col sm="4" offset-sm="4" offset="0" cols="12" id="login-form-col">
+        <LoginForm ref="login-form" @login="login"/>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script>
-import LoginForm from "@/components/block/LoginForm";
+import LoginForm from "@/components/authentication/LoginForm";
 import axios from "axios";
 
 export default {
@@ -36,13 +40,12 @@ export default {
           password: password
         }
       }).then((response) => {
-        let state = response.data.state
-        if (state === "USER_NOT_EXISTS") {
+        if (response.data.status === "USER_NOT_FOUND") {
           alert("用户名不存在")
-        } else if (state === "WRONG_PASSWORD") {
+        } else if (response.data.status === "WRONG_PASSWORD") {
           alert("密码错误")
-        } else if (state === "LOGIN_SUCCESSFULLY") {
-          localStorage.setItem("token", response.data.token);
+        } else if (response.data.status === "SUCCESS") {
+          localStorage.setItem("token", response.data.payload);
           localStorage.setItem("username", username);
           self.$router.push("/posts/" + username);
         }
@@ -53,11 +56,15 @@ export default {
 </script>
 
 <style scoped>
-#login {
-  width: 100%;
+#login-container {
   height: 100%;
   position: absolute;
-  overflow: hidden;
   background-image: url(../../public/img/login-bg.png);
+}
+
+#vertical-center {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>

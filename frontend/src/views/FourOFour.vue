@@ -1,19 +1,17 @@
 <template>
   <body class="bg-purple">
   <div class="central-body">
-    <img class="image-404" src="../../public/img/404.svg" width="300px">
-    <router-link :to="userOwnPage">
-      <div class="btn-go-home">返回首页</div>
-    </router-link>
+    <img class="image-404" src="../../public/img/404.svg" width="300px" alt="">
+    <router-link :to="userOwnPage" class="btn-go-home">返回首页</router-link>
   </div>
   <div class="objects">
-    <img class="object_rocket" src="../../public/img/rocket.svg" width="40px">
+    <img class="object_rocket" src="../../public/img/rocket.svg" width="40px" alt="">
     <div class="earth-moon">
-      <img class="object_earth" src="../../public/img/earth.svg" width="100px">
-      <img class="object_moon" src="../../public/img/moon.svg" width="80px">
+      <img class="object_earth" src="../../public/img/earth.svg" width="100px" alt="">
+      <img class="object_moon" src="../../public/img/moon.svg" width="80px" alt="">
     </div>
     <div class="box_astronaut">
-      <img class="object_astronaut" src="../../public/img/astronaut.svg" width="140px">
+      <img class="object_astronaut" src="../../public/img/astronaut.svg" width="140px" alt="">
     </div>
   </div>
   <div class="glowing_stars">
@@ -38,8 +36,6 @@ export default {
 </script>
 
 <style scoped>
-/*@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500');*/
-
 @-moz-keyframes rocket-movement {
   100% {
     -moz-transform: translate(1200px, -600px);

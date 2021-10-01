@@ -2,26 +2,18 @@ package com.n34.demo.service;
 
 import com.n34.demo.entity.User;
 import com.n34.demo.repository.UserRepository;
+import com.n34.demo.response.Response;
+import com.n34.demo.response.Status;
 import com.n34.demo.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    enum State {
-        USER_NOT_EXISTS,
-        WRONG_PASSWORD,
-        LOGIN_SUCCESSFULLY,
-        USERNAME_ALREADY_EXISTS,
-        EMAIL_ALREADY_EXISTS,
-        REGISTER_SUCCESSFULLY
-    }
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -32,33 +24,41 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Map<String, Object> checkLogin(String username, String password) {
-        User user = userRepository.findById(username).orElse(null);
+    public Response checkLogin(String username, String password) {
+        Optional<User> user = userRepository.findById(username);
 
-        if (user == null) {
-            return Map.of("state", State.USER_NOT_EXISTS);
-        } else if (!passwordEncoder.matches(password, user.getPassword())) {
-            return Map.of("state", State.WRONG_PASSWORD);
+        if (user.isEmpty()) {
+            return new Response(Status.USER_NOT_FOUND);
+        } else if (!passwordEncoder.matches(password, user.get().getPassword())) {
+            return new Response(Status.WRONG_PASSWORD);
         }
 
-        return Map.of("state", State.LOGIN_SUCCESSFULLY,
-                "token", JwtUtils.createToken(username));
+        return new Response(Status.SUCCESS, JwtUtils.createToken(username));
     }
 
     @Transactional
-    public Map<String, Object> addUser(User user) {
+    public Response addUser(User user) {
         if (userRepository.findById(user.getUsername()).isPresent()) {
-            return Map.of("state", State.USERNAME_ALREADY_EXISTS);
+            return new Response(Status.REPEATED_USERNAME);
         } else if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            return Map.of("state", State.EMAIL_ALREADY_EXISTS);
+            return new Response(Status.REPEATED_EMAIL);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return Map.of("state", State.REGISTER_SUCCESSFULLY);
+        return new Response(Status.SUCCESS);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public Response getAllUsers() {
+        return new Response(Status.SUCCESS,userRepository.findAll());
+    }
+
+    public Response getUserByUsername(String username) {
+        Optional<User> user = userRepository.findById(username);
+        if (user.isPresent()) {
+            return new Response(Status.SUCCESS, user.get());
+        } else {
+            return new Response(Status.USER_NOT_FOUND);
+        }
     }
 }

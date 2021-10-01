@@ -47,11 +47,11 @@ router.beforeEach((to, from, next) => {
                 token: token
             }
         }).then((response) => {
-            if (!response.data) {
-                alert("登录信息已失效，请重新登录")
+            if (response.data.status === "FAILED") {
                 next({path: "/login"})
+            } else if (response.data.status === "SUCCESS") {
+                next()
             }
-            next()
         })
     }
 })

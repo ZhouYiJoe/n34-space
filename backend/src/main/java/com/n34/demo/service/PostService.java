@@ -4,11 +4,13 @@ import com.n34.demo.entity.Post;
 import com.n34.demo.entity.User;
 import com.n34.demo.repository.PostRepository;
 import com.n34.demo.repository.UserRepository;
+import com.n34.demo.response.Response;
+import com.n34.demo.response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -23,34 +25,36 @@ public class PostService {
     }
 
     @Transactional
-    public Post addPost(String username, Post post) {
-        User user = userRepository.findById(username).orElse(null);
-        if (user == null) {
-            return null;
+    public Response addPost(String username, Post post) {
+        Optional<User> user = userRepository.findById(username);
+        if (user.isPresent()) {
+            post.setAuthor(user.get());
+            user.get().getPosts().add(post);
+            postRepository.save(post);
+            userRepository.save(user.get());
+            return new Response(Status.SUCCESS, post);
+        } else {
+            return new Response(Status.USER_NOT_FOUND);
         }
-        post.setAuthor(user);
-        user.getPosts().add(post);
-        postRepository.save(post);
-        userRepository.save(user);
-        return post;
     }
 
     @Transactional
-    public boolean removePost(Long postId) {
-        Post post = postRepository.findById(postId).orElse(null);
-        if (post == null) {
-            return false;
+    public Response removePost(Long postId) {
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isPresent()) {
+            postRepository.delete(post.get());
+            return new Response(Status.SUCCESS);
+        } else {
+            return new Response(Status.POST_NOT_FOUND);
         }
-        postRepository.delete(post);
-        return true;
     }
 
-    public Map<String, Object> getAllPostsByUsername(String username) {
-        User user = userRepository.findById(username).orElse(null);
-        if (user == null) {
-            return Map.of("userFound", false);
+    public Response getAllPostsByUsername(String username) {
+        Optional<User> user = userRepository.findById(username);
+        if (user.isPresent()) {
+            return new Response(Status.SUCCESS, user.get().getPosts().stream().toList());
+        } else {
+            return new Response(Status.USER_NOT_FOUND);
         }
-        return Map.of("userFound", true,
-                "posts", user.getPosts().stream().toList());
     }
 }

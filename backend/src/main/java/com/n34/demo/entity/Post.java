@@ -46,14 +46,4 @@ public class Post {
     public void setAuthor(User author) {
         this.author = author;
     }
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", timeCreated=" + timeCreated +
-                ", body='" + body + '\'' +
-                ", author=" + author.getUsername() +
-                '}';
-    }
 }

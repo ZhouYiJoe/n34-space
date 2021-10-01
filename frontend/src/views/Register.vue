@@ -1,12 +1,15 @@
 <template>
-  <div id="register">
-    <RegisterForm ref="register-form"
-                  @register="register"/>
-  </div>
+  <b-container fluid id="register-container">
+    <b-row id="vertical-center">
+      <b-col sm="6" offset-sm="3" cols="12" offset="0" id="register-form-col">
+        <RegisterForm ref="register-form" @register="register"/>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-import RegisterForm from "@/components/block/RegisterForm";
+import RegisterForm from "@/components/authentication/RegisterForm";
 import axios from "axios";
 
 export default {
@@ -55,12 +58,11 @@ export default {
         email: email,
         nickname: nickname
       }).then((response) => {
-        let state = response.data.state
-        if (state === "USERNAME_ALREADY_EXISTS") {
+        if (response.data.status === "REPEATED_USERNAME") {
           alert("用户名已存在")
-        } else if (state === "EMAIL_ALREADY_EXISTS") {
+        } else if (response.data.status === "REPEATED_EMAIL") {
           alert("邮箱已被注册")
-        } else if (state === "REGISTER_SUCCESSFULLY") {
+        } else if (response.data.status === "SUCCESS") {
           alert("注册成功，请进行登录")
           self.$router.push("/login")
         }
@@ -71,15 +73,15 @@ export default {
 </script>
 
 <style scoped>
-#register {
-  background-image: url(../../public/img/login-bg.png);
-  width: 100%;
+#register-container {
   height: 100%;
   position: absolute;
+  background-image: url(../../public/img/login-bg.png);
 }
 
-.container {
-  margin: 150px auto;
-  overflow: hidden;
+#vertical-center {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
