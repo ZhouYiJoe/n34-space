@@ -126,7 +126,7 @@ export default {
       }
 
       axios.post("/posts/" + this.pageOwner.username, {
-        timeCreated: new Date(),
+        timeCreated: new Date().toLocaleString(),
         body: newPostBody
       }).then(response => {
         if (response.data.status === "SUCCESS") {

@@ -4,7 +4,7 @@ import com.n34.demo.entity.User;
 import com.n34.demo.response.Response;
 import com.n34.demo.response.Status;
 import com.n34.demo.service.UserService;
-import com.n34.demo.util.JwtUtils;
+import com.n34.demo.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

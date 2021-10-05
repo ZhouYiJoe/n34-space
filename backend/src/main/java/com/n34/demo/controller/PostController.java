@@ -1,10 +1,13 @@
 package com.n34.demo.controller;
 
-import com.n34.demo.entity.Post;
 import com.n34.demo.response.Response;
 import com.n34.demo.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 @RestController
 @RequestMapping("posts")
@@ -16,14 +19,18 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("{username}")
-    public Response getAllPostsByUsername(@PathVariable String username) {
-        return postService.getAllPostsByUsername(username);
+    @GetMapping("{author}")
+    public Response getAllPostsOfAuthor(@PathVariable String author) throws Exception {
+        return postService.getPostsByUsername(author);
     }
 
-    @PostMapping("{username}")
-    public Response addPost(@PathVariable String username, @RequestBody Post post) {
-        return postService.addPost(username, post);
+    @PostMapping("{author}")
+    public Response addPost(@PathVariable String author,
+                            @RequestBody Map<String, Object> post) throws Exception {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd ahh:mm:ss");
+        Date timeCreated = dateFormat.parse((String) post.get("timeCreated"));
+        String body = (String) post.get("body");
+        return postService.addPost(author, timeCreated, body);
     }
 
     @DeleteMapping("{postId}")

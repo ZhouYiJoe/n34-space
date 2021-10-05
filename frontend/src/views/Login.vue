@@ -40,6 +40,7 @@ export default {
           password: password
         }
       }).then((response) => {
+        console.log(response.data.status)
         if (response.data.status === "USER_NOT_FOUND") {
           alert("用户名不存在")
         } else if (response.data.status === "WRONG_PASSWORD") {

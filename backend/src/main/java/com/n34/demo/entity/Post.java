@@ -9,7 +9,8 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date timeCreated;
-    private String body;
+    //存放博文内容的文件名
+    private String filename;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "author_name", referencedColumnName = "username")
@@ -31,19 +32,19 @@ public class Post {
         this.timeCreated = timeCreated;
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
     public User getAuthor() {
         return author;
     }
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

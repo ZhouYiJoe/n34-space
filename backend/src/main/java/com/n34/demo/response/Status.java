@@ -7,5 +7,6 @@ public enum Status {
     WRONG_PASSWORD,
     REPEATED_USERNAME,
     REPEATED_EMAIL,
-    FAILED
+    FAILED,
+    INVALID_TOKEN
 }

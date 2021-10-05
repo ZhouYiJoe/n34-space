@@ -1,4 +1,4 @@
-package com.n34.demo.util;
+package com.n34.demo.utils;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,9 +22,9 @@ public class JwtUtils {
     }
 
     public static boolean checkToken(String token) {
-        if (token == null)
+        if (token == null) {
             return false;
-
+        }
         try {
             Jwts.parser()
                     .setSigningKey(SECRET_KEY)

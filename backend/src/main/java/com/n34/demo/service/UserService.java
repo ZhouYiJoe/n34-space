@@ -4,13 +4,11 @@ import com.n34.demo.entity.User;
 import com.n34.demo.repository.UserRepository;
 import com.n34.demo.response.Response;
 import com.n34.demo.response.Status;
-import com.n34.demo.util.JwtUtils;
+import com.n34.demo.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -25,14 +23,12 @@ public class UserService {
     }
 
     public Response checkLogin(String username, String password) {
-        Optional<User> user = userRepository.findById(username);
-
-        if (user.isEmpty()) {
+        User user = userRepository.findById(username).orElse(null);
+        if (user == null) {
             return new Response(Status.USER_NOT_FOUND);
-        } else if (!passwordEncoder.matches(password, user.get().getPassword())) {
+        } else if (!passwordEncoder.matches(password, user.getPassword())) {
             return new Response(Status.WRONG_PASSWORD);
         }
-
         return new Response(Status.SUCCESS, JwtUtils.createToken(username));
     }
 
@@ -43,7 +39,6 @@ public class UserService {
         } else if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return new Response(Status.REPEATED_EMAIL);
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return new Response(Status.SUCCESS);
@@ -54,9 +49,9 @@ public class UserService {
     }
 
     public Response getUserByUsername(String username) {
-        Optional<User> user = userRepository.findById(username);
-        if (user.isPresent()) {
-            return new Response(Status.SUCCESS, user.get());
+        User user = userRepository.findById(username).orElse(null);
+        if (user != null) {
+            return new Response(Status.SUCCESS, user);
         } else {
             return new Response(Status.USER_NOT_FOUND);
         }
