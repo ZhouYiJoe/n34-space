@@ -74,4 +74,15 @@ public class PostService {
             return new Response(Status.USER_NOT_FOUND);
         }
     }
+
+    public Response getAllPosts() throws Exception {
+        List<Map<String, Object>> postsInfo = new ArrayList<>();
+        for (Post post : postRepository.findAll()) {
+            postsInfo.add(Map.of("id", post.getId(),
+                    "timeCreated", post.getTimeCreated(),
+                    "body", FileUtils.getPostFileContent(post.getFilename()),
+                    "author", post.getAuthor()));
+        }
+        return new Response(Status.SUCCESS, postsInfo);
+    }
 }

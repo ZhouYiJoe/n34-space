@@ -1,6 +1,5 @@
 package com.n34.demo.controller;
 
-import com.n34.demo.entity.User;
 import com.n34.demo.response.Response;
 import com.n34.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

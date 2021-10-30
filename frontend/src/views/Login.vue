@@ -48,7 +48,7 @@ export default {
         } else if (response.data.status === "SUCCESS") {
           localStorage.setItem("token", response.data.payload);
           localStorage.setItem("username", username);
-          self.$router.push("/posts/" + username);
+          self.$router.push("/");
         }
       })
     }

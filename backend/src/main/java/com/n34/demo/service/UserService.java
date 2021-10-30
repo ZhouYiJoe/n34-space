@@ -5,28 +5,25 @@ import com.n34.demo.repository.UserRepository;
 import com.n34.demo.response.Response;
 import com.n34.demo.response.Status;
 import com.n34.demo.utils.JwtUtils;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public Response checkLogin(String username, String password) {
         User user = userRepository.findById(username).orElse(null);
         if (user == null) {
             return new Response(Status.USER_NOT_FOUND);
-        } else if (!passwordEncoder.matches(password, user.getPassword())) {
+        } else if (!BCrypt.checkpw(password, user.getPassword())) {
             return new Response(Status.WRONG_PASSWORD);
         }
         return new Response(Status.SUCCESS, JwtUtils.createToken(username));
@@ -39,7 +36,7 @@ public class UserService {
         } else if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return new Response(Status.REPEATED_EMAIL);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         userRepository.save(user);
         return new Response(Status.SUCCESS);
     }

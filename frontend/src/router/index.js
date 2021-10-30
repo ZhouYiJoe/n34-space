@@ -5,6 +5,7 @@ import Register from "@/views/Register";
 import axios from "axios";
 import Posts from "@/views/Posts";
 import FourOFour from "@/views/FourOFour";
+import Home from "@/views/Home";
 
 Vue.use(VueRouter)
 
@@ -12,7 +13,7 @@ const router = new VueRouter({
     routes: [
         {
             path: "/",
-            redirect: "/posts/" + localStorage.getItem("username")
+            component: Home
         },
         {
             path: "/login",

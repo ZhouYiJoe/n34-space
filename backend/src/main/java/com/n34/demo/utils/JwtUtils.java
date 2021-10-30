@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class JwtUtils {
     private static final int EXP_TIME = 1000 * 60 * 60 * 24;
-    private static final String SECRET_KEY = "fmf4+3D&LP@$rVFGEuKrr*8mY-%umxG7";
+    public static final String SECRET_KEY = "fmf4+3D&LP@$rVFGEuKrr*8mY-%umxG7";
 
     public static String createToken(String username) {
         return Jwts.builder()
@@ -26,9 +26,7 @@ public class JwtUtils {
             return false;
         }
         try {
-            Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
-                    .parseClaimsJws(token);
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
         } catch (Exception e) {
             return false;
         }
