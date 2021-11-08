@@ -6,8 +6,7 @@ import com.n34.demo.repository.PostRepository;
 import com.n34.demo.repository.UserRepository;
 import com.n34.demo.response.Response;
 import com.n34.demo.response.Status;
-import com.n34.demo.utils.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.n34.demo.repository.FileRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +16,14 @@ import java.util.*;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final FileRepository fileRepository;
 
-    @Autowired
     public PostService(PostRepository postRepository,
-                       UserRepository userRepository) {
+                       UserRepository userRepository,
+                       FileRepository fileRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.fileRepository = fileRepository;
     }
 
     @Transactional
@@ -36,7 +37,7 @@ public class PostService {
             user.getPosts().add(post);
             postRepository.save(post);
             userRepository.save(user);
-            FileUtils.createPostFile(post.getFilename(), body);
+            fileRepository.createPostFile(post.getFilename(), body);
             return new Response(Status.SUCCESS, Map.of("id", post.getId(),
                     "timeCreated", post.getTimeCreated(),
                     "body", body,
@@ -50,7 +51,7 @@ public class PostService {
     public Response removePost(Long postId) {
         Post post = postRepository.findById(postId).orElse(null);
         if (post != null) {
-            FileUtils.deletePostFile(post.getFilename());
+            fileRepository.deletePostFile(post.getFilename());
             postRepository.delete(post);
             return new Response(Status.SUCCESS);
         } else {
@@ -66,7 +67,7 @@ public class PostService {
             for (Post post : posts) {
                 postsInfo.add(Map.of("id", post.getId(),
                         "timeCreated", post.getTimeCreated(),
-                        "body", FileUtils.getPostFileContent(post.getFilename()),
+                        "body", fileRepository.getPostFileContent(post.getFilename()),
                         "author", post.getAuthor()));
             }
             return new Response(Status.SUCCESS, postsInfo);
@@ -80,7 +81,7 @@ public class PostService {
         for (Post post : postRepository.findAll()) {
             postsInfo.add(Map.of("id", post.getId(),
                     "timeCreated", post.getTimeCreated(),
-                    "body", FileUtils.getPostFileContent(post.getFilename()),
+                    "body", fileRepository.getPostFileContent(post.getFilename()),
                     "author", post.getAuthor()));
         }
         return new Response(Status.SUCCESS, postsInfo);

@@ -11,3 +11,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
       format_sql: true
+
+n34:
+  resource:
+    resource-dir-path: /root/n34-space
+    post-dir-name: posts
