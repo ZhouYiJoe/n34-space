@@ -32,7 +32,7 @@ axios.interceptors.response.use(response => {
 })
 
 Vue.config.productionTip = false
-axios.defaults.baseURL = "http://localhost:8080"
+axios.defaults.baseURL = process.env.VUE_APP_AXIOS_BASE_URL
 
 new Vue({
     render: h => h(App),

@@ -14,5 +14,5 @@ spring:
 
 n34:
   resource:
-    resource-dir-path: /root/n34-space-resources/
+    resource-dir-path: /n34-space-resources
     post-dir-name: posts
