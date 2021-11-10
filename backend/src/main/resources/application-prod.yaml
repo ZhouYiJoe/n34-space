@@ -1,5 +1,6 @@
 spring:
   datasource:
+    #n34_mysql为本项目中MySQL的Docker容器名
     url: jdbc:mysql://n34_mysql:3306/n34
     username: root
     password: 123456
