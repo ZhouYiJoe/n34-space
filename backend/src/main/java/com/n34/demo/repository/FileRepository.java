@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 持久化微博内容到磁盘上
+ */
 @Repository
 public class FileRepository {
     private static final int BUFFER_SIZE = 10240;

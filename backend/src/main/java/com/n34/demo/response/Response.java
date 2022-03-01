@@ -1,5 +1,8 @@
 package com.n34.demo.response;
 
+/**
+ * 统一响应结果类
+ */
 public class Response {
     private Status status;
     private Object payload;

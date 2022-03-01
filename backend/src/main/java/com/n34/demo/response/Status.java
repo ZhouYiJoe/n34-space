@@ -1,5 +1,8 @@
 package com.n34.demo.response;
 
+/**
+ * 响应体中携带的响应信息
+ */
 public enum Status {
     SUCCESS,
     USER_NOT_FOUND,
