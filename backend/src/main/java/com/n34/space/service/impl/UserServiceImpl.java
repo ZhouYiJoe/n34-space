@@ -8,11 +8,14 @@ import com.n34.space.mapper.UserMapper;
 import com.n34.space.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public boolean register(UserDTO userDTO) {
         LambdaQueryWrapper<User> cond1 = new LambdaQueryWrapper<>();
@@ -27,6 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return save(user);
     }
 }

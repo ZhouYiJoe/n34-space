@@ -1,7 +1,7 @@
 package com.n34.space.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.n34.space.entity.NormalUserLoginState;
+import com.n34.space.entity.dto.NormalUserLoginState;
 import com.n34.space.entity.User;
 import com.n34.space.entity.dto.UserDTO;
 import com.n34.space.mapper.UserMapper;
@@ -11,6 +11,7 @@ import com.n34.space.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +26,12 @@ public class AuthServiceImpl implements AuthService {
         LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
         cond.eq(User::getUsername, userDTO.getUsername());
         User user = userMapper.selectOne(cond);
-        if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword()))
-            throw new RuntimeException("密码错误");
+        Assert.notNull(user, "用户不存在");
+        Assert.isTrue(passwordEncoder.matches(userDTO.getPassword(), user.getPassword()), "密码错误");
         NormalUserLoginState loginState = new NormalUserLoginState()
                 .setUserId(user.getId())
-                .setUsername(userDTO.getUsername())
-                .setPassword(userDTO.getPassword())
+                .setUsername(user.getUsername())
+                .setPassword(user.getPassword())
                 .setActive(true);
         String token = JwtUtils.createToken(user.getId().toString());
         springSecurityService.saveLoginState(user.getId(), token, loginState);

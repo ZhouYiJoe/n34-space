@@ -1,4 +1,4 @@
-package com.n34.space.entity;
+package com.n34.space.entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

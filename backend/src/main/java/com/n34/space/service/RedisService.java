@@ -13,4 +13,6 @@ public interface RedisService {
     Boolean expire(String key, long timeout, TimeUnit unit);
 
     void hmset(String key, Map<Object, Object> m);
+
+    Boolean del(String key);
 }

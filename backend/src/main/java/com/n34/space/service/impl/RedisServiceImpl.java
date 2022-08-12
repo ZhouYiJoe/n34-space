@@ -37,4 +37,9 @@ public class RedisServiceImpl implements RedisService {
     public void hmset(String key, Map<Object, Object> m) {
         redisTemplate.opsForHash().putAll(key, m);
     }
+
+    @Override
+    public Boolean del(String key) {
+        return redisTemplate.delete(key);
+    }
 }

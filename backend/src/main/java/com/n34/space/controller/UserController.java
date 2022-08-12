@@ -1,6 +1,5 @@
 package com.n34.space.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.n34.space.entity.dto.UserDTO;
 import com.n34.space.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +17,12 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public R<List<UserDTO>> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return null;
     }
 
     @GetMapping("/{username}")
-    public R<UserDTO> getUserInfoByUsername(@PathVariable String username) {
+    public UserDTO getUserInfoByUsername(@PathVariable String username) {
         return null;
     }
 }

@@ -4,6 +4,10 @@ spring:
     username: root
     password: 123456
 
+server:
+  error:
+    include-message: ALWAYS
+
 mybatis-plus:
   global-config:
     db-config:
