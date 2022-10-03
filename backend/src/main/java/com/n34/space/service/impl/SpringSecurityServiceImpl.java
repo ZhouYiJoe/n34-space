@@ -34,7 +34,7 @@ public class SpringSecurityServiceImpl implements SpringSecurityService {
     }
 
     @Override
-    public long getCurrentUserId() {
+    public Long getCurrentUserId() {
         return getLoginState().getUserId();
     }
 

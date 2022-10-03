@@ -7,5 +7,5 @@ import com.n34.space.service.PostService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
 }

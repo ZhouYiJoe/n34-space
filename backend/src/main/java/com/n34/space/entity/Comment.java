@@ -10,11 +10,14 @@ import java.util.Date;
 
 @Data
 @Accessors(chain = true)
-public class Post {
+public class Comment {
     @TableId
     private Long id;
-    private Long authorId;
     private String content;
+    //发表该评论的用户的ID
+    private Long userId;
+    //被评论的博文的ID
+    private Long postId;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)
