@@ -1,8 +1,8 @@
 package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.n34.space.entity.CommentLike;
-import com.n34.space.service.CommentLikeService;
+import com.n34.space.entity.CommentReplyLike;
+import com.n34.space.service.CommentReplyLikeService;
 import com.n34.space.service.SpringSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -13,19 +13,19 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/comment_likes")
+@RequestMapping("/comment_reply_likes")
 @Validated
-public class CommentLikeController {
-    private final CommentLikeService commentLikeService;
+public class CommentReplyLikeController {
+    private final CommentReplyLikeService commentReplyLikeService;
     private final SpringSecurityService springSecurityService;
 
     @GetMapping
-    public Boolean leaveLike(@NotNull @RequestParam Long commentId) {
+    public Boolean leaveLike(@NotNull @RequestParam Long commentReplyId) {
         try {
-            CommentLike commentLike = new CommentLike()
+            CommentReplyLike commentReplyLike = new CommentReplyLike()
                     .setUserId(springSecurityService.getCurrentUserId())
-                    .setCommentId(commentId);
-            return commentLikeService.save(commentLike);
+                    .setCommentReplyId(commentReplyId);
+            return commentReplyLikeService.save(commentReplyLike);
         } catch (Exception e) {
             if (e instanceof SQLIntegrityConstraintViolationException) {
                 throw new RuntimeException("已经点赞过了");
@@ -36,10 +36,10 @@ public class CommentLikeController {
     }
 
     @DeleteMapping
-    public Boolean cancelLike(@NotNull @RequestParam Long commentId) {
-        LambdaQueryWrapper<CommentLike> cond = new LambdaQueryWrapper<>();
-        cond.eq(CommentLike::getCommentId, commentId);
-        cond.eq(CommentLike::getUserId, springSecurityService.getCurrentUserId());
-        return commentLikeService.remove(cond);
+    public Boolean cancelLike(@NotNull @RequestParam Long commentReplyId) {
+        LambdaQueryWrapper<CommentReplyLike> cond = new LambdaQueryWrapper<>();
+        cond.eq(CommentReplyLike::getCommentReplyId, commentReplyId);
+        cond.eq(CommentReplyLike::getUserId, springSecurityService.getCurrentUserId());
+        return commentReplyLikeService.remove(cond);
     }
 }

@@ -3,6 +3,7 @@ package com.n34.space.filter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -19,11 +20,13 @@ public class ExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            Throwable rootCause = e instanceof NestedServletException ? ((NestedServletException) e).getRootCause() : e;
+            rootCause.printStackTrace();
             request.setAttribute("javax.servlet.error.status_code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            request.setAttribute("javax.servlet.error.message", e.getMessage());
+            request.setAttribute("javax.servlet.error.message", rootCause.getMessage());
             request.setAttribute("javax.servlet.error.request_uri", request.getServletPath());
-            request.setAttribute("javax.servlet.error.exception", e);
+            request.setAttribute("javax.servlet.error.exception", rootCause);
+            //进行转发，BasicErrorController默认对应的URL为/error
             request.getRequestDispatcher("/error").forward(request, response);
         }
     }

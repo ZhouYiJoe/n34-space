@@ -19,6 +19,7 @@ public class CommentReplyVo {
     //被回复的评论的ID
     private Long commentId;
     private Integer numLike;
+    private Boolean likedByMe;
     private Date timeCreated;
     private Date timeUpdated;
 }

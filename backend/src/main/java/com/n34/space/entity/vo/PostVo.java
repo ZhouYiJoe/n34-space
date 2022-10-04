@@ -15,4 +15,7 @@ public class PostVo {
     private Long authorId;
     private String authorUsername;
     private String authorNickname;
+    private Integer numLike;
+    private Integer numComment;
+    private Boolean likedByMe;
 }

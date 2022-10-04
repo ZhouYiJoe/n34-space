@@ -59,6 +59,11 @@ public class CommentReplyController {
             LambdaQueryWrapper<CommentReplyLike> cond2 = new LambdaQueryWrapper<>();
             cond2.eq(CommentReplyLike::getCommentReplyId, commentReplyVo.getId());
             commentReplyVo.setNumLike(commentReplyLikeService.count(cond2));
+
+            cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(CommentReplyLike::getCommentReplyId, commentReplyVo.getId());
+            cond2.eq(CommentReplyLike::getUserId, springSecurityService.getCurrentUserId());
+            commentReplyVo.setLikedByMe(commentReplyLikeService.count(cond2) == 1);
         }
 
         return commentReplyVoPage;
