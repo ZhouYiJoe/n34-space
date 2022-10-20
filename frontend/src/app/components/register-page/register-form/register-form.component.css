@@ -1,0 +1,59 @@
+form {
+  background-color: #fff;
+  width: 500px;
+  height: 300px;
+  border-radius: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.form-element {
+  position: absolute;
+  left: 50%;
+  width: 400px;
+  margin-left: -200px;
+}
+
+input {
+  background-color: #e8f0fb;
+  border: 1px solid #c7cdd2;
+  height: 30px;
+  text-indent: 1em;
+}
+
+a {
+  text-decoration: none;
+}
+
+#username {
+  top: 25px;
+}
+
+#password {
+  top: 75px;
+}
+
+#nickname {
+  top: 125px;
+}
+
+#email {
+  top: 175px;
+}
+
+#login-button {
+  top: 225px;
+  background-color: #ff7c3f;
+  border: 1px;
+  color: white;
+  height: 40px;
+}
+
+#login-tip {
+  font-size: small;
+  margin-top: 275px;
+}
+
+#login-link {
+  color: orange;
+}

@@ -1,0 +1,52 @@
+form {
+  background-color: #fff;
+  width: 500px;
+  height: 200px;
+  border-radius: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+.form-element {
+  position: absolute;
+  left: 50%;
+  width: 400px;
+  margin-left: -200px;
+}
+
+input {
+  background-color: #e8f0fb;
+  border: 1px solid #c7cdd2;
+  height: 30px;
+  text-indent: 1em;
+}
+
+#username {
+  top: 25px;
+}
+
+#password {
+  top: 75px;
+}
+
+#login-button {
+  top: 125px;
+  background-color: #ff7c3f;
+  border: 1px;
+  color: white;
+  height: 40px;
+}
+
+#register-tip {
+  font-size: small;
+  margin-top: 175px;
+}
+
+#register-link {
+  color: orange;
+}
+

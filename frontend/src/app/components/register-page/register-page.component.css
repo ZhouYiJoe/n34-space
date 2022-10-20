@@ -1,0 +1,14 @@
+div {
+  background-image: url(../../../assets/login-bg.png);
+  min-width: 100%;
+  min-height: 100%;
+  position: absolute;
+}
+
+app-register-form {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -250px;
+  margin-top: -150px;
+}
