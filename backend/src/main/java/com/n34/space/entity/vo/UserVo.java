@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UserVo {
+    private Long id;
     private String username;
     private String email;
     private String nickname;

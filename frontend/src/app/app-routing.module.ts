@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginPageComponent} from './components/login-page/login-page.component';
 import {NotFoundPageComponent} from "./components/not-found-page/not-found-page.component";
 import {RegisterPageComponent} from "./components/register-page/register-page.component";
+import {HomePageComponent} from "./components/home-page/home-page.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterPageComponent
+  },
+  {
+    path: 'home',
+    component: HomePageComponent
   },
   {
     path: '404',

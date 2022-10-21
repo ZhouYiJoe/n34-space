@@ -12,3 +12,8 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: id_worker
+
+logging:
+  level:
+    springfox: error
+    com.baomidou.mybatisplus.core.metadata.TableInfoHelper: error
