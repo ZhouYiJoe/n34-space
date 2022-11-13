@@ -9,6 +9,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class CommentReplyLike {
-    private Long userId;
-    private Long commentReplyId;
+    private String userId;
+    private String commentReplyId;
 }

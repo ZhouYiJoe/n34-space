@@ -8,16 +8,16 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class CommentReplyVo {
-    private Long id;
+    private String id;
     private String content;
     //发表该回复的用户的ID
-    private Long userId;
+    private String userId;
     //发表该回复的用户的用户名
     private String username;
     //发表该回复的用户的昵称
     private String nickname;
     //被回复的评论的ID
-    private Long commentId;
+    private String commentId;
     private Integer numLike;
     private Boolean likedByMe;
     private Date timeCreated;

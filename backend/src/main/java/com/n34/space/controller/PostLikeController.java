@@ -20,7 +20,7 @@ public class PostLikeController {
     private final SpringSecurityService springSecurityService;
 
     @GetMapping
-    public Boolean leaveLike(@NotNull @RequestParam Long postId) {
+    public Boolean leaveLike(@NotNull @RequestParam String postId) {
         try {
             PostLike postLike = new PostLike()
                     .setUserId(springSecurityService.getCurrentUserId())
@@ -36,7 +36,7 @@ public class PostLikeController {
     }
 
     @DeleteMapping
-    public Boolean cancelLike(@NotNull @RequestParam Long postId) {
+    public Boolean cancelLike(@NotNull @RequestParam String postId) {
         LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
         cond.eq(PostLike::getPostId, postId);
         cond.eq(PostLike::getUserId, springSecurityService.getCurrentUserId());

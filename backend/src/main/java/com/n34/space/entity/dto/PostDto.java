@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class PostDto {
-    private Long id;
+    private String id;
     private String content;
-    private Long authorId;
 }

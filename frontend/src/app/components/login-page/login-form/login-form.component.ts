@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {RegexService} from "../../../services/regex.service";
-import {baseApi, handleError} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {catchError} from "rxjs";
 import {Router} from "@angular/router";
-import {LocalStorageService} from "../../../services/local-storage.service";
+import {ErrorHandleService} from "../../../services/error-handle.service";
 
 @Component({
   selector: 'app-login-form',
@@ -20,7 +20,7 @@ export class LoginFormComponent implements OnInit {
   constructor(public httpClient: HttpClient,
               public regexService: RegexService,
               public router: Router,
-              public localStorageService: LocalStorageService) { }
+              public errorHandleService: ErrorHandleService) { }
 
   ngOnInit(): void {
   }
@@ -35,13 +35,12 @@ export class LoginFormComponent implements OnInit {
       return
     }
 
-    let url: string = `${baseApi}/auth/login`
-    let options: any = {responseType: 'text'}
-    this.httpClient.post(url, this.userInfo, options)
-      .pipe(catchError(handleError))
+    let url: string = `${baseUrl}/auth/login`
+    this.httpClient.post(url, this.userInfo, {responseType: 'text'})
+      .pipe(catchError(this.errorHandleService.handleError))
       .subscribe(data => {
-        this.localStorageService.set('token', data)
-        this.router.navigate(['/home'])
+        localStorage.setItem('token', data)
+        this.router.navigate(['/app/home'])
       })
   }
 }

@@ -1,0 +1,24 @@
+#container {
+  overflow: hidden;
+}
+
+#my-posts {
+  margin-top: 20px;
+}
+
+.option {
+  height: 50px;
+  width: 165px;
+  display: block;
+  font-size: 20px;
+  text-decoration: none;
+  color: black;
+  line-height: 50px;
+  margin-left: 20px;
+  border-radius: 30px;
+  text-indent: 1em;
+}
+
+.option:hover {
+  background-color: #e7e7e8;
+}

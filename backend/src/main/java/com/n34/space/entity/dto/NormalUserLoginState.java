@@ -11,7 +11,7 @@ import java.util.Collection;
 @Data
 @Accessors(chain = true)
 public class NormalUserLoginState implements UserDetails {
-    private Long userId;
+    private String userId;
     private String username;
     private String password;
     private Boolean active;

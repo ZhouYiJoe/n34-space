@@ -4,7 +4,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginPageComponent} from './components/login-page/login-page.component';
 import {NotFoundPageComponent} from "./components/not-found-page/not-found-page.component";
 import {RegisterPageComponent} from "./components/register-page/register-page.component";
-import {HomePageComponent} from "./components/home-page/home-page.component";
+import {HomePageComponent} from "./components/main/home-page/home-page.component";
+import {ComponentAuthService} from "./services/component-auth.service";
+import {MainComponent} from "./components/main/main.component";
 
 const routes: Routes = [
   {
@@ -16,17 +18,29 @@ const routes: Routes = [
     component: RegisterPageComponent
   },
   {
-    path: 'home',
-    component: HomePageComponent
-  },
-  {
     path: '404',
     component: NotFoundPageComponent
   },
   {
+    path: 'app',
+    component: MainComponent,
+    canActivate: [ComponentAuthService],
+    children: [
+      {
+        path: 'home',
+        component: HomePageComponent
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'home'
+      }
+    ]
+  },
+  {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    redirectTo: 'app'
   },
   {
     path: '**',

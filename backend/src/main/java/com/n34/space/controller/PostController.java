@@ -3,7 +3,10 @@ package com.n34.space.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.n34.space.entity.*;
+import com.n34.space.entity.Comment;
+import com.n34.space.entity.Post;
+import com.n34.space.entity.PostLike;
+import com.n34.space.entity.User;
 import com.n34.space.entity.dto.PostDto;
 import com.n34.space.entity.vo.PostVo;
 import com.n34.space.service.*;
@@ -26,14 +29,14 @@ public class PostController {
 
     @PostMapping
     public Boolean postNew(@RequestBody PostDto postDto) {
-        Assert.isNull(postDto.getId(), "无权访问");
-        Assert.notNull(postDto.getAuthorId(), "authorId为null");
-        Assert.isTrue(postDto.getAuthorId().equals(springSecurityService.getCurrentUserId()), "无权访问");
-        return postService.save(BeanCopyUtils.copyObject(postDto, Post.class));
+        postDto.setId(null);
+        Post post = BeanCopyUtils.copyObject(postDto, Post.class);
+        post.setAuthorId(springSecurityService.getCurrentUserId());
+        return postService.save(post);
     }
 
     @GetMapping
-    public IPage<PostVo> findPage(@NotNull @RequestParam Long authorId,
+    public IPage<PostVo> findPage(@NotNull @RequestParam String authorId,
                                   @NotNull @RequestParam Integer pageNo,
                                   @NotNull @RequestParam Integer pageSize) {
         LambdaQueryWrapper<Post> cond = new LambdaQueryWrapper<>();
@@ -70,15 +73,14 @@ public class PostController {
         Assert.notNull(postDto.getId(), "ID为null");
         Post post = postService.getById(postDto.getId());
         Assert.notNull(post, "博文不存在");
-        Long currentUserId = springSecurityService.getCurrentUserId();
+        String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(post.getAuthorId()), "无权访问");
         Assert.notNull(postDto.getContent(), "博文为null");
-        Assert.isTrue(currentUserId.equals(postDto.getAuthorId()), "无权访问");
         return postService.updateById(BeanCopyUtils.copyObject(postDto, Post.class));
     }
 
     @DeleteMapping("/{id}")
-    public Boolean remove(@NotNull @PathVariable Long id) {
+    public Boolean remove(@NotNull @PathVariable String id) {
         Post post = postService.getById(id);
         Assert.notNull(post, "博文不存在");
         Assert.isTrue(springSecurityService.getCurrentUserId().equals(post.getAuthorId()), "无权访问");

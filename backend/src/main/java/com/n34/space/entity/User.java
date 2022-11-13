@@ -12,7 +12,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class User {
     @TableId
-    private Long id;
+    private String id;
     private String username;
     private String password;
     private String email;

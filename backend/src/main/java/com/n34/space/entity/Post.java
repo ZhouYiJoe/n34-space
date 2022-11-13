@@ -12,8 +12,8 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Post {
     @TableId
-    private Long id;
-    private Long authorId;
+    private String id;
+    private String authorId;
     private String content;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;

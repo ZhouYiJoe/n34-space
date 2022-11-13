@@ -8,16 +8,16 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class CommentVo {
-    private Long id;
+    private String id;
     private String content;
     //发表该评论的用户的ID
-    private Long userId;
+    private String userId;
     //发表该评论的用户的用户名
     private String username;
     //发表该评论的用户的昵称
     private String nickname;
     //被评论的博文的ID
-    private Long postId;
+    private String postId;
     private Integer numLike;
     private Integer numReply;
     private Boolean likedByMe;

@@ -11,7 +11,13 @@ import { RegisterFormComponent } from './components/register-page/register-form/
 import {HttpClientModule, HttpErrorResponse} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {Observable, throwError} from "rxjs";
-import { HomePageComponent } from './components/home-page/home-page.component';
+import { HomePageComponent } from './components/main/home-page/home-page.component';
+import {interceptorProviders} from "./interceptors";
+import { MainComponent } from './components/main/main.component';
+import { SidebarComponent } from './components/main/sidebar/sidebar.component';
+import { PostPublishComponent } from './components/main/home-page/post-publish/post-publish.component';
+import { PostsListComponent } from './components/main/posts-list/posts-list.component';
+import { PostsListItemComponent } from './components/main/posts-list/posts-list-item/posts-list-item.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +28,11 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     RegisterPageComponent,
     RegisterFormComponent,
     HomePageComponent,
+    MainComponent,
+    SidebarComponent,
+    PostPublishComponent,
+    PostsListComponent,
+    PostsListItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,16 +40,9 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [interceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
 
-export const baseApi: string = 'http://localhost:8080'
-
-export function handleError(response: HttpErrorResponse): Observable<never> {
-  console.error(response)
-  let responseBody = typeof response.error === 'string' ? JSON.parse(response.error) : response.error
-  alert(responseBody.message)
-  return throwError(() => new Error(response.message))
-}
+export const baseUrl: string = 'http://localhost:8080'

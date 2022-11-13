@@ -71,7 +71,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     public Boolean logout() {
-        long userId = springSecurityService.getCurrentUserId();
+        String userId = springSecurityService.getCurrentUserId();
         springSecurityService.removeLoginState(userId);
         return true;
     }

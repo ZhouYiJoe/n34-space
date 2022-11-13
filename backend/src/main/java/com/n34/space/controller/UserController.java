@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/self")
     public UserVo getSelfInfo() {
-        long userId = springSecurityService.getCurrentUserId();
+        String userId = springSecurityService.getCurrentUserId();
         User user = userService.getById(userId);
         Assert.notNull(user, "用户不存在");
         return BeanCopyUtils.copyObject(user, UserVo.class);

@@ -20,7 +20,7 @@ public class CommentLikeController {
     private final SpringSecurityService springSecurityService;
 
     @GetMapping
-    public Boolean leaveLike(@NotNull @RequestParam Long commentId) {
+    public Boolean leaveLike(@NotNull @RequestParam String commentId) {
         try {
             CommentLike commentLike = new CommentLike()
                     .setUserId(springSecurityService.getCurrentUserId())
@@ -36,7 +36,7 @@ public class CommentLikeController {
     }
 
     @DeleteMapping
-    public Boolean cancelLike(@NotNull @RequestParam Long commentId) {
+    public Boolean cancelLike(@NotNull @RequestParam String commentId) {
         LambdaQueryWrapper<CommentLike> cond = new LambdaQueryWrapper<>();
         cond.eq(CommentLike::getCommentId, commentId);
         cond.eq(CommentLike::getUserId, springSecurityService.getCurrentUserId());

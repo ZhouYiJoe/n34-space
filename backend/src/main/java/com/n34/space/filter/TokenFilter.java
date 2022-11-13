@@ -4,6 +4,7 @@ import com.n34.space.entity.dto.NormalUserLoginState;
 import com.n34.space.service.SpringSecurityService;
 import com.n34.space.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,12 @@ public class TokenFilter extends OncePerRequestFilter {
     public void doFilterInternal(HttpServletRequest request,
                                  HttpServletResponse response,
                                  FilterChain filterChain) throws ServletException, IOException {
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(null, null, null);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+            return;
+        }
         String token = request.getHeader("token");
         if (!StringUtils.hasText(token)) {
             filterChain.doFilter(request, response);

@@ -25,7 +25,7 @@ public class SpringSecurityServiceImpl implements SpringSecurityService {
     private final RedisService redisService;
 
     @Override
-    public void saveLoginState(long userId, String token, UserDetails loginState) {
+    public void saveLoginState(String userId, String token, UserDetails loginState) {
         Map<Object, Object> map = new HashMap<>();
         map.put(TOKEN_HASH_KEY, token);
         map.put(LOGIN_INFO_HASH_KEY, JsonUtils.toJson(loginState));
@@ -34,7 +34,7 @@ public class SpringSecurityServiceImpl implements SpringSecurityService {
     }
 
     @Override
-    public Long getCurrentUserId() {
+    public String getCurrentUserId() {
         return getLoginState().getUserId();
     }
 
@@ -56,7 +56,7 @@ public class SpringSecurityServiceImpl implements SpringSecurityService {
                 LOGIN_STATE_KEY + ":" + userId, TOKEN_HASH_KEY);
     }
 
-    public void removeLoginState(long userId) {
+    public void removeLoginState(String userId) {
         redisService.del(LOGIN_STATE_KEY + ":" + userId);
     }
 }

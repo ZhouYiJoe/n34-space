@@ -38,7 +38,7 @@ public class CommentReplyController {
     }
 
     @GetMapping
-    public IPage<CommentReplyVo> findPage(@NotNull @RequestParam Long commentId,
+    public IPage<CommentReplyVo> findPage(@NotNull @RequestParam String commentId,
                                           @NotNull @RequestParam Integer pageNo,
                                           @NotNull @RequestParam Integer pageSize) {
         LambdaQueryWrapper<CommentReply> cond = new LambdaQueryWrapper<>();
@@ -49,7 +49,7 @@ public class CommentReplyController {
         IPage<CommentReplyVo> commentReplyVoPage = BeanCopyUtils.copyPage(commentReplyPage, CommentReplyVo.class);
 
         for (CommentReplyVo commentReplyVo : commentReplyVoPage.getRecords()) {
-            Long userId = commentReplyVo.getUserId();
+            String userId = commentReplyVo.getUserId();
             Assert.notNull(userId, "userId为null");
             User user = userService.getById(userId);
             Assert.notNull(user, "user为null");
@@ -73,7 +73,7 @@ public class CommentReplyController {
     public Boolean update(@RequestBody CommentReplyDto commentReplyDto) {
         Assert.notNull(commentReplyDto.getId(), "id为null");
         CommentReply commentReply = commentReplyService.getById(commentReplyDto.getId());
-        Long currentUserId = springSecurityService.getCurrentUserId();
+        String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(commentReply.getUserId()), "无权访问");
         Assert.isTrue(currentUserId.equals(commentReplyDto.getUserId()), "无权访问");
         Assert.isNull(commentReply.getCommentId(), "无权访问");
@@ -81,10 +81,10 @@ public class CommentReplyController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean remove(@NotNull @PathVariable Long id) {
+    public Boolean remove(@NotNull @PathVariable String id) {
         CommentReply commentReply = commentReplyService.getById(id);
         Assert.notNull(commentReply, "回复不存在");
-        Long currentUserId = springSecurityService.getCurrentUserId();
+        String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(commentReply.getUserId()), "无权访问");
         return commentReplyService.removeById(id);
     }

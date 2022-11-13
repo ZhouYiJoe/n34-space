@@ -15,12 +15,12 @@ import java.util.Date;
 @Accessors(chain = true)
 public class CommentReply {
     @TableId
-    private Long id;
+    private String id;
     private String content;
     //发表该回复的用户的ID
-    private Long userId;
+    private String userId;
     //被回复的评论的ID
-    private Long commentId;
+    private String commentId;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)

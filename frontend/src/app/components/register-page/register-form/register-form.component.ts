@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {RegexService} from "../../../services/regex.service";
-import {baseApi, handleError} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {HttpClient} from "@angular/common/http";
 import {catchError} from "rxjs";
 import {Router} from "@angular/router";
+import {ErrorHandleService} from "../../../services/error-handle.service";
 
 @Component({
   selector: 'app-register-form',
@@ -20,7 +21,8 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
               public regexService: RegexService,
-              public router: Router) {
+              public router: Router,
+              public errorHandleService: ErrorHandleService) {
   }
 
   ngOnInit(): void {
@@ -44,9 +46,9 @@ export class RegisterFormComponent implements OnInit {
       return
     }
 
-    let url: string = `${baseApi}/auth/register`
+    let url: string = `${baseUrl}/auth/register`
     this.httpClient.post(url, this.userInfo)
-      .pipe(catchError(handleError))
+      .pipe(catchError(this.errorHandleService.handleError))
       .subscribe(data => {
         alert('注册成功，接下来跳转到登录页面')
         this.router.navigate(['/login'])

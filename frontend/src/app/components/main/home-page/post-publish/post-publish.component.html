@@ -1,0 +1,6 @@
+<div id="container">
+  <textarea rows="5" maxlength="140" placeholder="有什么新鲜事？" [(ngModel)]="postToPublish.content"></textarea>
+  <p id="post-length">{{postToPublish.content.length}}/140</p>
+  <button (click)="publishPost()">发布</button>
+</div>
+

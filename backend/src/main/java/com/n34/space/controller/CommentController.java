@@ -39,7 +39,7 @@ public class CommentController {
     }
 
     @GetMapping
-    public IPage<CommentVo> findPage(@NotNull @RequestParam Long postId,
+    public IPage<CommentVo> findPage(@NotNull @RequestParam String postId,
                                      @NotNull @RequestParam Integer pageNo,
                                      @NotNull @RequestParam Integer pageSize) {
         LambdaQueryWrapper<Comment> cond = new LambdaQueryWrapper<>();
@@ -50,7 +50,7 @@ public class CommentController {
         IPage<CommentVo> commentVoPage = BeanCopyUtils.copyPage(commentPage, CommentVo.class);
 
         for (CommentVo commentVo : commentVoPage.getRecords()) {
-            Long userId = commentVo.getUserId();
+            String userId = commentVo.getUserId();
             Assert.notNull(userId, "userId为null");
             User user = userService.getById(userId);
             Assert.notNull(user, "user为null");
@@ -78,7 +78,7 @@ public class CommentController {
     public Boolean update(@RequestBody CommentDto commentDto) {
         Assert.notNull(commentDto.getId(), "id为null");
         Comment comment = commentService.getById(commentDto.getId());
-        Long currentUserId = springSecurityService.getCurrentUserId();
+        String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(comment.getUserId()), "无权访问");
         Assert.isTrue(currentUserId.equals(commentDto.getUserId()), "无权访问");
         Assert.isNull(commentDto.getPostId(), "无权访问");
@@ -86,10 +86,10 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean remove(@NotNull @PathVariable Long id) {
+    public Boolean remove(@NotNull @PathVariable String id) {
         Comment comment = commentService.getById(id);
         Assert.notNull(comment, "评论不存在");
-        Long currentUserId = springSecurityService.getCurrentUserId();
+        String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(comment.getUserId()), "无权访问");
         return commentService.removeById(id);
     }
