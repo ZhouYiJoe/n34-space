@@ -56,6 +56,7 @@ public class CommentController {
             Assert.notNull(user, "user为null");
             commentVo.setUsername(user.getUsername());
             commentVo.setNickname(user.getNickname());
+            commentVo.setAvatarFilename(user.getAvatarFilename());
 
             LambdaQueryWrapper<CommentLike> cond2 = new LambdaQueryWrapper<>();
             cond2.eq(CommentLike::getCommentId, commentVo.getId());
@@ -64,7 +65,7 @@ public class CommentController {
             cond2 = new LambdaQueryWrapper<>();
             cond2.eq(CommentLike::getCommentId, commentVo.getId());
             cond2.eq(CommentLike::getUserId, springSecurityService.getCurrentUserId());
-            commentVo.setLikedByMe(commentLikeService.count() == 1);
+            commentVo.setLikedByMe(commentLikeService.count(cond2) == 1);
 
             LambdaQueryWrapper<CommentReply> cond3 = new LambdaQueryWrapper<>();
             cond3.eq(CommentReply::getCommentId, commentVo.getId());

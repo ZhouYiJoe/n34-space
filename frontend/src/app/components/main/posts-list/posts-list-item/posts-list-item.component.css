@@ -5,7 +5,7 @@
 }
 
 #left {
-  width: 120px;
+  width: 70px;
   float: left;
 }
 
@@ -14,27 +14,77 @@
 }
 
 #right {
-  width: 628px;
+  width: 678px;
   float: right;
+}
+
+#right-top:before,
+#right-top:after {
+  content: "";
+  display: table;
+}
+
+#right-top:after {
+  clear: both;
 }
 
 #right-top {
   margin-top: 10px;
+  position: relative;
+  *zoom: 1;
 }
 
 #nickname {
-  display: inline;
+  float: left;
   font-weight: bold;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 #usernameAndTime {
+  float: left;
   margin-left: 5px;
-  display: inline;
   color: gray;
+}
+
+#more {
+  float: right;
+  margin-right: 15px;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+#more:hover {
+  background-color: rgba(232, 245, 253, .8);
+  cursor: pointer;
+}
+
+#menu {
+  position: absolute;
+  border: solid 1px #c9c9c9;
+  background-color: white;
+  width: 100px;
+  height: 50px;
+  left: 565px;
+}
+
+.menu-item {
+  height: 25px;
+  font-size: 15px;
+  line-height: 25px;
+  text-align: center;
+}
+
+.menu-item:hover {
+  cursor: pointer;
+  background-color: #f7f7f7;
 }
 
 #content {
   margin-top: 5px;
+  word-wrap: break-word;
 }
 
 #bottom {
@@ -47,4 +97,162 @@
   width: 150px;
   display: inline-block;
   text-align: center;
+  cursor: pointer;
+}
+
+.button:hover {
+  color: orange;
+}
+
+.likedByMe {
+  color: orange;
+}
+
+#edit-window {
+  position: fixed;
+  background-color: white;
+  width: 800px;
+  height: 400px;
+  left: 50vw;
+  top: 50vh;
+  margin-left: -400px;
+  margin-top: -200px;
+  z-index: 2;
+  box-shadow: 0 0 10px 2px gray;
+}
+
+#window-background {
+  background-color: rgba(0, 0, 0, 0.22);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+.edit-window-button {
+  float: right;
+  width: 100px;
+  height: 40px;
+  margin-right: 25px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+}
+
+.edit-window-button:hover {
+  cursor: pointer;
+}
+
+#submit-update {
+  background-color: #f07c1d;
+}
+
+#submit-update:hover {
+  background-color: #c06117;
+}
+
+#cancel-update {
+  background-color: gray;
+}
+
+#cancel-update:hover {
+  background-color: #5b5b5b;
+}
+
+#update-input-box {
+  resize: none;
+  outline: none;
+  border: #bdbdbd 1px solid;
+  width: 750px;
+  height: 300px;
+  margin-left: 25px;
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+#edit-input-box-length {
+  float: left;
+  color: #808080;
+  margin-left: 25px;
+  margin-top: 15px;
+  font-size: 20px;
+  line-height: 40px;
+}
+
+#avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-left: 10px;
+}
+
+#comment-window {
+  position: fixed;
+  background-color: white;
+  width: 800px;
+  height: 800px;
+  left: 50vw;
+  top: 50vh;
+  margin-left: -400px;
+  margin-top: -400px;
+  z-index: 2;
+  box-shadow: 0 0 10px 2px gray;
+  overflow: hidden;
+}
+
+#comment-input-box {
+  resize: none;
+  outline: none;
+  border: #bdbdbd 1px solid;
+  width: 750px;
+  height: 300px;
+  margin-left: 25px;
+  font-size: 20px;
+}
+
+#close-comment-window-button {
+  float: right;
+  cursor: pointer;
+}
+
+#comment-input-box-length {
+  float: left;
+  color: #808080;
+  margin-left: 25px;
+  margin-top: 15px;
+  font-size: 20px;
+  line-height: 40px;
+}
+
+#submit-comment-button {
+  float: right;
+  width: 100px;
+  height: 40px;
+  margin-right: 25px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  background-color: #f07c1d;
+  cursor: pointer;
+}
+
+#submit-comment-button:hover {
+  background-color: #c06117;
+}
+
+#comment-list {
+  border-top: solid 1px #e5e5e5;
+  height: 400px;
+  width: 800px;
+  overflow: auto;
 }

@@ -9,6 +9,9 @@ export class PostsListComponent implements OnInit {
   @Input()
   public posts: any[] = []
 
+  @Input()
+  public canEdit: boolean = false
+
   constructor() { }
 
   ngOnInit(): void {

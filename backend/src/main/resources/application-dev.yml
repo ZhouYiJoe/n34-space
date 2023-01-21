@@ -3,6 +3,10 @@ spring:
     url: jdbc:mysql://localhost:3306/n34
     username: root
     password: 123456
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
 
 server:
   error:
@@ -12,8 +16,18 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: uuid
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.n34.space.entity
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   level:
     springfox: error
     com.baomidou.mybatisplus.core.metadata.TableInfoHelper: error
+
+minio:
+  endpoint: http://127.0.0.1:9090
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: images

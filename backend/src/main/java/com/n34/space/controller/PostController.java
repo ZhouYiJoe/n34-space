@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -50,6 +51,7 @@ public class PostController {
         for (PostVo postVo : postVoPage.getRecords()) {
             postVo.setAuthorNickname(author.getNickname());
             postVo.setAuthorUsername(author.getUsername());
+            postVo.setAuthorAvatarFilename(author.getAvatarFilename());
 
             LambdaQueryWrapper<PostLike> cond2 = new LambdaQueryWrapper<>();
             cond2.eq(PostLike::getPostId, postVo.getId());
@@ -58,7 +60,7 @@ public class PostController {
             cond2 = new LambdaQueryWrapper<>();
             cond2.eq(PostLike::getPostId, postVo.getId());
             cond2.eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
-            postVo.setLikedByMe(postLikeService.count() == 1);
+            postVo.setLikedByMe(postLikeService.count(cond2) == 1);
 
             LambdaQueryWrapper<Comment> cond3 = new LambdaQueryWrapper<>();
             cond3.eq(Comment::getPostId, postVo.getId());
@@ -85,5 +87,62 @@ public class PostController {
         Assert.notNull(post, "博文不存在");
         Assert.isTrue(springSecurityService.getCurrentUserId().equals(post.getAuthorId()), "无权访问");
         return postService.removeById(id);
+    }
+
+    @GetMapping("/hot")
+    IPage<PostVo> findHot(@NotNull @RequestParam Integer pageNo,
+                          @NotNull @RequestParam Integer pageSize) {
+        List<PostVo> postVos = postService.findHot((pageNo - 1) * pageSize, pageSize);
+
+        for (PostVo postVo : postVos) {
+            LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
+            cond.eq(PostLike::getPostId, postVo.getId())
+                    .eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
+            postVo.setLikedByMe(postLikeService.count(cond) == 1);
+        }
+        IPage<PostVo> page = new Page<>();
+        page.setRecords(postVos);
+        int count = postService.count();
+        page.setPages((int) Math.ceil((double) count / pageSize));
+        page.setTotal(count);
+        page.setSize(pageSize);
+        return page;
+    }
+
+    @GetMapping("/followee_posts")
+    public IPage<PostVo> getFolloweePosts(@NotNull @RequestParam Integer pageNo,
+                                         @NotNull @RequestParam Integer pageSize) {
+        String currentUserId = springSecurityService.getCurrentUserId();
+        List<Post> posts = postService.getFolloweePosts(
+                currentUserId, (pageNo - 1) * pageSize, pageSize);
+        List<PostVo> postVos = BeanCopyUtils.copyList(posts, PostVo.class);
+
+        for (PostVo postVo : postVos) {
+            User author = userService.getById(postVo.getAuthorId());
+            postVo.setAuthorNickname(author.getNickname());
+            postVo.setAuthorUsername(author.getUsername());
+            postVo.setAuthorAvatarFilename(author.getAvatarFilename());
+
+            LambdaQueryWrapper<PostLike> cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(PostLike::getPostId, postVo.getId());
+            postVo.setNumLike(postLikeService.count(cond2));
+
+            cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(PostLike::getPostId, postVo.getId());
+            cond2.eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
+            postVo.setLikedByMe(postLikeService.count(cond2) == 1);
+
+            LambdaQueryWrapper<Comment> cond3 = new LambdaQueryWrapper<>();
+            cond3.eq(Comment::getPostId, postVo.getId());
+            postVo.setNumComment(commentService.count(cond3));
+        }
+
+        IPage<PostVo> page = new Page<>();
+        page.setRecords(postVos);
+        int count = postService.countFolloweePosts(currentUserId);
+        page.setPages((int) Math.ceil((double) count / pageSize));
+        page.setTotal(count);
+        page.setSize(pageSize);
+        return page;
     }
 }

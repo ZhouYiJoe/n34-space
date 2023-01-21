@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseUrl} from "../../../../app.module";
+import {baseUrl, currentUserIdKey} from "../../../../app.module";
 import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../../services/error-handle.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-post-publish',
@@ -10,10 +11,14 @@ import {ErrorHandleService} from "../../../../services/error-handle.service";
   styleUrls: ['./post-publish.component.css']
 })
 export class PostPublishComponent implements OnInit {
+  @Input()
+  public postsComponent: any
+
   public postToPublish: any = {content: ''}
 
   constructor(public httpClient: HttpClient,
-              public errorHandleService: ErrorHandleService) {
+              public errorHandleService: ErrorHandleService,
+              public router: Router) {
   }
 
   ngOnInit(): void {
@@ -21,8 +26,12 @@ export class PostPublishComponent implements OnInit {
   }
 
   publishPost(): void {
-    let url: string = `${baseUrl}/posts`
-    this.httpClient.post(url, this.postToPublish)
+    let item = localStorage.getItem(currentUserIdKey)
+    if (item === null) {
+      this.router.navigate(['/login'])
+      return
+    }
+    this.httpClient.post(`${baseUrl}/posts`, this.postToPublish)
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe(data => {
         if (!data) {
@@ -30,6 +39,7 @@ export class PostPublishComponent implements OnInit {
         } else {
           alert('发布成功！')
           this.postToPublish.content = ''
+          this.postsComponent.refreshPosts()
         }
       })
   }

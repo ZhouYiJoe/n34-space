@@ -1,0 +1,78 @@
+#container {
+  height: 100vh;
+  position: relative;
+}
+
+img {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+  position: absolute;
+  left: 50%;
+  margin-left: -75px;
+  top: 100px;
+}
+
+#upload-avatar-button {
+  position: absolute;
+  top: 300px;
+  background-color: #66bed5;
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  left: 50%;
+  margin-left: -50px;
+  cursor: pointer;
+}
+
+#upload-avatar-button > input {
+  display: none;
+}
+
+#info-panel {
+  position: absolute;
+  top: 390px;
+  left: 250px;
+}
+
+#fields {
+  float: left;
+}
+
+#values {
+  float: left;
+  margin-left: 100px;
+}
+
+.field,
+.value {
+  font-size: 20px;
+  height: 80px;
+  line-height: 80px;
+}
+
+#nickname-value {
+  float: left;
+}
+
+#edit-nickname-button {
+  margin-left: 20px;
+  float: left;
+  font-size: 16px;
+  height: 80px;
+  line-height: 80px;
+  color: blue;
+  cursor: pointer;
+}
+
+#edit-nickname-input-box {
+  font-size: 16px;
+  height: 20px;
+  margin-top: 30px;
+  float: left;
+}

@@ -17,6 +17,7 @@ public class User {
     private String password;
     private String email;
     private String nickname;
+    private String avatarFilename;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)

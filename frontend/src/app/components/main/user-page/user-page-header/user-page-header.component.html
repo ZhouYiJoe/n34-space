@@ -1,0 +1,11 @@
+<div id="header">
+  <img [src]="this.userInfo.avatarFilename === null ? 'assets/default_avatar.webp' :
+  'http://localhost:9090/images/' + this.userInfo.avatarFilename" alt="" id="avatar">
+  <div id="nickname">{{this.userInfo.nickname}}</div>
+  <div id="username">@{{this.userInfo.username}}</div>
+  <div id="follow-button" *ngIf="followButtonShowed"
+       [ngStyle]="{'background-color': this.userInfo.followedByMe ? '#2d2d2d' : 'orange'}"
+       (click)="onFollowButtonClick()">
+    {{this.userInfo.followedByMe ? '取消关注' : '关注'}}
+  </div>
+</div>

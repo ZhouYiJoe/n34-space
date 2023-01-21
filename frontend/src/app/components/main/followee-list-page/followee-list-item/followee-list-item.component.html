@@ -1,0 +1,19 @@
+<div id="container">
+  <div id="left">
+    <img [src]="followee.avatarFilename === null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + followee.avatarFilename" alt="" id="avatar">
+  </div>
+  <div id="middle">
+    <a id="nickname" [routerLink]="['/app/users', followee.username]">{{followee.nickname}}</a>
+    <div id="username">@{{followee.username}}</div>
+  </div>
+  <div id="right">
+    <div id="follow-button"
+         (click)="onFollowButtonClick()"
+         [ngClass]="{'follow-button': !this.followee.followedByMe,
+         'unfollow-button': this.followee.followedByMe}">
+      {{followee.followedByMe ? '取消关注' : '关注'}}
+    </div>
+  </div>
+  <div style="clear: both"></div>
+</div>

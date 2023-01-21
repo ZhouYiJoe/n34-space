@@ -18,6 +18,6 @@ public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("timeCreated", new Date(), metaObject);
+        this.setFieldValByName("timeUpdated", new Date(), metaObject);
     }
 }

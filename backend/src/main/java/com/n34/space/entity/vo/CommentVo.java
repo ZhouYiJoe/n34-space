@@ -1,5 +1,6 @@
 package com.n34.space.entity.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,9 +19,12 @@ public class CommentVo {
     private String nickname;
     //被评论的博文的ID
     private String postId;
+    private String avatarFilename;
     private Integer numLike;
     private Integer numReply;
     private Boolean likedByMe;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date timeCreated;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date timeUpdated;
 }
