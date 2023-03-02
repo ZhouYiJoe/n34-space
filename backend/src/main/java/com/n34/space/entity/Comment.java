@@ -18,6 +18,8 @@ public class Comment {
     private String userId;
     //被评论的博文的ID
     private String postId;
+    private String category;
+    private Boolean extreme;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)

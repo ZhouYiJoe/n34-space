@@ -3,13 +3,12 @@ import {HttpClient} from "@angular/common/http";
 import {
   baseImgUrl,
   baseUrl, currentUserAvatarFilenameKey,
-  currentUserEmailKey,
-  currentUsernameKey,
   currentUserNicknameKey
 } from "../../../app.module";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {catchError} from "rxjs";
 import {Router} from "@angular/router";
+import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
   selector: 'app-user-info-page',
@@ -33,21 +32,12 @@ export class UserInfoPageComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
               public errorHandleService: ErrorHandleService,
-              public router: Router) {
+              public router: Router,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
-    this.userInfo.username = localStorage.getItem(currentUsernameKey)
-    this.userInfo.email = localStorage.getItem(currentUserEmailKey)
-    this.userInfo.nickname = localStorage.getItem(currentUserNicknameKey)
-    this.userInfo.avatarFilename = localStorage.getItem(currentUserAvatarFilenameKey)
-    if (this.userInfo.username === null ||
-      this.userInfo.email === null ||
-      this.userInfo.nickname === null ||
-      this.userInfo.avatarFilename === null) {
-
-      this.router.navigate(['/login'])
-    }
+    this.userInfo = this.userInfoService.getUserInfo()
     if (this.userInfo.avatarFilename !== 'null') {
       this.avatarUrl = `${baseImgUrl}${this.userInfo.avatarFilename}`
     }
@@ -78,13 +68,13 @@ export class UserInfoPageComponent implements OnInit {
         nickname: this.userInfo.nickname
       })
         .pipe(catchError((response) => {
-          this.userInfo.nickname = localStorage.getItem(currentUserNicknameKey)
+          this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
           return this.errorHandleService.handleError(response)
         }))
         .subscribe((data: any) => {
           if (!data) {
             alert('修改失败')
-            this.userInfo.nickname = localStorage.getItem(currentUserNicknameKey)
+            this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
           } else {
             localStorage.setItem(currentUserNicknameKey, this.userInfo.nickname)
           }

@@ -72,8 +72,8 @@ pad_token_idx = tokenizer.pad_token_id
 unk_token_idx = tokenizer.unk_token_id
 max_input_length = tokenizer.max_model_input_sizes['bert-base-uncased']
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-categories = ['体育', '娱乐', '家居', '彩票', '房产', '教育', '时尚', '时政', '星座', '游戏', '社会',
-              '科技', '股票', '财经']
+categories = ['科技', '娱乐', '运动', '汽车', '教育', '世界', '文化',
+              '金融', '游戏', '旅游', '军事', '房产', '农业', '故事', '股票']
 
 HIDDEN_DIM = 256
 OUTPUT_DIM = len(categories)

@@ -85,4 +85,13 @@ public class UserController {
         }
         return followees;
     }
+
+    @PostMapping("/filterConfig")
+    public Boolean changeFilterConfig(@RequestBody UserDto userDto) {
+        String currentUserId = springSecurityService.getCurrentUserId();
+        LambdaUpdateWrapper<User> cond = new LambdaUpdateWrapper<>();
+        cond.set(User::getFilterConfig, userDto.getFilterConfig());
+        cond.eq(User::getId, currentUserId);
+        return userService.update(cond);
+    }
 }

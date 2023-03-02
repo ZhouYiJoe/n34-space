@@ -4,39 +4,50 @@
 <!-- namespace用来指定该映射文件所对应Mapper接口的全限定名 -->
 <mapper namespace="com.n34.space.mapper.PostMapper">
     <select id="findHot" resultType="PostVo">
-        SELECT t1.id                                                  as id,
-               t1.content                                             as content,
-               t1.time_created                                        as time_created,
-               t1.author_username                                     as author_username,
-               t1.author_nickname                                     as author_nickname,
-               t1.author_avatar_filename                              as author_avatar_filename,
-               (SELECT count(*) FROM post_like WHERE post_id = t1.id) AS num_like,
-               (SELECT count(*) FROM `comment` WHERE post_id = t1.id) AS num_comment
+        SELECT t1.id as id,
+        t1.content as content,
+        t1.time_created as time_created,
+        t1.category as category,
+        t1.extreme as extreme,
+        t1.author_username as author_username,
+        t1.author_nickname as author_nickname,
+        t1.author_avatar_filename as author_avatar_filename,
+        (SELECT count(*) FROM post_like WHERE post_id = t1.id) AS num_like,
+        (SELECT count(*) FROM `comment` WHERE post_id = t1.id) AS num_comment
         FROM (
-                 SELECT post.id,
-                        content,
-                        post.time_created,
-                        `user`.username        AS author_username,
-                        `user`.nickname        AS author_nickname,
-                        `user`.avatar_filename AS author_avatar_filename
-                 FROM post
-                          JOIN `user` ON post.author_id = `user`.id
-             ) AS t1
-        order by num_like + num_comment desc
-        limit #{limit} offset #{offset};
+        SELECT post.id,
+        content,
+        post.time_created,
+        post.category,
+        post.extreme,
+        `user`.username AS author_username,
+        `user`.nickname AS author_nickname,
+        `user`.avatar_filename AS author_avatar_filename
+        FROM post
+        JOIN `user` ON post.author_id = `user`.id
+        ) AS t1
+        <where>
+            <foreach collection="categories" index="i" separator="and" item="category">
+                <if test="filterConfig.charAt(i) == '1'">
+                    not (category = #{category} and extreme = 1)
+                </if>
+            </foreach>
+            <if test="searchText != null">
+                and content like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+        order by num_like + num_comment desc, time_created desc;
     </select>
 
     <select id="getFolloweePosts" resultType="Post">
         select id, author_id, content, time_created, time_updated
         from post
         where author_id in (select followee_id from follow where follower_id = #{userId})
-        order by time_created desc
-        limit #{limit} offset #{offset};
-    </select>
-    
-    <select id="countFolloweePosts" resultType="int">
-        select count(*)
-        from post
-        where author_id in (select followee_id from follow where follower_id = #{userId});
+        <foreach collection="categories" index="i" item="category">
+            <if test="filterConfig.charAt(i) == '1'">
+                and not (category = #{category} and extreme = 1)
+            </if>
+        </foreach>
+        order by time_created desc;
     </select>
 </mapper>

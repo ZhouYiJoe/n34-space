@@ -12,4 +12,5 @@ public class UserVo {
     private String nickname;
     private String avatarFilename;
     private Boolean followedByMe;
+    private String filterConfig;
 }

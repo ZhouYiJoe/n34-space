@@ -1,8 +1,13 @@
 <div class="container">
-  <div id="sidebar">
+  <div id="left-sidebar">
     <app-sidebar></app-sidebar>
   </div>
   <div id="content">
     <router-outlet #content></router-outlet>
+  </div>
+  <div id="right-sidebar">
+    <div id="search-box">
+      <input type="text" placeholder="搜索本网站" [(ngModel)]="searchText" (keyup)="search($event)">
+    </div>
   </div>
 </div>

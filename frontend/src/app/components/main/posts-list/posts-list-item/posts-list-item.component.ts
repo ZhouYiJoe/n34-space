@@ -4,6 +4,7 @@ import {baseUrl, currentUserIdKey} from "../../../../app.module";
 import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../../services/error-handle.service";
 import {Router} from "@angular/router";
+import {UserInfoService} from "../../../../services/user-info.service";
 
 @Component({
   selector: 'app-posts-list-item',
@@ -30,7 +31,8 @@ export class PostsListItemComponent implements OnInit {
 
   constructor(public hc: HttpClient,
               public eh: ErrorHandleService,
-              public router: Router) {
+              public router: Router,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
@@ -120,8 +122,7 @@ export class PostsListItemComponent implements OnInit {
   }
 
   submitComment() {
-    let currentUserId = localStorage.getItem(currentUserIdKey)
-    if (currentUserId === null) return
+    let currentUserId = this.userInfoService.getUserInfo()?.userId
     this.hc.post(`${baseUrl}/comments`, {
       content: this.commentInputBoxContent,
       userId: currentUserId,
@@ -147,11 +148,6 @@ export class PostsListItemComponent implements OnInit {
     }
     if (this.maxNumCommentPage === 0) return
     if (this.curMaxNumCommentPage < this.maxNumCommentPage) {
-      let currentUserId = localStorage.getItem(currentUserIdKey)
-      if (currentUserId === null) {
-        this.router.navigate(['/login'])
-        return
-      }
       this.hc.get(`${baseUrl}/comments`, {
         params: {
           postId: this.post.id,

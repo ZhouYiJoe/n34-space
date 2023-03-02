@@ -12,8 +12,8 @@ flask_cors.CORS(app, supports_credentials=True)
 def get_sentiment():
     body = flask.request.get_json()
     text = body['text']
-    weight = sentiment_prediction.predict_sentiment(text)
-    res = {'extreme': weight < 0.2}
+    prediction = sentiment_prediction.predict_sentiment(text)
+    res = {'extreme': prediction == 'disgust' or prediction == 'anger'}
     return flask.jsonify(res)
 
 

@@ -15,6 +15,8 @@ public class Post {
     private String id;
     private String authorId;
     private String content;
+    private String category;
+    private Boolean extreme;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)

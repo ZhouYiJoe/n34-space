@@ -56,6 +56,7 @@ public class SpringSecurityServiceImpl implements SpringSecurityService {
                 LOGIN_STATE_KEY + ":" + userId, TOKEN_HASH_KEY);
     }
 
+    @Override
     public void removeLoginState(String userId) {
         redisService.del(LOGIN_STATE_KEY + ":" + userId);
     }

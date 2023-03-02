@@ -6,8 +6,10 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UserDto {
+    private String id;
     private String username;
     private String password;
     private String email;
     private String nickname;
+    private String filterConfig;
 }

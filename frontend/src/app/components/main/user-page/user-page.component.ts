@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseUrl, currentUserIdKey} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {catchError} from "rxjs";
+import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
   selector: 'app-user-page',
@@ -29,7 +30,8 @@ export class UserPageComponent implements OnInit {
   constructor(public httpClient: HttpClient,
               public activatedRoute: ActivatedRoute,
               public errorHandleService: ErrorHandleService,
-              public router: Router) {
+              public router: Router,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
@@ -45,7 +47,7 @@ export class UserPageComponent implements OnInit {
             this.userInfo.avatarFilename = data.avatarFilename
             this.userInfo.id = data.id
             this.userInfo.followedByMe = data.followedByMe
-            this.followButtonShowed = this.userInfo.id !== localStorage.getItem(currentUserIdKey)
+            this.followButtonShowed = this.userInfo.id !== this.userInfoService.getUserInfo()?.userId
             this.refreshPosts()
           }
         })
@@ -65,11 +67,6 @@ export class UserPageComponent implements OnInit {
   }
 
   refreshPosts(): void {
-    let currentUserId = localStorage.getItem(currentUserIdKey)
-    if (currentUserId === null) {
-      this.router.navigate(['/login'])
-      return
-    }
     this.httpClient.get(`${baseUrl}/posts`, {
       params: {
         authorId: this.userInfo.id,
@@ -87,11 +84,6 @@ export class UserPageComponent implements OnInit {
   getNextPage(): void {
     if (this.maxPageId === null) return
     if (this.curMaxPageId < this.maxPageId) {
-      let currentUserId = localStorage.getItem(currentUserIdKey)
-      if (currentUserId === null) {
-        this.router.navigate(['/login'])
-        return
-      }
       this.httpClient.get(`${baseUrl}/posts`, {
         params: {
           authorId: this.userInfo.id,

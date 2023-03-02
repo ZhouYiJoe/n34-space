@@ -26,6 +26,11 @@ import { UserPageHeaderComponent } from './components/main/user-page/user-page-h
 import { FolloweeListPageComponent } from './components/main/followee-list-page/followee-list-page.component';
 import { FolloweeListItemComponent } from './components/main/followee-list-page/followee-list-item/followee-list-item.component';
 import { FolloweePostsPageComponent } from './components/main/followee-posts-page/followee-posts-page.component';
+import { ConfigPageComponent } from './components/main/config-page/config-page.component';
+import { SearchPageComponent } from './components/main/search-page/search-page.component';
+import { SearchHotPageComponent } from './components/main/search-page/search-hot-page/search-hot-page.component';
+import { SearchLatestPageComponent } from './components/main/search-page/search-latest-page/search-latest-page.component';
+import { SearchUserPageComponent } from './components/main/search-page/search-user-page/search-user-page.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +54,11 @@ import { FolloweePostsPageComponent } from './components/main/followee-posts-pag
     FolloweeListPageComponent,
     FolloweeListItemComponent,
     FolloweePostsPageComponent,
+    ConfigPageComponent,
+    SearchPageComponent,
+    SearchHotPageComponent,
+    SearchLatestPageComponent,
+    SearchUserPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,3 +80,4 @@ export const currentUsernameKey = 'currentUsername'
 export const currentUserEmailKey = 'currentUserEmail'
 export const currentUserNicknameKey = 'currentUserNickname'
 export const currentUserAvatarFilenameKey = 'currentUserAvatarFilename'
+export const currentFilterConfigKey = 'currentFilterConfig'

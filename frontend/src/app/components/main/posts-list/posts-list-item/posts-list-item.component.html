@@ -13,7 +13,7 @@
         <div class="menu-item" (click)="delete()">删除</div>
       </div>
     </div>
-    <div id="content">{{post.content}}</div>
+    <div id="content" [innerHTML]="post.content"></div>
     <div id="bottom">
       <div class="button" (click)="clickLikeButton()" [ngClass]="{'likedByMe': post.likedByMe}">
         点赞&nbsp;{{post.numLike}}</div>

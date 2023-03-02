@@ -12,6 +12,8 @@ import {HotPageComponent} from "./components/main/hot-page/hot-page.component";
 import {UserPageComponent} from "./components/main/user-page/user-page.component";
 import {FolloweeListPageComponent} from "./components/main/followee-list-page/followee-list-page.component";
 import {FolloweePostsPageComponent} from "./components/main/followee-posts-page/followee-posts-page.component";
+import {ConfigPageComponent} from "./components/main/config-page/config-page.component";
+import {SearchPageComponent} from "./components/main/search-page/search-page.component";
 
 const routes: Routes = [
   {
@@ -54,6 +56,14 @@ const routes: Routes = [
       {
         path: 'followee_posts',
         component: FolloweePostsPageComponent
+      },
+      {
+        path: 'config',
+        component: ConfigPageComponent
+      },
+      {
+        path: 'search',
+        component: SearchPageComponent
       },
       {
         path: '',

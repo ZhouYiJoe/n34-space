@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {RegexService} from "../../../services/regex.service";
 import {
-  baseUrl, currentUserAvatarFilenameKey,
+  baseUrl, currentFilterConfigKey, currentUserAvatarFilenameKey,
   currentUserEmailKey,
   currentUserIdKey,
   currentUsernameKey,
@@ -54,6 +54,7 @@ export class LoginFormComponent implements OnInit {
             localStorage.setItem(currentUserEmailKey, data.email)
             localStorage.setItem(currentUserNicknameKey, data.nickname)
             localStorage.setItem(currentUserAvatarFilenameKey, data.avatarFilename)
+            localStorage.setItem(currentFilterConfigKey, data.filterConfig)
             this.router.navigate(['/app/home'])
           })
       })

@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 21/01/2023 16:25:42
+ Date: 21/01/2023 20:56:13
 */
 
 SET NAMES utf8mb4;
@@ -105,6 +105,7 @@ CREATE TABLE `user`  (
   `time_created` datetime(0) NULL DEFAULT NULL,
   `time_updated` datetime(0) NULL DEFAULT NULL,
   `avatar_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `filter_config` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '000000000000',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

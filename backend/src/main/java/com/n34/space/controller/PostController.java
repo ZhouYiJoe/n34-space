@@ -1,6 +1,7 @@
 package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.n34.space.entity.Comment;
@@ -10,9 +11,13 @@ import com.n34.space.entity.User;
 import com.n34.space.entity.dto.PostDto;
 import com.n34.space.entity.vo.PostVo;
 import com.n34.space.service.*;
+import com.n34.space.utils.AiUtils;
 import com.n34.space.utils.BeanCopyUtils;
+import com.n34.space.utils.ConditionUtils;
+import com.n34.space.utils.FontUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -33,22 +38,30 @@ public class PostController {
         postDto.setId(null);
         Post post = BeanCopyUtils.copyObject(postDto, Post.class);
         post.setAuthorId(springSecurityService.getCurrentUserId());
+        post.setCategory(AiUtils.getCategory(post.getContent()));
+        post.setExtreme(AiUtils.getSentiment(post.getContent()));
         return postService.save(post);
     }
 
     @GetMapping
-    public IPage<PostVo> findPage(@NotNull @RequestParam String authorId,
-                                  @NotNull @RequestParam Integer pageNo,
-                                  @NotNull @RequestParam Integer pageSize) {
-        LambdaQueryWrapper<Post> cond = new LambdaQueryWrapper<>();
-        cond.eq(Post::getAuthorId, authorId);
-        cond.orderByDesc(Post::getTimeCreated);
-        IPage<Post> page = postService.page(new Page<>(pageNo, pageSize), cond);
-        IPage<PostVo> postVoPage = BeanCopyUtils.copyPage(page, PostVo.class);
+    public List<PostVo> findForUser(@NotNull @RequestParam String authorId,
+                                    @NotNull @RequestParam Boolean filtered) {
+        String currentUserId = springSecurityService.getCurrentUserId();
+        String filterConfig = userService.getById(currentUserId).getFilterConfig();
+        QueryWrapper<Post> cond = new QueryWrapper<>();
+        cond.eq("author_id", authorId);
+        if (filtered) {
+            String filterExtremeSql = ConditionUtils.filterExtreme(filterConfig);
+            cond.last(filterExtremeSql + " order by time_created desc");
+        } else {
+            cond.last(" order by time_created desc");
+        }
+        List<Post> page = postService.list(cond);
+        List<PostVo> postVos = BeanCopyUtils.copyList(page, PostVo.class);
         User author = userService.getById(authorId);
         Assert.notNull(author, "博文的作者不存在");
 
-        for (PostVo postVo : postVoPage.getRecords()) {
+        for (PostVo postVo : postVos) {
             postVo.setAuthorNickname(author.getNickname());
             postVo.setAuthorUsername(author.getUsername());
             postVo.setAuthorAvatarFilename(author.getAvatarFilename());
@@ -67,7 +80,7 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
         }
 
-        return postVoPage;
+        return postVos;
     }
 
     @PutMapping
@@ -78,7 +91,10 @@ public class PostController {
         String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(post.getAuthorId()), "无权访问");
         Assert.notNull(postDto.getContent(), "博文为null");
-        return postService.updateById(BeanCopyUtils.copyObject(postDto, Post.class));
+        Post post1 = BeanCopyUtils.copyObject(postDto, Post.class);
+        post1.setCategory(AiUtils.getCategory(post1.getContent()));
+        post1.setExtreme(AiUtils.getSentiment(post1.getContent()));
+        return postService.updateById(post1);
     }
 
     @DeleteMapping("/{id}")
@@ -90,31 +106,33 @@ public class PostController {
     }
 
     @GetMapping("/hot")
-    IPage<PostVo> findHot(@NotNull @RequestParam Integer pageNo,
-                          @NotNull @RequestParam Integer pageSize) {
-        List<PostVo> postVos = postService.findHot((pageNo - 1) * pageSize, pageSize);
-
+    public List<PostVo> findHot(@RequestParam String searchText) {
+        if (!StringUtils.hasText(searchText)) {
+            searchText = null;
+        }
+        String currentUserId = springSecurityService.getCurrentUserId();
+        String filterConfig = userService.getById(currentUserId).getFilterConfig();
+        List<String> categories = AiUtils.getAllCategories();
+        List<PostVo> postVos = postService.findHot(searchText, categories, filterConfig);
         for (PostVo postVo : postVos) {
             LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
             cond.eq(PostLike::getPostId, postVo.getId())
                     .eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
             postVo.setLikedByMe(postLikeService.count(cond) == 1);
+            if (searchText != null) {
+                String content = postVo.getContent();
+                postVo.setContent(FontUtils.emphasize(content, searchText));
+            }
         }
-        IPage<PostVo> page = new Page<>();
-        page.setRecords(postVos);
-        int count = postService.count();
-        page.setPages((int) Math.ceil((double) count / pageSize));
-        page.setTotal(count);
-        page.setSize(pageSize);
-        return page;
+        return postVos;
     }
 
     @GetMapping("/followee_posts")
-    public IPage<PostVo> getFolloweePosts(@NotNull @RequestParam Integer pageNo,
-                                         @NotNull @RequestParam Integer pageSize) {
+    public List<PostVo> getFolloweePosts() {
         String currentUserId = springSecurityService.getCurrentUserId();
-        List<Post> posts = postService.getFolloweePosts(
-                currentUserId, (pageNo - 1) * pageSize, pageSize);
+        String filterConfig = userService.getById(currentUserId).getFilterConfig();
+        List<String> categories = AiUtils.getAllCategories();
+        List<Post> posts = postService.getFolloweePosts(currentUserId, categories, filterConfig);
         List<PostVo> postVos = BeanCopyUtils.copyList(posts, PostVo.class);
 
         for (PostVo postVo : postVos) {
@@ -137,12 +155,6 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
         }
 
-        IPage<PostVo> page = new Page<>();
-        page.setRecords(postVos);
-        int count = postService.countFolloweePosts(currentUserId);
-        page.setPages((int) Math.ceil((double) count / pageSize));
-        page.setTotal(count);
-        page.setSize(pageSize);
-        return page;
+        return postVos;
     }
 }

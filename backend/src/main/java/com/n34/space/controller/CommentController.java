@@ -1,6 +1,7 @@
 package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.n34.space.entity.Comment;
@@ -10,7 +11,9 @@ import com.n34.space.entity.User;
 import com.n34.space.entity.dto.CommentDto;
 import com.n34.space.entity.vo.CommentVo;
 import com.n34.space.service.*;
+import com.n34.space.utils.AiUtils;
 import com.n34.space.utils.BeanCopyUtils;
+import com.n34.space.utils.ConditionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -35,16 +38,22 @@ public class CommentController {
         Assert.notNull(commentDto.getPostId(), "postId为null");
         Assert.isNull(commentDto.getId(), "无权访问");
         Assert.isTrue(commentDto.getUserId().equals(springSecurityService.getCurrentUserId()), "无权访问");
-        return commentService.save(BeanCopyUtils.copyObject(commentDto, Comment.class));
+        Comment comment = BeanCopyUtils.copyObject(commentDto, Comment.class);
+        comment.setCategory(AiUtils.getCategory(comment.getContent()));
+        comment.setExtreme(AiUtils.getSentiment(comment.getContent()));
+        return commentService.save(comment);
     }
 
     @GetMapping
     public IPage<CommentVo> findPage(@NotNull @RequestParam String postId,
                                      @NotNull @RequestParam Integer pageNo,
                                      @NotNull @RequestParam Integer pageSize) {
-        LambdaQueryWrapper<Comment> cond = new LambdaQueryWrapper<>();
-        cond.eq(Comment::getPostId, postId);
-        cond.orderByDesc(Comment::getTimeCreated);
+        String currentUserId = springSecurityService.getCurrentUserId();
+        String filterConfig = userService.getById(currentUserId).getFilterConfig();
+        QueryWrapper<Comment> cond = new QueryWrapper<>();
+        cond.eq("post_id", postId);
+        String filterExtremeSql = ConditionUtils.filterExtreme(filterConfig);
+        cond.last(filterExtremeSql + "order by time_created desc");
         IPage<Comment> commentPage = new Page<>(pageNo, pageSize);
         commentService.page(commentPage, cond);
         IPage<CommentVo> commentVoPage = BeanCopyUtils.copyPage(commentPage, CommentVo.class);
@@ -83,7 +92,10 @@ public class CommentController {
         Assert.isTrue(currentUserId.equals(comment.getUserId()), "无权访问");
         Assert.isTrue(currentUserId.equals(commentDto.getUserId()), "无权访问");
         Assert.isNull(commentDto.getPostId(), "无权访问");
-        return commentService.updateById(BeanCopyUtils.copyObject(commentDto, Comment.class));
+        Comment comment1 = BeanCopyUtils.copyObject(commentDto, Comment.class);
+        comment1.setCategory(AiUtils.getCategory(comment1.getContent()));
+        comment1.setExtreme(AiUtils.getSentiment(comment1.getContent()));
+        return commentService.updateById(comment1);
     }
 
     @DeleteMapping("/{id}")

@@ -50,8 +50,10 @@ def predict_sentiment(sentence):
     indexed = [init_token_idx] + tokenizer.convert_tokens_to_ids(tokens) + [eos_token_idx]
     tensor = torch.LongTensor(indexed).to(device)
     tensor = tensor.unsqueeze(0)
-    prediction = torch.sigmoid(model(tensor))
-    return 1 - prediction.item()
+    predictions = model(tensor)
+    max_prediction = predictions.argmax(dim=1)
+    category_index = max_prediction.item()
+    return labels[category_index]
 
 
 SEED = 1234
@@ -70,9 +72,10 @@ pad_token_idx = tokenizer.pad_token_id
 unk_token_idx = tokenizer.unk_token_id
 max_input_length = tokenizer.max_model_input_sizes['bert-base-uncased']
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+labels = ['none', 'like', 'disgust', 'happiness', 'sadness', 'anger', 'surprise', 'fear']
 
 HIDDEN_DIM = 256
-OUTPUT_DIM = 1
+OUTPUT_DIM = len(labels)
 N_LAYERS = 2
 BIDIRECTIONAL = True
 DROPOUT = 0.25

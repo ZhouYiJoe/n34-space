@@ -1,0 +1,21 @@
+#navi-bar {
+  height: 50px;
+  width: 749px;
+}
+
+.navi-option {
+  float: left;
+  height: 50px;
+  width: 250px;
+  line-height: 50px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.navi-option:hover {
+  background-color: #e7e7e8;
+}
+
+#navi-user {
+  width: 249px;
+}

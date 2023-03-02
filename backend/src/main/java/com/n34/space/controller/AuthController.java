@@ -36,7 +36,7 @@ public class AuthController {
                 .setUsername(user.getUsername())
                 .setPassword(user.getPassword())
                 .setActive(true);
-        String token = JwtUtils.createToken(user.getId().toString());
+        String token = JwtUtils.createToken(user.getId());
         springSecurityService.saveLoginState(user.getId(), token, loginState);
         return token;
     }
