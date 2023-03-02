@@ -2,8 +2,6 @@ package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.n34.space.entity.Comment;
 import com.n34.space.entity.Post;
 import com.n34.space.entity.PostLike;
@@ -21,6 +19,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -155,6 +155,48 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
         }
 
+        return postVos;
+    }
+
+    @GetMapping("/latest")
+    public List<PostVo> getLatest(@RequestParam String searchText) {
+        LambdaQueryWrapper<Post> cond = new LambdaQueryWrapper<>();
+        cond.orderByDesc(Post::getTimeUpdated);
+        if (StringUtils.hasText(searchText)) {
+            cond.like(Post::getContent, searchText);
+        }
+        List<Post> posts = postService.list(cond);
+        String currentUserId = springSecurityService.getCurrentUserId();
+        String filterConfig = userService.getById(currentUserId).getFilterConfig();
+        List<String> categories = AiUtils.getAllCategories();
+        List<Post> posts2 = new ArrayList<>();
+        for (Post post : posts) {
+            int i = categories.indexOf(post.getCategory());
+            if (filterConfig.charAt(i) == '0' || !post.getExtreme() || post.getAuthorId().equals(currentUserId)) {
+                posts2.add(post);
+            }
+        }
+
+        List<PostVo> postVos = BeanCopyUtils.copyList(posts2, PostVo.class);
+        for (PostVo postVo : postVos) {
+            User author = userService.getById(postVo.getAuthorId());
+            postVo.setAuthorNickname(author.getNickname());
+            postVo.setAuthorUsername(author.getUsername());
+            postVo.setAuthorAvatarFilename(author.getAvatarFilename());
+
+            LambdaQueryWrapper<PostLike> cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(PostLike::getPostId, postVo.getId());
+            postVo.setNumLike(postLikeService.count(cond2));
+
+            cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(PostLike::getPostId, postVo.getId());
+            cond2.eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
+            postVo.setLikedByMe(postLikeService.count(cond2) == 1);
+
+            LambdaQueryWrapper<Comment> cond3 = new LambdaQueryWrapper<>();
+            cond3.eq(Comment::getPostId, postVo.getId());
+            postVo.setNumComment(commentService.count(cond3));
+        }
         return postVos;
     }
 }

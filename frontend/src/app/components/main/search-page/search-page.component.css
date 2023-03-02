@@ -1,19 +1,26 @@
 #navi-bar {
   height: 50px;
-  width: 749px;
+  width: 747px;
+  border-left: solid #e5e5e5 1px;
+  border-right: solid #e5e5e5 1px;
+  border-bottom: solid #e5e5e5 1px;
 }
 
 .navi-option {
   float: left;
   height: 50px;
-  width: 250px;
+  width: 249px;
   line-height: 50px;
   text-align: center;
   cursor: pointer;
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
 }
 
 .navi-option:hover {
-  background-color: #e7e7e8;
+  background-color: #f4f1ef;
 }
 
 #navi-user {

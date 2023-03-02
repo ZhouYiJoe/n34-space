@@ -2,6 +2,7 @@
   overflow: hidden;
   border-bottom: solid #e5e5e5 1px;
   border-right: solid #e5e5e5 1px;
+  border-left: solid #e5e5e5 1px;
 }
 
 #left {
@@ -14,7 +15,7 @@
 }
 
 #right {
-  width: 678px;
+  width: 677px;
   float: right;
 }
 

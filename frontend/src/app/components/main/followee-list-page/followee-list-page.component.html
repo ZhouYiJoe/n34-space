@@ -1,4 +1,4 @@
 <div id="container">
-  <app-followee-list-item *ngFor="let followee of followees" [followee]="followee">
-  </app-followee-list-item>
+  <div id="no-followee-prompt" *ngIf="followees.length == 0">您还没有关注任何用户！</div>
+  <app-user-list [users]="followees"></app-user-list>
 </div>

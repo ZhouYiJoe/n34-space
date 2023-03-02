@@ -54,47 +54,15 @@ export class UserPageComponent implements OnInit {
     })
   }
 
-  ngAfterViewInit() {
-    window.onscroll = () => {
-      let clientHeight = document.documentElement.clientHeight || document.body.clientHeight
-      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
-      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-      const distanceToBottom = scrollHeight - (clientHeight + scrollTop)
-      if (distanceToBottom < 50) {
-        this.getNextPage()
-      }
-    }
-  }
-
   refreshPosts(): void {
     this.httpClient.get(`${baseUrl}/posts`, {
       params: {
         authorId: this.userInfo.id,
-        pageNo: 1,
-        pageSize: 15
+        filtered: true
       }
     }).pipe(catchError(this.errorHandleService.handleError))
       .subscribe((data: any) => {
-        this.posts = data.records
-        this.maxPageId = data.pages
-        this.curMaxPageId = 1
+        this.posts = data
       })
-  }
-
-  getNextPage(): void {
-    if (this.maxPageId === null) return
-    if (this.curMaxPageId < this.maxPageId) {
-      this.httpClient.get(`${baseUrl}/posts`, {
-        params: {
-          authorId: this.userInfo.id,
-          pageNo: this.curMaxPageId + 1,
-          pageSize: 15
-        }
-      }).pipe(catchError(this.errorHandleService.handleError))
-        .subscribe((data: any) => {
-          this.posts.push(...data.records)
-          this.curMaxPageId++
-        })
-    }
   }
 }

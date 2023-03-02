@@ -31,6 +31,8 @@ import { SearchPageComponent } from './components/main/search-page/search-page.c
 import { SearchHotPageComponent } from './components/main/search-page/search-hot-page/search-hot-page.component';
 import { SearchLatestPageComponent } from './components/main/search-page/search-latest-page/search-latest-page.component';
 import { SearchUserPageComponent } from './components/main/search-page/search-user-page/search-user-page.component';
+import { UserListComponent } from './components/main/user-list/user-list.component';
+import { UserListItemComponent } from './components/main/user-list/user-list-item/user-list-item.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { SearchUserPageComponent } from './components/main/search-page/search-us
     SearchHotPageComponent,
     SearchLatestPageComponent,
     SearchUserPageComponent,
+    UserListComponent,
+    UserListItemComponent,
   ],
   imports: [
     BrowserModule,

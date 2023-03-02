@@ -13,6 +13,7 @@ import com.n34.space.service.impl.MinioService;
 import com.n34.space.utils.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,5 +94,24 @@ public class UserController {
         cond.set(User::getFilterConfig, userDto.getFilterConfig());
         cond.eq(User::getId, currentUserId);
         return userService.update(cond);
+    }
+
+    @GetMapping
+    public List<UserVo> getList(@RequestParam String searchText) {
+        LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
+        if (StringUtils.hasText(searchText)) {
+            cond.like(User::getUsername, searchText).or().like(User::getNickname, searchText);
+        }
+        List<User> users = userService.list(cond);
+        List<UserVo> userVos = BeanCopyUtils.copyList(users, UserVo.class);
+        String currentUserId = springSecurityService.getCurrentUserId();
+        for (UserVo userVo : userVos) {
+            LambdaQueryWrapper<Follow> cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(Follow::getFolloweeId, userVo.getId());
+            cond2.eq(Follow::getFollowerId, currentUserId);
+            int count = followService.count(cond2);
+            userVo.setFollowedByMe(count == 1);
+        }
+        return userVos;
     }
 }

@@ -1,0 +1,68 @@
+#container {
+  width: 748px;
+}
+
+#avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+#left {
+  float: left;
+}
+
+#middle {
+  float: left;
+}
+
+#right {
+  float: right;
+}
+
+#nickname {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  color: black;
+}
+
+#username {
+  font-size: 14px;
+  color: gray;
+}
+
+#follow-button {
+  width: 90px;
+  height: 30px;
+  border-radius: 20px;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.unfollow-button {
+  border: 1px solid #c9c9c9;
+}
+
+.unfollow-button:hover {
+  background-color: rgba(255, 0, 0, 0.15);
+  color: red;
+  border: 1px solid #ff9292;
+}
+
+.follow-button {
+  background-color: black;
+  color: white;
+  border: none;
+}

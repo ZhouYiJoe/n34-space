@@ -22,7 +22,7 @@ export class MainComponent implements OnInit {
   search(event: KeyboardEvent) {
     if (event.key == 'Enter') {
       let navigationExtras: NavigationExtras = {queryParams: {q: this.searchText}}
-      this.router.navigate(['/app/search'], navigationExtras)
+      this.router.navigate(['/app/search/hot'], navigationExtras)
     }
   }
 }
