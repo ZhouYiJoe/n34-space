@@ -11,6 +11,7 @@ import java.util.List;
 @Mapper
 public interface PostMapper extends BaseMapper<Post> {
     List<PostVo> findHot(@Param("searchText") String searchText,
+                         @Param("hashtag") String hashtag,
                          @Param("categories") List<String> categories,
                          @Param("filterConfig") String filterConfig);
 

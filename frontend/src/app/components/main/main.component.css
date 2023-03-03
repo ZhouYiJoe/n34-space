@@ -42,3 +42,95 @@
   outline: none;
   resize: none;
 }
+
+#hot-hashtag-list {
+  border-radius: 20px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  margin-top: 15px;
+  margin-left: 25px;
+  width: 315px;
+  background-color: #f9f8f7;
+  overflow: hidden;
+}
+
+.hot-hashtag {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+}
+
+.hot-hashtag:hover {
+  background-color: #f1f0ef;
+}
+
+#hot-user-list {
+  margin-top: 15px;
+  margin-left: 25px;
+  width: 325px;
+}
+
+.hot-user-list-item-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.hot-user-list-item-left {
+  float: left;
+}
+
+.hot-user-list-item-middle {
+  float: left;
+}
+
+.hot-user-list-item-right {
+  float: right;
+}
+
+.hot-user-list-item-nickname {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  color: black;
+}
+
+.hot-user-list-item-username {
+  font-size: 14px;
+  color: gray;
+}
+
+.hot-user-list-item-button {
+  width: 90px;
+  height: 30px;
+  border-radius: 20px;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.hot-user-list-item-unfollow-button {
+  border: 1px solid #c9c9c9;
+}
+
+.hot-user-list-item-unfollow-button:hover {
+  background-color: rgba(255, 0, 0, 0.15);
+  color: red;
+  border: 1px solid #ff9292;
+}
+
+.hot-user-list-item-follow-button {
+  background-color: black;
+  color: white;
+  border: none;
+}

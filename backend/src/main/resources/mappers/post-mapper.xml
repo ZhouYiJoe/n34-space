@@ -35,6 +35,9 @@
             <if test="searchText != null">
                 and content like concat("%", #{searchText}, "%")
             </if>
+            <if test="hashtag != null">
+                and content like concat("%#", #{hashtag}, "#%")
+            </if>
         </where>
         order by num_like + num_comment desc, time_created desc;
     </select>

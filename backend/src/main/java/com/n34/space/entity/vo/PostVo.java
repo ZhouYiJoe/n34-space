@@ -22,4 +22,5 @@ public class PostVo {
     private Integer numLike;
     private Integer numComment;
     private Boolean likedByMe;
+    private String html;
 }

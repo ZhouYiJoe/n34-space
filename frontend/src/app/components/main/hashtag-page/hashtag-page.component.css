@@ -9,7 +9,7 @@
 .navi-option {
   float: left;
   height: 50px;
-  width: 249px;
+  width: 373px;
   line-height: 50px;
   text-align: center;
   cursor: pointer;
@@ -17,6 +17,10 @@
   font-size: 20px;
   border-bottom-style: solid;
   border-bottom-width: 1px;
+}
+
+#navi-latest {
+  width: 374px;
 }
 
 .navi-option:hover {

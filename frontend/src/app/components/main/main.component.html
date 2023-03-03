@@ -9,5 +9,34 @@
     <div id="search-box">
       <input type="text" placeholder="搜索本网站" [(ngModel)]="searchText" (keyup)="search($event)">
     </div>
+    <div id="hot-hashtag-list">
+      <h2 style="padding: 0 0 10px 10px">热门话题</h2>
+      <div class="hot-hashtag" *ngFor="let hotHashtag of hotHashtags"
+           [routerLink]="['/app/hashtag/', hotHashtag.hashtag]">
+        <div style="font-weight: bold; padding-left: 10px">#{{hotHashtag.hashtag}}</div>
+        <div style="font-size: 14px; color: #716853; margin-top: 5px; margin-left: 10px">{{hotHashtag.count}}条推文</div>
+      </div>
+    </div>
+    <div id="hot-user-list">
+      <div *ngFor="let hotUser of hotUsers" class="hot-user-list-item">
+        <div class="hot-user-list-item-left">
+          <img [src]="hotUser.avatarFilename === null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + hotUser.avatarFilename" alt="" class="hot-user-list-item-avatar">
+        </div>
+        <div class="hot-user-list-item-middle">
+          <a class="hot-user-list-item-nickname" [routerLink]="['/app/users', hotUser.username]">{{hotUser.nickname}}</a>
+          <div class="hot-user-list-item-username">@{{hotUser.username}}</div>
+        </div>
+        <div class="hot-user-list-item-right">
+          <div class="hot-user-list-item-button"
+               (click)="onFollowButtonClick(hotUser)"
+               [ngClass]="{'hot-user-list-item-follow-button': !this.hotUser.followedByMe,
+         'hot-user-list-item-unfollow-button': this.hotUser.followedByMe}">
+            {{hotUser.followedByMe ? '取消关注' : '关注'}}
+          </div>
+        </div>
+        <div style="clear: both"></div>
+      </div>
+    </div>
   </div>
 </div>

@@ -17,6 +17,7 @@ import {SearchPageComponent} from "./components/main/search-page/search-page.com
 import {SearchHotPageComponent} from "./components/main/search-page/search-hot-page/search-hot-page.component";
 import {SearchLatestPageComponent} from "./components/main/search-page/search-latest-page/search-latest-page.component";
 import {SearchUserPageComponent} from "./components/main/search-page/search-user-page/search-user-page.component";
+import {HashtagPageComponent} from "./components/main/hashtag-page/hashtag-page.component";
 
 const routes: Routes = [
   {
@@ -81,6 +82,10 @@ const routes: Routes = [
             component: SearchUserPageComponent
           }
         ]
+      },
+      {
+        path: 'hashtag/:hashtag',
+        component: HashtagPageComponent
       },
       {
         path: '',

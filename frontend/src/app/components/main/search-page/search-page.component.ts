@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseUrl} from "../../../app.module";
 import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
-import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 
 @Component({
@@ -11,7 +9,6 @@ import {ErrorHandleService} from "../../../services/error-handle.service";
   styleUrls: ['./search-page.component.css']
 })
 export class SearchPageComponent implements OnInit {
-  public posts: any[] = []
   public selected: boolean[] = [true, false, false]
 
   constructor(public httpClient: HttpClient,

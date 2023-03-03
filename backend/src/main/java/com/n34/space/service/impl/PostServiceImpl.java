@@ -13,9 +13,11 @@ import java.util.List;
 @Service
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     @Override
-    public List<PostVo> findHot(String searchText, List<String> categories,
+    public List<PostVo> findHot(String searchText,
+                                String hashtag,
+                                List<String> categories,
                                 String filterConfig) {
-        return baseMapper.findHot(searchText, categories, filterConfig);
+        return baseMapper.findHot(searchText, hashtag, categories, filterConfig);
     }
 
     @Override

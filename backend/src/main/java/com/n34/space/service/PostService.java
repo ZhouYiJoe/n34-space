@@ -7,7 +7,9 @@ import com.n34.space.entity.vo.PostVo;
 import java.util.List;
 
 public interface PostService extends IService<Post> {
-    List<PostVo> findHot(String searchText, List<String> categories,
+    List<PostVo> findHot(String searchText,
+                         String hashtag,
+                         List<String> categories,
                          String filterConfig);
 
     List<Post> getFolloweePosts(String userId,

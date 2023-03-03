@@ -69,6 +69,7 @@ export class PostsListItemComponent implements OnInit {
           alert('修改成功')
           this.editWindowVisible = false
           this.post.content = this.editInputBoxContent
+          this.post.html = data.html
         } else {
           alert('修改失败')
         }
@@ -163,6 +164,10 @@ export class PostsListItemComponent implements OnInit {
   }
 
   onClickInPostContent(event: any) {
-    if (!event.target.attributes.)
+    if (!event.target.attributes.link) return
+    if (!event.target.attributes.param) return
+    let link = event.target.attributes.link.value
+    let param = event.target.attributes.param.value
+    this.router.navigate([link, param])
   }
 }

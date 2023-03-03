@@ -33,6 +33,8 @@ import { SearchLatestPageComponent } from './components/main/search-page/search-
 import { SearchUserPageComponent } from './components/main/search-page/search-user-page/search-user-page.component';
 import { UserListComponent } from './components/main/user-list/user-list.component';
 import { UserListItemComponent } from './components/main/user-list/user-list-item/user-list-item.component';
+import { HashtagPageComponent } from './components/main/hashtag-page/hashtag-page.component';
+import {Safe} from "./safe";
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { UserListItemComponent } from './components/main/user-list/user-list-ite
     SearchUserPageComponent,
     UserListComponent,
     UserListItemComponent,
+    HashtagPageComponent,
+    Safe,
   ],
   imports: [
     BrowserModule,

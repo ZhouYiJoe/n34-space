@@ -18,7 +18,7 @@ public class RegexUtils {
     }
 
     public static String parseHashtag(String post) {
-        return ReUtil.replaceAll(post, "#([\\S\\s]+?)#", "<div style=\"color: oranged;\" link=\"/app/hashtag/\" param=\"$1\">$1</div>");
+        return ReUtil.replaceAll(post, "#([\\S\\s]+?)#", "<span class=\"hashtag-class\" style=\"color: orangered; cursor: pointer;\" link=\"/app/hashtag/\" param=\"$1\">#$1#</span>");
     }
 
     public static String correctSearchText(String searchText) {

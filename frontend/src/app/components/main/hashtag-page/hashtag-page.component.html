@@ -1,0 +1,5 @@
+<div id="navi-bar">
+  <div id="navi-hot" class="navi-option" (click)="onHotSelected()" [ngStyle]="{'border-bottom-color': selected[0] ? 'orange' : '#e5e5e5'}">热门</div>
+  <div id="navi-latest" class="navi-option" (click)="onLatestSelected()" [ngStyle]="{'border-bottom-color': selected[1] ? 'orange' : '#e5e5e5'}">最新</div>
+</div>
+<app-posts-list [canEdit]="false" [posts]="posts"></app-posts-list>

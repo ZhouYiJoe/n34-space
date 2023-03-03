@@ -90,14 +90,14 @@ public class PostController {
             cond3.eq(Comment::getPostId, postVo.getId());
             postVo.setNumComment(commentService.count(cond3));
 
-            postVo.setContent(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
         }
 
         return postVos;
     }
 
     @PutMapping
-    public Boolean update(@RequestBody PostDto postDto) {
+    public PostVo update(@RequestBody PostDto postDto) {
         Assert.notNull(postDto.getId(), "ID为null");
         Post post = postService.getById(postDto.getId());
         Set<String> hashtagNames = RegexUtils.getAllHashtag(post.getContent());
@@ -137,7 +137,29 @@ public class PostController {
                     .setPostId(post.getId());
             hashtagPostRelaService.save(hashtagPostRela);
         }
-        return postService.updateById(post1);
+        postService.updateById(post1);
+        post = postService.getById(post1.getId());
+        PostVo postVo = BeanCopyUtils.copyObject(post, PostVo.class);
+        User author = userService.getById(postVo.getAuthorId());
+        postVo.setAuthorNickname(author.getNickname());
+        postVo.setAuthorUsername(author.getUsername());
+        postVo.setAuthorAvatarFilename(author.getAvatarFilename());
+
+        LambdaQueryWrapper<PostLike> cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(PostLike::getPostId, postVo.getId());
+        postVo.setNumLike(postLikeService.count(cond2));
+
+        cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(PostLike::getPostId, postVo.getId());
+        cond2.eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
+        postVo.setLikedByMe(postLikeService.count(cond2) == 1);
+
+        LambdaQueryWrapper<Comment> cond3 = new LambdaQueryWrapper<>();
+        cond3.eq(Comment::getPostId, postVo.getId());
+        postVo.setNumComment(commentService.count(cond3));
+
+        postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+        return postVo;
     }
 
     @DeleteMapping("/{id}")
@@ -165,17 +187,21 @@ public class PostController {
     }
 
     @GetMapping("/hot")
-    public List<PostVo> findHot(@RequestParam String searchText) {
+    public List<PostVo> findHot(@RequestParam(required = false) String searchText,
+                                @RequestParam(required = false) String hashtag) {
         if (searchText != null) {
             searchText = RegexUtils.correctSearchText(searchText);
             if (!StringUtils.hasText(searchText)) {
                 searchText = null;
             }
         }
+        if (!StringUtils.hasText(hashtag)) {
+            hashtag = null;
+        }
         String currentUserId = springSecurityService.getCurrentUserId();
         String filterConfig = userService.getById(currentUserId).getFilterConfig();
         List<String> categories = AiUtils.getAllCategories();
-        List<PostVo> postVos = postService.findHot(searchText, categories, filterConfig);
+        List<PostVo> postVos = postService.findHot(searchText, hashtag, categories, filterConfig);
         for (PostVo postVo : postVos) {
             LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
             cond.eq(PostLike::getPostId, postVo.getId())
@@ -185,7 +211,7 @@ public class PostController {
                 String content = postVo.getContent();
                 postVo.setContent(FontUtils.emphasize(content, searchText));
             }
-            postVo.setContent(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
         }
         return postVos;
     }
@@ -217,14 +243,15 @@ public class PostController {
             cond3.eq(Comment::getPostId, postVo.getId());
             postVo.setNumComment(commentService.count(cond3));
 
-            postVo.setContent(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
         }
 
         return postVos;
     }
 
     @GetMapping("/latest")
-    public List<PostVo> getLatest(@RequestParam String searchText) {
+    public List<PostVo> getLatest(@RequestParam(required = false) String searchText,
+                                  @RequestParam(required = false) String hashtag) {
         if (searchText != null) {
             searchText = RegexUtils.correctSearchText(searchText);
         }
@@ -232,6 +259,9 @@ public class PostController {
         cond.orderByDesc(Post::getTimeUpdated);
         if (StringUtils.hasText(searchText)) {
             cond.like(Post::getContent, searchText);
+        }
+        if (StringUtils.hasText(hashtag)) {
+            cond.like(Post::getContent, "#" + hashtag + "#");
         }
         List<Post> posts = postService.list(cond);
         String currentUserId = springSecurityService.getCurrentUserId();
@@ -270,7 +300,7 @@ public class PostController {
                 postVo.setContent(FontUtils.emphasize(content, searchText));
             }
 
-            postVo.setContent(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
         }
         return postVos;
     }

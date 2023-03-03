@@ -98,7 +98,9 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserVo> getList(@RequestParam String searchText) {
+    public List<UserVo> getList(@RequestParam(required = false) String searchText,
+                                @RequestParam(required = false) Boolean sortByFollower,
+                                @RequestParam(required = false) Integer topN) {
         if (searchText != null) {
             searchText = RegexUtils.correctSearchText(searchText);
         }
@@ -112,10 +114,15 @@ public class UserController {
         for (UserVo userVo : userVos) {
             LambdaQueryWrapper<Follow> cond2 = new LambdaQueryWrapper<>();
             cond2.eq(Follow::getFolloweeId, userVo.getId());
-            cond2.eq(Follow::getFollowerId, currentUserId);
             int count = followService.count(cond2);
+            userVo.setNumFollower(count);
+            cond2.eq(Follow::getFollowerId, currentUserId);
+            count = followService.count(cond2);
             userVo.setFollowedByMe(count == 1);
         }
-        return userVos;
+        if (sortByFollower) {
+            userVos.sort((a, b) -> -Integer.compare(a.getNumFollower(), b.getNumFollower()));
+        }
+        return topN == null ? userVos : userVos.subList(0, Math.min(topN, userVos.size()));
     }
 }
