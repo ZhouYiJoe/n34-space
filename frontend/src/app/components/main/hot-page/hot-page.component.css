@@ -1,3 +1,11 @@
 #post-list {
   width: 749px;
 }
+
+#no-post-prompt {
+  width: 749px;
+  text-align: center;
+  margin-top: 75px;
+  font-size: 30px;
+  font-weight: bold;
+}

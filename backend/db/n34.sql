@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 21/01/2023 20:56:13
+ Date: 03/03/2023 10:42:29
 */
 
 SET NAMES utf8mb4;
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `post`;
 CREATE TABLE `post`  (
   `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `author_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `content` varchar(140) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `content` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time_created` datetime(0) NULL DEFAULT NULL,
   `time_updated` datetime(0) NULL DEFAULT NULL,
   `category` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -105,7 +105,7 @@ CREATE TABLE `user`  (
   `time_created` datetime(0) NULL DEFAULT NULL,
   `time_updated` datetime(0) NULL DEFAULT NULL,
   `avatar_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `filter_config` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '000000000000',
+  `filter_config` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '000000000000000',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

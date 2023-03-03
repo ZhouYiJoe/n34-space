@@ -11,6 +11,7 @@ import com.n34.space.service.SpringSecurityService;
 import com.n34.space.service.UserService;
 import com.n34.space.service.impl.MinioService;
 import com.n34.space.utils.BeanCopyUtils;
+import com.n34.space.utils.RegexUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -98,6 +99,9 @@ public class UserController {
 
     @GetMapping
     public List<UserVo> getList(@RequestParam String searchText) {
+        if (searchText != null) {
+            searchText = RegexUtils.correctSearchText(searchText);
+        }
         LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(searchText)) {
             cond.like(User::getUsername, searchText).or().like(User::getNickname, searchText);

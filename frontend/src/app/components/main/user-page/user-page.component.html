@@ -1,4 +1,5 @@
 <app-user-page-header [userInfo]="userInfo" [followButtonShowed]="followButtonShowed">
 </app-user-page-header>
+<div id="no-content-prompt" *ngIf="posts.length == 0">该用户还未发布任何推文！</div>
 <app-posts-list [canEdit]="false" [posts]="posts">
 </app-posts-list>

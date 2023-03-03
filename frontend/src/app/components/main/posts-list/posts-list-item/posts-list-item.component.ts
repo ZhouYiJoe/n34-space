@@ -161,4 +161,8 @@ export class PostsListItemComponent implements OnInit {
         })
     }
   }
+
+  onClickInPostContent(event: any) {
+    if (!event.target.attributes.)
+  }
 }

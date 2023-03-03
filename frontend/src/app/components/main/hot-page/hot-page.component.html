@@ -1,3 +1,4 @@
 <div id="post-list">
+  <div id="no-post-prompt" *ngIf="posts.length == 0">目前还没有热门推文！</div>
   <app-posts-list [posts]="posts" [canEdit]="false"></app-posts-list>
 </div>
