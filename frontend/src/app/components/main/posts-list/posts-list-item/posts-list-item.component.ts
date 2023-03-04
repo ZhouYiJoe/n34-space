@@ -99,8 +99,9 @@ export class PostsListItemComponent implements OnInit {
   }
 
   clickReplyButton() {
-    this.commentWindowVisible = true
-    this.refreshComments()
+    // this.commentWindowVisible = true
+    // this.refreshComments()
+    this.router.navigate(['app/post/', this.post.id])
   }
 
   refreshComments() {

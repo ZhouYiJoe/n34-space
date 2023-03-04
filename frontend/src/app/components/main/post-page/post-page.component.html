@@ -1,0 +1,26 @@
+<div id="container">
+  <div id="post-author-part">
+    <div id="post-author-part-left">
+      <img id="avatar" [src]="this.post.authorAvatarFilename === null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + this.post.authorAvatarFilename" alt="">
+    </div>
+    <div id="post-author-part-right">
+      <a id="post-author-nickname" [routerLink]="['/app/users', post.authorUsername]">{{post.authorNickname}}</a>
+      <div id="post-author-username">@{{post.authorUsername}}</div>
+    </div>
+  </div>
+  <div id="post-content" (click)="onClickInPostContent($event)" [innerHTML]="post.html | safeHtml"></div>
+  <div id="post-create-time">{{post.timeCreated}}</div>
+  <div id="like-and-reply-part">
+    <div id="post-like-button" (click)="clickLikeButton()" [ngClass]="{'likedByMe': post.likedByMe, 'post-like-and-reply-button': true}">点赞&nbsp;{{post.numLike}}</div>
+    <div id="post-reply-button" class="post-like-and-reply-button">回复&nbsp;{{post.numComment}}</div>
+    <div style="clear: both"></div>
+  </div>
+  <div id="comment-input-part">
+    <textarea id="comment-input-box" rows="5" maxlength="140" placeholder="发布你的回复" [(ngModel)]="commentToPublish.content"></textarea>
+    <p id="comment-to-publish-length">{{commentToPublish.content.length}}/140</p>
+    <button id="comment-publish-button" (click)="submitComment()">发布</button>
+    <div style="clear: both"></div>
+  </div>
+  <app-comment-list [comments]="comments"></app-comment-list>
+</div>

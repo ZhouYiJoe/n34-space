@@ -3,12 +3,12 @@
   width: 783px;
 }
 
-#left {
+#top-left {
   width: 70px;
   float: left;
 }
 
-#right {
+#top-right {
   float: left;
   width: 713px;
 }

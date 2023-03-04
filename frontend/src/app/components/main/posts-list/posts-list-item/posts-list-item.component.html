@@ -1,26 +1,30 @@
 <div id="container" (click)="closeMenu($event)">
-  <div id="left">
-    <img id="avatar" [src]="this.post.authorAvatarFilename === null ? 'assets/default_avatar.webp' :
+  <div id="top">
+    <div id="left-top">
+      <img id="avatar" [src]="this.post.authorAvatarFilename === null ? 'assets/default_avatar.webp' :
     'http://localhost:9090/images/' + this.post.authorAvatarFilename" alt="">
-  </div>
-  <div id="right">
+    </div>
     <div id="right-top">
-      <a id="nickname" [routerLink]="['/app/users', post.authorUsername]">{{post.authorNickname}}</a>
-      <div id="usernameAndTime">@{{post.authorUsername}}&nbsp;·&nbsp;{{post.timeCreated}}</div>
-      <img src="assets/more.svg" alt="" id="more" (click)="showMenu()" *ngIf="this.canEdit">
-      <div id="menu" *ngIf="this.menuVisible">
-        <div class="menu-item" (click)="edit()">修改</div>
-        <div class="menu-item" (click)="delete()">删除</div>
+      <div id="right-top-line-1">
+        <a id="nickname" [routerLink]="['/app/users', post.authorUsername]">{{post.authorNickname}}</a>
+        <div id="usernameAndTime">@{{post.authorUsername}}&nbsp;·&nbsp;{{post.timeCreated}}</div>
+        <img src="assets/more.svg" alt="" id="more" (click)="showMenu()" *ngIf="this.canEdit">
+        <div id="menu" *ngIf="this.menuVisible">
+          <div class="menu-item" (click)="edit()">修改</div>
+          <div class="menu-item" (click)="delete()">删除</div>
+        </div>
+        <div style="clear: both"></div>
       </div>
+      <div id="right-top-line-2" (click)="onClickInPostContent($event)" [innerHTML]="post.html | safeHtml"></div>
     </div>
-    <div id="content" (click)="onClickInPostContent($event)" [innerHTML]="post.html | safeHtml"></div>
-    <div id="bottom">
-      <div class="button" (click)="clickLikeButton()" [ngClass]="{'likedByMe': post.likedByMe}">
-        点赞&nbsp;{{post.numLike}}</div>
-      <div class="button" (click)="clickReplyButton()">回复&nbsp;{{post.numComment}}</div>
-    </div>
+    <div style="clear: both"></div>
+  </div>
+  <div id="bottom">
+    <div class="button" (click)="clickLikeButton()" [ngClass]="{'likedByMe': post.likedByMe}">点赞&nbsp;{{post.numLike}}</div>
+    <div class="button" (click)="clickReplyButton()">回复&nbsp;{{post.numComment}}</div>
   </div>
 </div>
+
 <div id="window-background" *ngIf="this.editWindowVisible || this.commentWindowVisible"></div>
 <div id="edit-window" *ngIf="this.editWindowVisible">
   <div>

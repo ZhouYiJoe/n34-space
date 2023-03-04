@@ -5,34 +5,22 @@
   border-left: solid #e5e5e5 1px;
 }
 
-#left {
+#left-top {
   width: 70px;
   float: left;
 }
 
 #avatar {
   margin-top: 10px;
-}
-
-#right {
-  width: 677px;
-  float: right;
-}
-
-#right-top:before,
-#right-top:after {
-  content: "";
-  display: table;
-}
-
-#right-top:after {
-  clear: both;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-left: 10px;
 }
 
 #right-top {
-  margin-top: 10px;
-  position: relative;
-  *zoom: 1;
+  float: left;
+  width: 677px;
 }
 
 #nickname {
@@ -83,7 +71,7 @@
   background-color: #f7f7f7;
 }
 
-#content {
+#right-top-line-2 {
   margin-top: 5px;
   word-wrap: break-word;
 }
@@ -102,10 +90,6 @@
 }
 
 .button:hover {
-  color: orange;
-}
-
-.likedByMe {
   color: orange;
 }
 
@@ -184,13 +168,6 @@
   margin-top: 15px;
   font-size: 20px;
   line-height: 40px;
-}
-
-#avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  margin-left: 10px;
 }
 
 #comment-window {

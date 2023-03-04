@@ -1,0 +1,19 @@
+<div id="container">
+  <div id="top">
+    <div id="top-left">
+      <img id="avatar" [src]="this.comment.authorAvatarFilename === null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + this.comment.authorAvatarFilename" alt="">
+    </div>
+    <div id="top-right">
+      <div id="right-top">
+        <a id="nickname" [routerLink]="['/app/users', comment.authorUsername]">{{comment.authorNickname}}</a>
+        <div id="usernameAndTime">@{{comment.authorUsername}}&nbsp;·&nbsp;{{comment.timeCreated}}</div>
+      </div>
+      <div id="content" (click)="onClickInCommentContent($event)" [innerHTML]="comment.html | safeHtml"></div>
+    </div>
+  </div>
+  <div id="bottom">
+    <div class="button" (click)="clickLikeButton()" [ngClass]="{'likedByMe': comment.likedByMe}">点赞&nbsp;{{comment.numLike}}</div>
+    <div class="button" (click)="clickReplyButton()">回复&nbsp;{{comment.numReply}}</div>
+  </div>
+</div>

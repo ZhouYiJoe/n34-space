@@ -35,6 +35,8 @@ import { UserListComponent } from './components/main/user-list/user-list.compone
 import { UserListItemComponent } from './components/main/user-list/user-list-item/user-list-item.component';
 import { HashtagPageComponent } from './components/main/hashtag-page/hashtag-page.component';
 import {Safe} from "./safe";
+import { PostPageComponent } from './components/main/post-page/post-page.component';
+import { CommentListItemComponent } from './components/main/post-page/comment-list/comment-list-item/comment-list-item.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,8 @@ import {Safe} from "./safe";
     UserListItemComponent,
     HashtagPageComponent,
     Safe,
+    PostPageComponent,
+    CommentListItemComponent,
   ],
   imports: [
     BrowserModule,

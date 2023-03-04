@@ -11,7 +11,7 @@
   margin-right: 10px;
 }
 
-#left {
+#top-left {
   float: left;
 }
 
@@ -19,7 +19,7 @@
   float: left;
 }
 
-#right {
+#top-right {
   float: right;
 }
 

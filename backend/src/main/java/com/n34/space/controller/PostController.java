@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.n34.space.entity.*;
 import com.n34.space.entity.dto.PostDto;
 import com.n34.space.entity.vo.PostVo;
+import com.n34.space.entity.vo.UserVo;
 import com.n34.space.service.*;
 import com.n34.space.utils.*;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,33 @@ public class PostController {
     private final CommentService commentService;
     private final HashtagService hashtagService;
     private final HashtagPostRelaService hashtagPostRelaService;
+
+    @GetMapping("/{id}")
+    public PostVo getById(@PathVariable String id) {
+        Post post = postService.getById(id);
+        PostVo postVo = BeanCopyUtils.copyObject(post, PostVo.class);
+        User author = userService.getById(postVo.getAuthorId());
+        postVo.setAuthorNickname(author.getNickname());
+        postVo.setAuthorUsername(author.getUsername());
+        postVo.setAuthorAvatarFilename(author.getAvatarFilename());
+
+        LambdaQueryWrapper<PostLike> cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(PostLike::getPostId, postVo.getId());
+        postVo.setNumLike(postLikeService.count(cond2));
+
+        cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(PostLike::getPostId, postVo.getId());
+        cond2.eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
+        postVo.setLikedByMe(postLikeService.count(cond2) == 1);
+
+        LambdaQueryWrapper<Comment> cond3 = new LambdaQueryWrapper<>();
+        cond3.eq(Comment::getPostId, postVo.getId());
+        postVo.setNumComment(commentService.count(cond3));
+
+        postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+        postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
+        return postVo;
+    }
 
     @PostMapping
     public Boolean postNew(@RequestBody PostDto postDto) {

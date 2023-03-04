@@ -14,12 +14,14 @@ import com.n34.space.service.*;
 import com.n34.space.utils.AiUtils;
 import com.n34.space.utils.BeanCopyUtils;
 import com.n34.space.utils.ConditionUtils;
+import com.n34.space.utils.RegexUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,20 +47,17 @@ public class CommentController {
     }
 
     @GetMapping
-    public IPage<CommentVo> findPage(@NotNull @RequestParam String postId,
-                                     @NotNull @RequestParam Integer pageNo,
-                                     @NotNull @RequestParam Integer pageSize) {
+    public List<CommentVo> getList(@NotNull @RequestParam(required = false) String postId) {
         String currentUserId = springSecurityService.getCurrentUserId();
         String filterConfig = userService.getById(currentUserId).getFilterConfig();
         QueryWrapper<Comment> cond = new QueryWrapper<>();
         cond.eq("post_id", postId);
         String filterExtremeSql = ConditionUtils.filterExtreme(filterConfig);
         cond.last(filterExtremeSql + "order by time_created desc");
-        IPage<Comment> commentPage = new Page<>(pageNo, pageSize);
-        commentService.page(commentPage, cond);
-        IPage<CommentVo> commentVoPage = BeanCopyUtils.copyPage(commentPage, CommentVo.class);
+        List<Comment> comments = commentService.list(cond);
+        List<CommentVo> commentVos = BeanCopyUtils.copyList(comments, CommentVo.class);
 
-        for (CommentVo commentVo : commentVoPage.getRecords()) {
+        for (CommentVo commentVo : commentVos) {
             String userId = commentVo.getUserId();
             Assert.notNull(userId, "userId为null");
             User user = userService.getById(userId);
@@ -79,9 +78,11 @@ public class CommentController {
             LambdaQueryWrapper<CommentReply> cond3 = new LambdaQueryWrapper<>();
             cond3.eq(CommentReply::getCommentId, commentVo.getId());
             commentVo.setNumReply(commentReplyService.count(cond3));
+
+            commentVo.setContent(RegexUtils.parseAtSymbol(commentVo.getContent()));
         }
 
-        return commentVoPage;
+        return commentVos;
     }
 
     @PutMapping

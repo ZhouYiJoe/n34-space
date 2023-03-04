@@ -1,0 +1,123 @@
+#container {
+  overflow: hidden;
+  border-right: solid #e5e5e5 1px;
+  border-left: solid #e5e5e5 1px;
+}
+
+#avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+#post-author-part {
+  height: 70px;
+}
+
+#post-author-part-left {
+  width: 70px;
+  height: 70px;
+  float: left;
+}
+
+#post-author-part-right {
+  height: 70px;
+  width: 672px;
+  float: left;
+  margin-left: 5px;
+}
+
+#post-author-nickname {
+  display: block;
+  margin-top: 15px;
+  height: 20px;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#post-author-username {
+  height: 20px;
+  color: gray;
+  font-size: 14px;
+}
+
+#post-content {
+  padding: 10px 15px;
+}
+
+#post-create-time {
+  padding: 10px 15px;
+  color: gray;
+}
+
+#like-and-reply-part {
+  margin-left: 15px;
+  margin-top: 10px;
+  width: 717px;
+  border-top: 1px solid #f4f1ef;
+  border-bottom: 1px solid #f4f1ef;
+}
+
+.post-like-and-reply-button {
+  height: 30px;
+  width: 358px;
+  float: left;
+  line-height: 30px;
+  text-align: center;
+  color: grey;
+}
+
+.likedByMe {
+  color: orange;
+}
+
+#post-like-button {
+  cursor: pointer;
+}
+
+#post-like-button:hover {
+  color: orange;
+}
+
+#comment-input-box {
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 709px;
+  border-style: none;
+  font-size: 20px;
+  resize: none;
+  outline: none;
+}
+
+#comment-publish-button {
+  float: right;
+  margin-bottom: 10px;
+  margin-right: 15px;
+  border: none;
+  background-color: #f07c1d;
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#comment-publish-button:hover {
+  background-color: #d26b19;
+}
+
+#comment-to-publish-length {
+  float: left;
+  margin-left: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
+  line-height: 40px;
+  color: gray;
+}
