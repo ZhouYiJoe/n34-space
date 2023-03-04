@@ -100,7 +100,8 @@ public class UserController {
     @GetMapping
     public List<UserVo> getList(@RequestParam(required = false) String searchText,
                                 @RequestParam(required = false) Boolean sortByFollower,
-                                @RequestParam(required = false) Integer topN) {
+                                @RequestParam(required = false) Integer topN,
+                                @RequestParam(required = false) Boolean includeFollowed) {
         if (searchText != null) {
             searchText = RegexUtils.correctSearchText(searchText);
         }
@@ -120,8 +121,11 @@ public class UserController {
             count = followService.count(cond2);
             userVo.setFollowedByMe(count == 1);
         }
-        if (sortByFollower) {
+        if (sortByFollower != null && sortByFollower) {
             userVos.sort((a, b) -> -Integer.compare(a.getNumFollower(), b.getNumFollower()));
+        }
+        if (includeFollowed != null && !includeFollowed) {
+            userVos = userVos.stream().filter((userVo) -> !userVo.getFollowedByMe()).collect(Collectors.toList());
         }
         return topN == null ? userVos : userVos.subList(0, Math.min(topN, userVos.size()));
     }

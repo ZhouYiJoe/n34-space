@@ -1,5 +1,7 @@
 #container {
-  overflow: hidden;
+  /*overflow: hidden;*/
+  position: relative;
+  height: 100vh;
 }
 
 #my-posts {
@@ -22,4 +24,76 @@
 
 .option:hover {
   background-color: #e7e7e8;
+}
+
+#user-bar {
+  position: absolute;
+  top: 100vh;
+  margin-top: -100px;
+  width: 240px;
+  height: 60px;
+  border-radius: 30px;
+}
+
+#user-bar:hover {
+  background-color: #e7e7e8;
+  cursor: pointer;
+}
+
+#avatar {
+  float: left;
+}
+
+#avatar-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  margin-top: 8px;
+  margin-left: 8px;
+}
+
+#nickname-and-username {
+  float: left;
+  margin-left: 15px;
+}
+
+#nickname {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+}
+
+#username {
+  font-size: 16px;
+  color: gray;
+}
+
+#more {
+  float: right;
+}
+
+#more-button {
+  margin-top: 18px;
+  margin-right: 10px;
+}
+
+#user-bar-menu {
+  position: absolute;
+  top: 100vh;
+  margin-top: -170px;
+  width: 240px;
+  border-radius: 10px;
+  padding: 10px 0;
+  box-shadow: 0 0 10px 1px #c5c5c5;
+}
+
+.user-bar-menu-option {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.user-bar-menu-option:hover {
+  background-color: #f9f8f7;
 }

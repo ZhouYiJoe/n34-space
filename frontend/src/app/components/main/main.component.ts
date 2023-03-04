@@ -33,7 +33,7 @@ export class MainComponent implements OnInit {
       .subscribe((data: any) => {
         this.hotHashtags = data
       })
-    this.httpClient.get(`${baseUrl}/users`, {params: {sortByFollower: true, topN: 5}})
+    this.httpClient.get(`${baseUrl}/users`, {params: {sortByFollower: true, topN: 5, includeFollowed: false}})
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((data: any) => {
         this.hotUsers = data

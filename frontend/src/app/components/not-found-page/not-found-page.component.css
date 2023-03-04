@@ -1,0 +1,26 @@
+#container {
+  position: absolute;
+  left: 50vw;
+  top: 50vh;
+  width: 400px;
+  height: 400px;
+  margin-left: -200px;
+  margin-top: -200px;
+  text-align: center;
+}
+
+button {
+  border: none;
+  background-color: #f07c1d;
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #d26b19;
+}

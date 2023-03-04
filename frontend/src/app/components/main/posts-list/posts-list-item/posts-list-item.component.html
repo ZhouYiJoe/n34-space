@@ -1,4 +1,4 @@
-<div id="container">
+<div id="container" (click)="closeMenu($event)">
   <div id="left">
     <img id="avatar" [src]="this.post.authorAvatarFilename === null ? 'assets/default_avatar.webp' :
     'http://localhost:9090/images/' + this.post.authorAvatarFilename" alt="">

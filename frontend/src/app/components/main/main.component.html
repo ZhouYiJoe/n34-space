@@ -10,14 +10,15 @@
       <input type="text" placeholder="搜索本网站" [(ngModel)]="searchText" (keyup)="search($event)">
     </div>
     <div id="hot-hashtag-list">
-      <h2 style="padding: 0 0 10px 10px">热门话题</h2>
+      <h2 style="padding: 0 0 10px 0; margin-left: 15px">热门话题</h2>
       <div class="hot-hashtag" *ngFor="let hotHashtag of hotHashtags"
            [routerLink]="['/app/hashtag/', hotHashtag.hashtag]">
-        <div style="font-weight: bold; padding-left: 10px">#{{hotHashtag.hashtag}}</div>
-        <div style="font-size: 14px; color: #716853; margin-top: 5px; margin-left: 10px">{{hotHashtag.count}}条推文</div>
+        <div style="font-weight: bold; margin-left: 15px">#{{hotHashtag.hashtag}}</div>
+        <div style="font-size: 14px; color: #716853; margin-top: 5px; margin-left: 15px">{{hotHashtag.count}}条推文</div>
       </div>
     </div>
     <div id="hot-user-list">
+      <h2 style="margin-top: 10px; margin-left: 15px; margin-bottom: 15px;">推荐关注</h2>
       <div *ngFor="let hotUser of hotUsers" class="hot-user-list-item">
         <div class="hot-user-list-item-left">
           <img [src]="hotUser.avatarFilename === null ? 'assets/default_avatar.webp' :

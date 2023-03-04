@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
+import {currentUsernameKey} from "../../app.module";
 
 @Component({
   selector: 'app-not-found-page',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotFoundPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
   }
 
+  backToMainPage() {
+    let curUsername = localStorage.getItem(currentUsernameKey)
+    if (curUsername === null) {
+      this.router.navigate(['/login'])
+    }
+    this.router.navigate(['/app/home'])
+  }
 }

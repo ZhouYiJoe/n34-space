@@ -170,4 +170,10 @@ export class PostsListItemComponent implements OnInit {
     let param = event.target.attributes.param.value
     this.router.navigate([link, param])
   }
+
+  closeMenu(event: any) {
+    if (event.target.id !== 'more') {
+      this.menuVisible = false
+    }
+  }
 }

@@ -20,10 +20,17 @@ public class FollowController {
     @GetMapping
     public Boolean followUser(@NotNull @RequestParam String followeeId) {
         try {
-            Follow follow = new Follow()
-                    .setFollowerId(springSecurityService.getCurrentUserId())
-                    .setFolloweeId(followeeId);
-            return followService.save(follow);
+            LambdaQueryWrapper<Follow> cond = new LambdaQueryWrapper<>();
+            cond.eq(Follow::getFolloweeId, followeeId);
+            cond.eq(Follow::getFollowerId, springSecurityService.getCurrentUserId());
+            Follow follow = followService.getOne(cond);
+            if (follow == null) {
+                follow = new Follow()
+                        .setFollowerId(springSecurityService.getCurrentUserId())
+                        .setFolloweeId(followeeId);
+                return followService.save(follow);
+            }
+            return true;
         } catch (Exception e) {
             if (e instanceof SQLIntegrityConstraintViolationException) {
                 e.printStackTrace();
@@ -39,6 +46,7 @@ public class FollowController {
         LambdaQueryWrapper<Follow> cond = new LambdaQueryWrapper<>();
         cond.eq(Follow::getFolloweeId, followeeId);
         cond.eq(Follow::getFollowerId, springSecurityService.getCurrentUserId());
-        return followService.remove(cond);
+        followService.remove(cond);
+        return true;
     }
 }

@@ -33,6 +33,13 @@ public class PostController {
     public Boolean postNew(@RequestBody PostDto postDto) {
         postDto.setId(null);
         Set<String> hashtagNames = RegexUtils.getAllHashtag(postDto.getContent());
+        if (!RegexUtils.checkHashtag(hashtagNames)) {
+            throw new RuntimeException("话题标签中不能带有\"@\"");
+        }
+        List<String> atUsernames = RegexUtils.getAllAtUsername(postDto.getContent());
+        if (!RegexUtils.checkAtUsername(atUsernames)) {
+            throw new RuntimeException("被@的用户名中不能带有\"#\"");
+        }
         Post post = BeanCopyUtils.copyObject(postDto, Post.class);
         post.setAuthorId(springSecurityService.getCurrentUserId());
         post.setCategory(AiUtils.getCategory(post.getContent()));
@@ -91,6 +98,7 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
 
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
         }
 
         return postVos;
@@ -100,8 +108,20 @@ public class PostController {
     public PostVo update(@RequestBody PostDto postDto) {
         Assert.notNull(postDto.getId(), "ID为null");
         Post post = postService.getById(postDto.getId());
-        Set<String> hashtagNames = RegexUtils.getAllHashtag(post.getContent());
-        for (String hashtagName : hashtagNames) {
+        Assert.notNull(post, "博文不存在");
+        String currentUserId = springSecurityService.getCurrentUserId();
+        Assert.isTrue(currentUserId.equals(post.getAuthorId()), "无权访问");
+        Assert.notNull(postDto.getContent(), "博文为null");
+        Set<String> newHashtagNames = RegexUtils.getAllHashtag(postDto.getContent());
+        if (!RegexUtils.checkHashtag(newHashtagNames)) {
+            throw new RuntimeException("话题标签中不能带有\"@\"");
+        }
+        List<String> newAtUsernames = RegexUtils.getAllAtUsername(postDto.getContent());
+        if (!RegexUtils.checkAtUsername(newAtUsernames)) {
+            throw new RuntimeException("被@的用户名中不能带有\"#\"");
+        }
+        Set<String> oldHashtagNames = RegexUtils.getAllHashtag(post.getContent());
+        for (String hashtagName : oldHashtagNames) {
             LambdaQueryWrapper<Hashtag> cond = new LambdaQueryWrapper<>();
             cond.eq(Hashtag::getName, hashtagName);
             Hashtag hashtag = hashtagService.getOne(cond);
@@ -116,15 +136,10 @@ public class PostController {
                 hashtagService.removeById(hashtag.getId());
             }
         }
-        Assert.notNull(post, "博文不存在");
-        String currentUserId = springSecurityService.getCurrentUserId();
-        Assert.isTrue(currentUserId.equals(post.getAuthorId()), "无权访问");
-        Assert.notNull(postDto.getContent(), "博文为null");
         Post post1 = BeanCopyUtils.copyObject(postDto, Post.class);
         post1.setCategory(AiUtils.getCategory(post1.getContent()));
         post1.setExtreme(AiUtils.getSentiment(post1.getContent()));
-        hashtagNames = RegexUtils.getAllHashtag(post1.getContent());
-        for (String hashtagName : hashtagNames) {
+        for (String hashtagName : newHashtagNames) {
             LambdaQueryWrapper<Hashtag> cond = new LambdaQueryWrapper<>();
             cond.eq(Hashtag::getName, hashtagName);
             Hashtag hashtag = hashtagService.getOne(cond);
@@ -212,6 +227,7 @@ public class PostController {
                 postVo.setContent(FontUtils.emphasize(content, searchText));
             }
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
         }
         return postVos;
     }
@@ -244,6 +260,7 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
 
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
         }
 
         return postVos;
@@ -301,6 +318,7 @@ public class PostController {
             }
 
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
         }
         return postVos;
     }
