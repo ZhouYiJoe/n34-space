@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 03/03/2023 10:42:29
+ Date: 04/03/2023 08:17:54
 */
 
 SET NAMES utf8mb4;
@@ -65,6 +65,26 @@ CREATE TABLE `follow`  (
   `follower_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `followee_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`follower_id`, `followee_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for hashtag
+-- ----------------------------
+DROP TABLE IF EXISTS `hashtag`;
+CREATE TABLE `hashtag`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for hashtag_post_rela
+-- ----------------------------
+DROP TABLE IF EXISTS `hashtag_post_rela`;
+CREATE TABLE `hashtag_post_rela`  (
+  `hashtag_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `post_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`hashtag_id`, `post_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
