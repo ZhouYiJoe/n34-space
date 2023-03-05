@@ -1,7 +1,3 @@
-#container {
-  width: 748px;
-}
-
 #avatar {
   width: 48px;
   height: 48px;
@@ -11,7 +7,7 @@
   margin-right: 10px;
 }
 
-#top-left {
+#left {
   float: left;
 }
 
@@ -19,7 +15,7 @@
   float: left;
 }
 
-#top-right {
+#right {
   float: right;
 }
 

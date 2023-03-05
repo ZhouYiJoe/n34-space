@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {baseUrl, currentUserIdKey} from "../../../app.module";
-import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {catchError} from "rxjs";
 
 @Component({
@@ -36,6 +36,7 @@ export class PostPageComponent implements OnInit {
         .pipe(catchError(this.errorHandleService.handleError))
         .subscribe((data: any) => {
           this.comments = data
+          console.log(data);
         })
     })
   }

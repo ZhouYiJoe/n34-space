@@ -37,13 +37,11 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
-  font-size: 14px;
 }
 
 #post-author-username {
   height: 20px;
   color: gray;
-  font-size: 14px;
 }
 
 #post-content {

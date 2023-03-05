@@ -79,7 +79,7 @@ public class CommentController {
             cond3.eq(CommentReply::getCommentId, commentVo.getId());
             commentVo.setNumReply(commentReplyService.count(cond3));
 
-            commentVo.setContent(RegexUtils.parseAtSymbol(commentVo.getContent()));
+            commentVo.setHtml(RegexUtils.parseAtSymbol(commentVo.getContent()));
         }
 
         return commentVos;

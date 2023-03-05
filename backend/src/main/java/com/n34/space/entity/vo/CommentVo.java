@@ -27,4 +27,5 @@ public class CommentVo {
     private Date timeCreated;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date timeUpdated;
+    private String html;
 }

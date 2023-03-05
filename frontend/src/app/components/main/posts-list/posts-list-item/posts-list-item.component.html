@@ -1,4 +1,4 @@
-<div id="container" (click)="closeMenu($event)">
+<div id="container">
   <div id="top">
     <div id="left-top">
       <img id="avatar" [src]="this.post.authorAvatarFilename === null ? 'assets/default_avatar.webp' :
@@ -8,8 +8,8 @@
       <div id="right-top-line-1">
         <a id="nickname" [routerLink]="['/app/users', post.authorUsername]">{{post.authorNickname}}</a>
         <div id="usernameAndTime">@{{post.authorUsername}}&nbsp;·&nbsp;{{post.timeCreated}}</div>
-        <img src="assets/more.svg" alt="" id="more" (click)="showMenu()" *ngIf="this.canEdit">
-        <div id="menu" *ngIf="this.menuVisible">
+        <img src="assets/more.svg" alt="" id="more" (click)="showOrHideMenu()" *ngIf="this.canEdit">
+        <div id="menu" *ngIf="menuVisible">
           <div class="menu-item" (click)="edit()">修改</div>
           <div class="menu-item" (click)="delete()">删除</div>
         </div>
@@ -25,7 +25,7 @@
   </div>
 </div>
 
-<div id="window-background" *ngIf="this.editWindowVisible || this.commentWindowVisible"></div>
+<div id="window-background" *ngIf="this.editWindowVisible"></div>
 <div id="edit-window" *ngIf="this.editWindowVisible">
   <div>
     <textarea maxlength="140" id="update-input-box" [(ngModel)]="editInputBoxContent"></textarea>
@@ -34,21 +34,5 @@
     <div id="edit-input-box-length">{{editInputBoxContent.length}}/140</div>
     <div class="edit-window-button" id="cancel-update" (click)="cancelUpdate()">取消</div>
     <div class="edit-window-button" id="submit-update" (click)="submitUpdate()">提交</div>
-  </div>
-</div>
-<div id="comment-window" *ngIf="this.commentWindowVisible">
-  <div style="height: 24px">
-    <img id="close-comment-window-button" (click)="closeCommentWindow()" src="assets/close-line.svg" alt="">
-  </div>
-  <div>
-    <textarea id="comment-input-box" maxlength="140" placeholder="发布你的回复"
-              [(ngModel)]="commentInputBoxContent"></textarea>
-  </div>
-  <div style="height: 70px;">
-    <div id="comment-input-box-length">{{commentInputBoxContent.length}}/140</div>
-    <div id="submit-comment-button" (click)="submitComment()">提交</div>
-  </div>
-  <div id="comment-list" (scroll)="getNewCommentPage($event)">
-    <app-comment-list [comments]="this.comments"></app-comment-list>
   </div>
 </div>

@@ -1,14 +1,25 @@
-#top-left {
+#container {
+  overflow: hidden;
+  border-bottom: solid #e5e5e5 1px;
+}
+
+#left-top {
   width: 70px;
   float: left;
 }
 
 #avatar {
   margin-top: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-left: 10px;
 }
 
-#top-right {
+#right-top {
+  margin-top: 10px;
   float: left;
+  width: 677px;
 }
 
 #nickname {
@@ -30,15 +41,24 @@
   word-wrap: break-word;
 }
 
+#right-top-line-2 {
+  margin-top: 5px;
+  word-wrap: break-word;
+}
+
 #bottom {
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   color: gray;
 }
 
 .button {
-  width: 150px;
+  width: 50%;
   display: inline-block;
   text-align: center;
   cursor: pointer;
+}
+
+.button:hover {
+  color: orange;
 }

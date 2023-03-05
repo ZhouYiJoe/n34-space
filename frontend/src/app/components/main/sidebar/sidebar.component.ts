@@ -49,7 +49,7 @@ export class SidebarComponent implements OnInit {
     this.router.navigate(['login'])
   }
 
-  onBlankClicked(event: any) {
-    this.menuVisible = event.target.attributes.class && event.target.attributes.class.value === 'show-menu-area';
+  showOrHideUserBarMenu() {
+    this.menuVisible = !this.menuVisible
   }
 }

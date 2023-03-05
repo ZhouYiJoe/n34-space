@@ -1,4 +1,4 @@
-<div id="container" (click)="onBlankClicked($event)">
+<div id="container">
   <a routerLink="/app/home" class="option" id="my-posts">我的推文</a>
   <a routerLink="/app/followee_posts" class="option">关注用户推文</a>
   <a routerLink="/app/hot" class="option">热门推文</a>
@@ -8,16 +8,18 @@
   <div id="user-bar-menu" *ngIf="menuVisible" class="show-menu-area">
     <div class="user-bar-menu-option" (click)="logout()">登出@{{currentUsername}}</div>
   </div>
-  <div id="user-bar" class="show-menu-area">
-    <div id="avatar" class="show-menu-area">
-      <img id="avatar-img" class="show-menu-area"  [src]="currentUserAvatarFilename === 'null' ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + currentUserAvatarFilename" alt="">
+  <div id="user-bar" (click)="showOrHideUserBarMenu()">
+    <div id="avatar">
+      <img id="avatar-img"
+           [src]="currentUserAvatarFilename === 'null' ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + currentUserAvatarFilename"
+           alt="">
     </div>
-    <div id="nickname-and-username" class="show-menu-area" >
-      <div id="nickname" class="show-menu-area" >{{currentUserNickname}}</div>
-      <div id="username" class="show-menu-area" >@{{currentUsername}}</div>
+    <div id="nickname-and-username">
+      <div id="nickname">{{currentUserNickname}}</div>
+      <div id="username">@{{currentUsername}}</div>
     </div>
-    <div id="more" class="show-menu-area">
-      <img src="assets/more.svg" class="show-menu-area" alt="" id="more-button">
+    <div id="more">
+      <img src="assets/more.svg" alt="" id="more-button">
     </div>
   </div>
 </div>

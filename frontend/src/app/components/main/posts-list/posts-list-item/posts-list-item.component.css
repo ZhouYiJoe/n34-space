@@ -19,8 +19,13 @@
 }
 
 #right-top {
+  margin-top: 10px;
   float: left;
   width: 677px;
+}
+
+#right-top-line-1 {
+  position: relative;
 }
 
 #nickname {
@@ -56,7 +61,8 @@
   background-color: white;
   width: 100px;
   height: 50px;
-  left: 565px;
+  left: 560px;
+  top: 20px;
 }
 
 .menu-item {
@@ -77,13 +83,13 @@
 }
 
 #bottom {
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   color: gray;
 }
 
 .button {
-  width: 150px;
+  width: 50%;
   display: inline-block;
   text-align: center;
   cursor: pointer;
@@ -153,7 +159,7 @@
 #update-input-box {
   resize: none;
   outline: none;
-  border: #bdbdbd 1px solid;
+  border: none;
   width: 750px;
   height: 300px;
   margin-left: 25px;

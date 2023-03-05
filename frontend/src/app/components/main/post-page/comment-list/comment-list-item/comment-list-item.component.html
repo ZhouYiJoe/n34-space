@@ -1,16 +1,18 @@
 <div id="container">
   <div id="top">
-    <div id="top-left">
-      <img id="avatar" [src]="this.comment.authorAvatarFilename === null ? 'assets/default_avatar.webp' :
-    'http://localhost:9090/images/' + this.comment.authorAvatarFilename" alt="">
+    <div id="left-top">
+      <img id="avatar" [src]="this.comment.avatarFilename === null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + this.comment.avatarFilename" alt="">
     </div>
-    <div id="top-right">
-      <div id="right-top">
-        <a id="nickname" [routerLink]="['/app/users', comment.authorUsername]">{{comment.authorNickname}}</a>
-        <div id="usernameAndTime">@{{comment.authorUsername}}&nbsp;·&nbsp;{{comment.timeCreated}}</div>
+    <div id="right-top">
+      <div id="right-top-line-1">
+        <a id="nickname" [routerLink]="['/app/users', comment.username]">{{comment.nickname}}</a>
+        <div id="usernameAndTime">@{{comment.username}}&nbsp;·&nbsp;{{comment.timeCreated}}</div>
+        <div style="clear: both"></div>
       </div>
-      <div id="content" (click)="onClickInCommentContent($event)" [innerHTML]="comment.html | safeHtml"></div>
+      <div id="right-top-line-2" (click)="onClickInCommentContent($event)" [innerHTML]="comment.html | safeHtml"></div>
     </div>
+    <div style="clear: both"></div>
   </div>
   <div id="bottom">
     <div class="button" (click)="clickLikeButton()" [ngClass]="{'likedByMe': comment.likedByMe}">点赞&nbsp;{{comment.numLike}}</div>

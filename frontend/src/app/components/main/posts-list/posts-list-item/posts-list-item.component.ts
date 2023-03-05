@@ -1,10 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseUrl, currentUserIdKey} from "../../../../app.module";
+import {baseUrl} from "../../../../app.module";
 import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../../services/error-handle.service";
 import {Router} from "@angular/router";
-import {UserInfoService} from "../../../../services/user-info.service";
 
 @Component({
   selector: 'app-posts-list-item',
@@ -16,30 +15,29 @@ export class PostsListItemComponent implements OnInit {
   public post: any
 
   public menuVisible: boolean = false
+
   public editWindowVisible: boolean = false
-  public commentWindowVisible: boolean = false
 
   public editInputBoxContent: string = ''
-  public commentInputBoxContent: string = ''
 
-  public curMaxNumCommentPage: number = 1
-  public maxNumCommentPage: number = 0
   public comments: any[] = []
 
   @Input()
   public canEdit: boolean = false
 
+  @Output()
+  public deleted: EventEmitter<any> = new EventEmitter<any>()
+
   constructor(public hc: HttpClient,
               public eh: ErrorHandleService,
-              public router: Router,
-              public userInfoService: UserInfoService) {
+              public router: Router) {
   }
 
   ngOnInit(): void {
   }
 
-  showMenu() {
-    this.menuVisible = true
+  showOrHideMenu() {
+    this.menuVisible = !this.menuVisible
   }
 
   edit() {
@@ -53,7 +51,7 @@ export class PostsListItemComponent implements OnInit {
       .pipe(catchError(this.eh.handleError))
       .subscribe((data: any) => {
         if (data) {
-          this.post.deleted = true
+          this.deleted.emit(this.post.id)
         } else {
           alert('删除失败')
         }
@@ -99,69 +97,7 @@ export class PostsListItemComponent implements OnInit {
   }
 
   clickReplyButton() {
-    // this.commentWindowVisible = true
-    // this.refreshComments()
     this.router.navigate(['app/post/', this.post.id])
-  }
-
-  refreshComments() {
-    this.hc.get(`${baseUrl}/comments`, {
-      params: {
-        postId: this.post.id,
-        pageNo: 1,
-        pageSize: 15
-      }
-    }).pipe(catchError(this.eh.handleError))
-      .subscribe((data: any) => {
-        this.comments = data.records
-        this.curMaxNumCommentPage = 1
-        this.maxNumCommentPage = data.pages
-      })
-  }
-
-  closeCommentWindow() {
-    this.commentWindowVisible = false
-  }
-
-  submitComment() {
-    let currentUserId = this.userInfoService.getUserInfo()?.userId
-    this.hc.post(`${baseUrl}/comments`, {
-      content: this.commentInputBoxContent,
-      userId: currentUserId,
-      postId: this.post.id
-    }).pipe(catchError(this.eh.handleError))
-      .subscribe((data: any) => {
-        if (data) {
-          alert('发布成功')
-          this.commentInputBoxContent = ''
-          this.refreshComments()
-          this.post.numComment++
-        } else {
-          alert('发布失败')
-        }
-      })
-  }
-
-  getNewCommentPage(event: any) {
-    const {clientHeight, scrollHeight, scrollTop} = event.target
-    const distanceToBottom = scrollHeight - (clientHeight + scrollTop)
-    if (distanceToBottom >= 50) {
-      return
-    }
-    if (this.maxNumCommentPage === 0) return
-    if (this.curMaxNumCommentPage < this.maxNumCommentPage) {
-      this.hc.get(`${baseUrl}/comments`, {
-        params: {
-          postId: this.post.id,
-          pageNo: this.curMaxNumCommentPage + 1,
-          pageSize: 15
-        }
-      }).pipe(catchError(this.eh.handleError))
-        .subscribe((data: any) => {
-          this.comments.push(...data.records)
-          this.curMaxNumCommentPage++
-        })
-    }
   }
 
   onClickInPostContent(event: any) {
@@ -170,11 +106,5 @@ export class PostsListItemComponent implements OnInit {
     let link = event.target.attributes.link.value
     let param = event.target.attributes.param.value
     this.router.navigate([link, param])
-  }
-
-  closeMenu(event: any) {
-    if (event.target.id !== 'more') {
-      this.menuVisible = false
-    }
   }
 }

@@ -1,6 +1,3 @@
 <div id="container">
-  <app-posts-list-item *ngFor="let post of posts"
-                       [post]="post"
-                       [ngStyle]="{display: post.deleted ? 'none' : 'block'}"
-                       [canEdit]="canEdit"></app-posts-list-item>
+  <app-posts-list-item *ngFor="let post of posts" [post]="post" [canEdit]="canEdit" (deleted)="deletePost($event)"></app-posts-list-item>
 </div>

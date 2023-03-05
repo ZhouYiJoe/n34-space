@@ -17,4 +17,8 @@ export class PostsListComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  deletePost(postId: any) {
+    this.posts = this.posts.filter(post => post.id != postId)
+  }
+
 }

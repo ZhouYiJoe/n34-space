@@ -19,6 +19,7 @@ export class CommentListItemComponent implements OnInit {
               public errorHandleService: ErrorHandleService) { }
 
   ngOnInit(): void {
+    console.log(this.comment);
   }
 
   onClickInCommentContent(event: any) {

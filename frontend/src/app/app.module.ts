@@ -19,7 +19,6 @@ import {PostsListComponent} from './components/main/posts-list/posts-list.compon
 import {PostsListItemComponent} from './components/main/posts-list/posts-list-item/posts-list-item.component';
 import {InfiniteScrollModule} from "ngx-infinite-scroll";
 import { UserInfoPageComponent } from './components/main/user-info-page/user-info-page.component';
-import { CommentListComponent } from './components/main/posts-list/posts-list-item/comment-list/comment-list.component';
 import { HotPageComponent } from './components/main/hot-page/hot-page.component';
 import { UserPageComponent } from './components/main/user-page/user-page.component';
 import { UserPageHeaderComponent } from './components/main/user-page/user-page-header/user-page-header.component';
@@ -37,6 +36,7 @@ import { HashtagPageComponent } from './components/main/hashtag-page/hashtag-pag
 import {Safe} from "./safe";
 import { PostPageComponent } from './components/main/post-page/post-page.component';
 import { CommentListItemComponent } from './components/main/post-page/comment-list/comment-list-item/comment-list-item.component';
+import {CommentListComponent} from "./components/main/post-page/comment-list/comment-list.component";
 
 @NgModule({
   declarations: [
@@ -54,6 +54,7 @@ import { CommentListItemComponent } from './components/main/post-page/comment-li
     PostsListItemComponent,
     UserInfoPageComponent,
     CommentListComponent,
+    CommentListItemComponent,
     HotPageComponent,
     UserPageComponent,
     UserPageHeaderComponent,
