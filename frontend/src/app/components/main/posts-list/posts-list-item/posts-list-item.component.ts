@@ -47,16 +47,18 @@ export class PostsListItemComponent implements OnInit {
   }
 
   delete() {
-    this.hc.delete(`${baseUrl}/posts/${this.post.id}`)
-      .pipe(catchError(this.eh.handleError))
-      .subscribe((data: any) => {
-        if (data) {
-          this.deleted.emit(this.post.id)
-        } else {
-          alert('删除失败')
-        }
-      })
-    this.menuVisible = false
+    if (confirm('确定要删除吗？')) {
+      this.hc.delete(`${baseUrl}/posts/${this.post.id}`)
+        .pipe(catchError(this.eh.handleError))
+        .subscribe((data: any) => {
+          if (data) {
+            this.deleted.emit(this.post.id)
+          } else {
+            alert('删除失败')
+          }
+        })
+      this.menuVisible = false
+    }
   }
 
   submitUpdate() {

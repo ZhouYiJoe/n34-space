@@ -1,0 +1,35 @@
+<div id="container">
+  <div id="top">
+    <div id="left-top">
+      <img id="avatar" [src]="this.reply.avatarFilename == null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + this.reply.avatarFilename" alt="">
+    </div>
+    <div id="right-top">
+      <div id="right-top-line-1">
+        <a id="nickname" [routerLink]="['/app/users', reply.username]">{{reply.nickname}}</a>
+        <div id="usernameAndTime">@{{reply.username}}&nbsp;·&nbsp;{{reply.timeCreated}}</div>
+        <div style="clear: both"></div>
+      </div>
+      <div id="right-top-line-2" (click)="onClickInReplyContent($event)" [innerHTML]="reply.html | safeHtml"></div>
+    </div>
+    <div style="clear: both"></div>
+  </div>
+  <div id="bottom">
+    <div class="button" [ngStyle]="{'width': showDeleteButton ? '33%' : '50%'}" (click)="clickLikeButton()" [ngClass]="{'likedByMe': reply.likedByMe}">点赞&nbsp;{{reply.numLike}}</div>
+    <div class="button" [ngStyle]="{'width': showDeleteButton ? '33%' : '50%'}" (click)="clickReplyButton()">回复</div>
+    <div class="button" *ngIf="showDeleteButton" style="width: 33%" (click)="deleteReply()">删除</div>
+  </div>
+</div>
+
+<div id="window-background" *ngIf="replyInputWindowVisible"></div>
+
+<div id="reply-input-window" *ngIf="replyInputWindowVisible">
+  <div>
+    <textarea maxlength="140" id="reply-input-box" [placeholder]="'回复@' + reply.username" [(ngModel)]="replyInputBoxContent"></textarea>
+  </div>
+  <div>
+    <div id="reply-input-box-length">{{replyInputBoxContent.length}}/140</div>
+    <div class="reply-input-window-button" id="cancel-reply-input" (click)="closeReplyInputWindow()">取消</div>
+    <div class="reply-input-window-button" id="submit-reply" (click)="submitReply()">提交</div>
+  </div>
+</div>

@@ -34,11 +34,11 @@ public class RegexUtils {
     }
 
     public static List<String> getAllAtUsername(String post) {
-        return ReUtil.findAll("@(\\S+?)\\b", post, 1, new ArrayList<>());
+        return ReUtil.findAll("@(\\S+)", post, 1, new ArrayList<>());
     }
 
     public static String parseAtSymbol(String post) {
-        return ReUtil.replaceAll(post, "@(\\S+?)\\b", "<span class=\"at-symbol-class\" style=\"color: orangered; cursor: pointer;\" link=\"/app/users/\" param=\"$1\">@$1</span>");
+        return ReUtil.replaceAll(post, "@(\\S+)", "<span class=\"at-symbol-class\" style=\"color: orangered; cursor: pointer;\" link=\"/app/users/\" param=\"$1\">@$1</span>");
     }
 
     public static boolean checkAtUsername(Collection<String> usernames) {

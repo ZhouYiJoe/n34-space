@@ -6,7 +6,7 @@ import {
   currentUserEmailKey,
   currentUserIdKey,
   currentUsernameKey,
-  currentUserNicknameKey
+  currentUserNicknameKey, currentUserWallpaperFilenameKey
 } from "../../../app.module";
 import {catchError} from "rxjs";
 import {Router} from "@angular/router";
@@ -55,6 +55,7 @@ export class LoginFormComponent implements OnInit {
             localStorage.setItem(currentUserNicknameKey, data.nickname)
             localStorage.setItem(currentUserAvatarFilenameKey, data.avatarFilename)
             localStorage.setItem(currentFilterConfigKey, data.filterConfig)
+            localStorage.setItem(currentUserWallpaperFilenameKey, data.wallpaperFilename)
             this.router.navigate(['/app/home'])
           })
       })

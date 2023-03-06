@@ -19,13 +19,12 @@ export class UserInfoPageComponent implements OnInit {
   @ViewChild('avatarFileInput')
   public avatarFileInput: any
 
-  public avatarUrl: string | null = null
-
   public userInfo: any = {
     username: '',
     email: '',
     nickname: '',
-    avatarFilename: ''
+    avatarFilename: '',
+    wallpaperFilename: ''
   }
 
   public editingNickname: boolean = false
@@ -38,9 +37,8 @@ export class UserInfoPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.userInfoService.getUserInfo()
-    if (this.userInfo.avatarFilename !== 'null') {
-      this.avatarUrl = `${baseImgUrl}${this.userInfo.avatarFilename}`
-    }
+    this.userInfo.avatarFilename = `${baseImgUrl}${this.userInfo.avatarFilename}`
+    this.userInfo.wallpaperFilename = `${baseImgUrl}${this.userInfo.wallpaperFilename}`
   }
 
   selectAvatar(): void {
@@ -55,7 +53,7 @@ export class UserInfoPageComponent implements OnInit {
       .subscribe((data: any) => {
         alert('上传成功')
         if (data != null) {
-          this.avatarUrl = `${baseImgUrl}${data}`
+          this.userInfo.avatarFilename = `${baseImgUrl}${data}`
           localStorage.setItem(currentUserAvatarFilenameKey, data)
         }
       })

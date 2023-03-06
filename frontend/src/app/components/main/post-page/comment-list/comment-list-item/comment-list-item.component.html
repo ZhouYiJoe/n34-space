@@ -15,7 +15,8 @@
     <div style="clear: both"></div>
   </div>
   <div id="bottom">
-    <div class="button" (click)="clickLikeButton()" [ngClass]="{'likedByMe': comment.likedByMe}">点赞&nbsp;{{comment.numLike}}</div>
-    <div class="button" (click)="clickReplyButton()">回复&nbsp;{{comment.numReply}}</div>
+    <div class="button" [ngStyle]="{'width': showDeleteButton ? '33%' : '50%'}" (click)="clickLikeButton()" [ngClass]="{'likedByMe': comment.likedByMe}">点赞&nbsp;{{comment.numLike}}</div>
+    <div class="button" [ngStyle]="{'width': showDeleteButton ? '33%' : '50%'}" (click)="clickReplyButton()">回复&nbsp;{{comment.numReply}}</div>
+    <div class="button" *ngIf="showDeleteButton" style="width: 33%" (click)="deleteComment()">删除</div>
   </div>
 </div>

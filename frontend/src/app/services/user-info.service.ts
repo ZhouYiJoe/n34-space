@@ -5,7 +5,7 @@ import {
   currentUserEmailKey,
   currentUserIdKey,
   currentUsernameKey,
-  currentUserNicknameKey
+  currentUserNicknameKey, currentUserWallpaperFilenameKey
 } from "../app.module";
 import {Router} from "@angular/router";
 
@@ -47,13 +47,19 @@ export class UserInfoService {
       this.router.navigate(['/login'])
       return null
     }
+    let wallpaperFilename = localStorage.getItem(currentUserWallpaperFilenameKey)
+    if (wallpaperFilename === null) {
+      this.router.navigate(['/login'])
+      return null
+    }
     return {
       userId: userId,
       username: username,
       email: email,
       nickname: nickname,
       avatarFilename: avatarFilename,
-      filterConfig: filterConfig
+      filterConfig: filterConfig,
+      wallpaperFilename: wallpaperFilename
     }
   }
 }

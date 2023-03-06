@@ -1,5 +1,8 @@
 #post-list {
   width: 749px;
+  border-left: solid #e5e5e5 1px;
+  border-right: solid #e5e5e5 1px;
+  min-height: 100vh;
 }
 
 #no-post-prompt {

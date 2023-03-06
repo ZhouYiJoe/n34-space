@@ -1,0 +1,2 @@
+<app-reply-list-item (deleted)="deleteReply($event)" *ngFor="let reply of replies"
+                       [reply]="reply" (replied)="newReplyAdded()"></app-reply-list-item>

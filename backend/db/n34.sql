@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 04/03/2023 08:17:54
+ Date: 05/03/2023 21:01:02
 */
 
 SET NAMES utf8mb4;
@@ -49,12 +49,24 @@ CREATE TABLE `comment_like`  (
 DROP TABLE IF EXISTS `comment_reply`;
 CREATE TABLE `comment_reply`  (
   `id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `content` varchar(140) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `content` varchar(280) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `user_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `comment_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time_created` datetime(0) NULL DEFAULT NULL,
   `time_updated` datetime(0) NULL DEFAULT NULL,
+  `category` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `extreme` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for comment_reply_like
+-- ----------------------------
+DROP TABLE IF EXISTS `comment_reply_like`;
+CREATE TABLE `comment_reply_like`  (
+  `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `comment_reply_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`user_id`, `comment_reply_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -126,6 +138,7 @@ CREATE TABLE `user`  (
   `time_updated` datetime(0) NULL DEFAULT NULL,
   `avatar_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `filter_config` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '000000000000000',
+  `wallpaper_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

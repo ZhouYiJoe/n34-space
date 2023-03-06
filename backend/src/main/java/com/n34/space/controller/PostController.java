@@ -5,18 +5,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.n34.space.entity.*;
 import com.n34.space.entity.dto.PostDto;
 import com.n34.space.entity.vo.PostVo;
-import com.n34.space.entity.vo.UserVo;
 import com.n34.space.service.*;
-import com.n34.space.utils.*;
+import com.n34.space.utils.AiUtils;
+import com.n34.space.utils.BeanCopyUtils;
+import com.n34.space.utils.ConditionUtils;
+import com.n34.space.utils.RegexUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
@@ -226,17 +228,18 @@ public class PostController {
                 hashtagService.removeById(hashtag.getId());
             }
         }
+
+        LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
+        cond.eq(PostLike::getPostId, id);
+        postLikeService.remove(cond);
         return postService.removeById(id);
     }
 
     @GetMapping("/hot")
     public List<PostVo> findHot(@RequestParam(required = false) String searchText,
                                 @RequestParam(required = false) String hashtag) {
-        if (searchText != null) {
-            searchText = RegexUtils.correctSearchText(searchText);
-            if (!StringUtils.hasText(searchText)) {
-                searchText = null;
-            }
+        if (!StringUtils.hasText(searchText)) {
+            searchText = null;
         }
         if (!StringUtils.hasText(hashtag)) {
             hashtag = null;
@@ -250,10 +253,6 @@ public class PostController {
             cond.eq(PostLike::getPostId, postVo.getId())
                     .eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
             postVo.setLikedByMe(postLikeService.count(cond) == 1);
-            if (searchText != null) {
-                String content = postVo.getContent();
-                postVo.setContent(FontUtils.emphasize(content, searchText));
-            }
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
             postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
         }
@@ -297,9 +296,6 @@ public class PostController {
     @GetMapping("/latest")
     public List<PostVo> getLatest(@RequestParam(required = false) String searchText,
                                   @RequestParam(required = false) String hashtag) {
-        if (searchText != null) {
-            searchText = RegexUtils.correctSearchText(searchText);
-        }
         LambdaQueryWrapper<Post> cond = new LambdaQueryWrapper<>();
         cond.orderByDesc(Post::getTimeUpdated);
         if (StringUtils.hasText(searchText)) {
@@ -312,15 +308,11 @@ public class PostController {
         String currentUserId = springSecurityService.getCurrentUserId();
         String filterConfig = userService.getById(currentUserId).getFilterConfig();
         List<String> categories = AiUtils.getAllCategories();
-        List<Post> posts2 = new ArrayList<>();
-        for (Post post : posts) {
-            int i = categories.indexOf(post.getCategory());
-            if (filterConfig.charAt(i) == '0' || !post.getExtreme() || post.getAuthorId().equals(currentUserId)) {
-                posts2.add(post);
-            }
-        }
-
-        List<PostVo> postVos = BeanCopyUtils.copyList(posts2, PostVo.class);
+        posts = posts.stream().filter(post -> !post.getExtreme()
+                        || post.getAuthorId().equals(currentUserId)
+                        || filterConfig.charAt(categories.indexOf(post.getCategory())) == '0')
+                .collect(Collectors.toList());
+        List<PostVo> postVos = BeanCopyUtils.copyList(posts, PostVo.class);
         for (PostVo postVo : postVos) {
             User author = userService.getById(postVo.getAuthorId());
             postVo.setAuthorNickname(author.getNickname());
@@ -339,11 +331,6 @@ public class PostController {
             LambdaQueryWrapper<Comment> cond3 = new LambdaQueryWrapper<>();
             cond3.eq(Comment::getPostId, postVo.getId());
             postVo.setNumComment(commentService.count(cond3));
-
-            if (StringUtils.hasText(searchText)) {
-                String content = postVo.getContent();
-                postVo.setContent(FontUtils.emphasize(content, searchText));
-            }
 
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
             postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));

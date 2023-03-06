@@ -1,25 +1,9 @@
 <div id="container">
-  <img [src]="this.avatarUrl === null ? 'assets/default_avatar.webp' : this.avatarUrl" alt="">
-  <div id="upload-avatar-button" (click)="selectAvatar()">
-    上传头像
-    <input type="file" #avatarFileInput (change)="uploadAvatar()">
+  <img [src]="userInfo.wallpaperFilename" alt="" width="749" height="250">
+  <img id="avatar" [src]="userInfo.avatarFilename" alt="" width="150" height="150">
+  <div id="edit-button-div">
+    <div id="edit-button">编辑个人资料</div>
   </div>
-  <div id="info-panel">
-    <div id="fields">
-      <div class="field" id="username-field">用户名:</div>
-      <div class="field" id="email-field">邮箱:</div>
-      <div class="field" id="nickname-field">昵称:</div>
-    </div>
-    <div id="values">
-      <div class="value" id="username-value">{{this.userInfo.username}}</div>
-      <div class="value" id="email-value">{{this.userInfo.email}}</div>
-      <div *ngIf="!this.editingNickname" class="value" id="nickname-value">{{this.userInfo.nickname}}</div>
-      <input *ngIf="this.editingNickname" type="text" id="edit-nickname-input-box"
-      [(ngModel)]="this.userInfo.nickname">
-      <div id="edit-nickname-button" (click)="editNickname()">
-        {{this.editingNickname ? '确认' : '修改'}}
-      </div>
-    </div>
-  </div>
+  <p id="nickname">{{userInfo.nickname}}</p>
 </div>
 

@@ -21,6 +21,8 @@ public class CommentReply {
     private String userId;
     //被回复的评论的ID
     private String commentId;
+    private String category;
+    private Boolean extreme;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)

@@ -37,6 +37,9 @@ import {Safe} from "./safe";
 import { PostPageComponent } from './components/main/post-page/post-page.component';
 import { CommentListItemComponent } from './components/main/post-page/comment-list/comment-list-item/comment-list-item.component';
 import {CommentListComponent} from "./components/main/post-page/comment-list/comment-list.component";
+import { CommentPageComponent } from './components/main/comment-page/comment-page.component';
+import { ReplyListComponent } from './components/main/comment-page/reply-list/reply-list.component';
+import { ReplyListItemComponent } from './components/main/comment-page/reply-list/reply-list-item/reply-list-item.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +75,9 @@ import {CommentListComponent} from "./components/main/post-page/comment-list/com
     Safe,
     PostPageComponent,
     CommentListItemComponent,
+    CommentPageComponent,
+    ReplyListComponent,
+    ReplyListItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,3 +100,4 @@ export const currentUserEmailKey = 'currentUserEmail'
 export const currentUserNicknameKey = 'currentUserNickname'
 export const currentUserAvatarFilenameKey = 'currentUserAvatarFilename'
 export const currentFilterConfigKey = 'currentFilterConfig'
+export const currentUserWallpaperFilenameKey = 'currentUserWallpaperFilename'

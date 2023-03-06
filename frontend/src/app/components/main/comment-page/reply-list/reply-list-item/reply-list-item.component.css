@@ -1,0 +1,144 @@
+#container {
+  overflow: hidden;
+  border-bottom: solid #e5e5e5 1px;
+}
+
+#left-top {
+  width: 70px;
+  float: left;
+}
+
+#avatar {
+  margin-top: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-left: 10px;
+}
+
+#right-top {
+  margin-top: 10px;
+  float: left;
+  width: 677px;
+}
+
+#nickname {
+  float: left;
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#usernameAndTime {
+  float: left;
+  margin-left: 5px;
+  color: gray;
+}
+
+#content {
+  margin-top: 5px;
+  word-wrap: break-word;
+}
+
+#right-top-line-2 {
+  margin-top: 5px;
+  word-wrap: break-word;
+}
+
+#bottom {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: gray;
+}
+
+.button {
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.likedByMe {
+  color: orange;
+}
+
+.button:hover {
+  color: orange;
+}
+
+#reply-input-window {
+  position: fixed;
+  background-color: white;
+  width: 800px;
+  height: 400px;
+  left: 50vw;
+  top: 50vh;
+  margin-left: -400px;
+  margin-top: -200px;
+  z-index: 2;
+  box-shadow: 0 0 10px 2px gray;
+}
+
+#window-background {
+  background-color: rgba(0, 0, 0, 0.22);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+.reply-input-window-button {
+  float: right;
+  width: 100px;
+  height: 40px;
+  margin-right: 25px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+}
+
+.reply-input-window-button:hover {
+  cursor: pointer;
+}
+
+#submit-reply {
+  background-color: #f07c1d;
+}
+
+#submit-reply:hover {
+  background-color: #c06117;
+}
+
+#cancel-reply-input {
+  background-color: gray;
+}
+
+#cancel-reply-input:hover {
+  background-color: #5b5b5b;
+}
+
+#reply-input-box {
+  resize: none;
+  outline: none;
+  border: none;
+  width: 750px;
+  height: 300px;
+  margin-left: 25px;
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+#reply-input-box-length {
+  float: left;
+  color: #808080;
+  margin-left: 25px;
+  margin-top: 15px;
+  font-size: 20px;
+  line-height: 40px;
+}

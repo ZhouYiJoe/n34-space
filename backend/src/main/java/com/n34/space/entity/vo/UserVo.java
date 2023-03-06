@@ -11,6 +11,7 @@ public class UserVo {
     private String email;
     private String nickname;
     private String avatarFilename;
+    private String wallpaperFilename;
     private Boolean followedByMe;
     private String filterConfig;
     private Integer numFollower;

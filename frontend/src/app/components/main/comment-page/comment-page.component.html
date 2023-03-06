@@ -1,0 +1,28 @@
+<div id="container">
+  <div id="comment-user-part">
+    <div id="comment-user-part-left">
+      <img id="avatar" [src]="this.comment.avatarFilename == null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + this.comment.avatarFilename" alt="">
+    </div>
+    <div id="comment-user-part-right">
+      <a id="comment-user-nickname" [routerLink]="['/app/users', comment.username]">{{comment.nickname}}</a>
+      <div id="comment-user-username">@{{comment.username}}</div>
+    </div>
+  </div>
+  <div id="comment-content" (click)="onClickInCommentContent($event)" [innerHTML]="comment.html | safeHtml"></div>
+  <div id="comment-create-time">{{comment.timeCreated}}</div>
+  <div id="like-and-reply-part">
+    <div id="comment-like-button" (click)="clickLikeButton()"
+         [ngClass]="{'likedByMe': comment.likedByMe, 'comment-like-and-reply-button': true}">点赞&nbsp;{{comment.numLike}}</div>
+    <div id="comment-reply-button" class="comment-like-and-reply-button">回复&nbsp;{{comment.numReply}}</div>
+    <div style="clear: both"></div>
+  </div>
+  <div id="reply-input-part">
+    <textarea id="reply-input-box" rows="5" maxlength="140" placeholder="发布你的回复"
+              [(ngModel)]="replyToPublish.content"></textarea>
+    <p id="reply-to-publish-length">{{replyToPublish.content.length}}/140</p>
+    <button id="reply-publish-button" (click)="submitReply()">发布</button>
+    <div style="clear: both"></div>
+  </div>
+  <app-reply-list [replies]="replies" (deleted)="comment.numReply = comment.numReply - 1" (newReplyAddedEvent)="refreshReplies()"></app-reply-list>
+</div>

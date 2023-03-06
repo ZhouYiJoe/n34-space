@@ -21,8 +21,10 @@ public class CommentReplyVo {
     private String commentId;
     private Integer numLike;
     private Boolean likedByMe;
+    private String avatarFilename;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date timeCreated;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date timeUpdated;
+    private String html;
 }

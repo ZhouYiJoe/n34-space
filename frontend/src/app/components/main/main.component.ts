@@ -41,7 +41,7 @@ export class MainComponent implements OnInit {
   }
 
   search(event: KeyboardEvent) {
-    if (event.key == 'Enter') {
+    if (event.key == 'Enter' && this.searchText) {
       let navigationExtras: NavigationExtras = {queryParams: {q: this.searchText}}
       this.router.navigate(['/app/search/hot'], navigationExtras)
     }

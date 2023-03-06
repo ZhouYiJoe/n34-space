@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.n34.space.entity.Comment;
-import com.n34.space.entity.CommentLike;
-import com.n34.space.entity.CommentReply;
-import com.n34.space.entity.User;
+import com.n34.space.entity.*;
 import com.n34.space.entity.dto.CommentDto;
+import com.n34.space.entity.vo.CommentReplyVo;
 import com.n34.space.entity.vo.CommentVo;
 import com.n34.space.service.*;
 import com.n34.space.utils.AiUtils;
@@ -34,6 +32,32 @@ public class CommentController {
     private final UserService userService;
     private final CommentReplyService commentReplyService;
 
+    @GetMapping("/{id}")
+    public CommentVo getById(@PathVariable String id) {
+        Comment comment = commentService.getById(id);
+        CommentVo commentVo = BeanCopyUtils.copyObject(comment, CommentVo.class);
+        User user = userService.getById(commentVo.getUserId());
+        commentVo.setNickname(user.getNickname());
+        commentVo.setUsername(user.getUsername());
+        commentVo.setAvatarFilename(user.getAvatarFilename());
+
+        LambdaQueryWrapper<CommentLike> cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(CommentLike::getCommentId, commentVo.getId());
+        commentVo.setNumLike(commentLikeService.count(cond2));
+
+        cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(CommentLike::getCommentId, commentVo.getId());
+        cond2.eq(CommentLike::getUserId, springSecurityService.getCurrentUserId());
+        commentVo.setLikedByMe(commentLikeService.count(cond2) == 1);
+
+        LambdaQueryWrapper<CommentReply> cond3 = new LambdaQueryWrapper<>();
+        cond3.eq(CommentReply::getCommentId, commentVo.getId());
+        commentVo.setNumReply(commentReplyService.count(cond3));
+
+        commentVo.setHtml(RegexUtils.parseAtSymbol(commentVo.getContent()));
+        return commentVo;
+    }
+
     @PostMapping
     public Boolean postNew(@RequestBody CommentDto commentDto) {
         Assert.notNull(commentDto.getUserId(), "userId为null");
@@ -47,13 +71,20 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<CommentVo> getList(@NotNull @RequestParam(required = false) String postId) {
+    public List<CommentVo> getList(@RequestParam(required = false) String postId,
+                                   @RequestParam(required = false) String timeSortOrder) {
         String currentUserId = springSecurityService.getCurrentUserId();
         String filterConfig = userService.getById(currentUserId).getFilterConfig();
         QueryWrapper<Comment> cond = new QueryWrapper<>();
         cond.eq("post_id", postId);
         String filterExtremeSql = ConditionUtils.filterExtreme(filterConfig);
-        cond.last(filterExtremeSql + "order by time_created desc");
+        if ("asc".equals(timeSortOrder)) {
+            cond.last(filterExtremeSql + "order by time_created");
+        } else if ("desc".equals(timeSortOrder)) {
+            cond.last(filterExtremeSql + "order by time_created desc");
+        } else {
+            cond.last(filterExtremeSql);
+        }
         List<Comment> comments = commentService.list(cond);
         List<CommentVo> commentVos = BeanCopyUtils.copyList(comments, CommentVo.class);
 
@@ -105,6 +136,10 @@ public class CommentController {
         Assert.notNull(comment, "评论不存在");
         String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(comment.getUserId()), "无权访问");
+
+        LambdaQueryWrapper<CommentLike> cond = new LambdaQueryWrapper<>();
+        cond.eq(CommentLike::getCommentId, id);
+        commentLikeService.remove(cond);
         return commentService.removeById(id);
     }
 }

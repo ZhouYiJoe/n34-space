@@ -1,8 +1,6 @@
 #container {
   overflow: hidden;
   border-bottom: solid #e5e5e5 1px;
-  border-right: solid #e5e5e5 1px;
-  border-left: solid #e5e5e5 1px;
 }
 
 #left-top {
@@ -78,8 +76,9 @@
 }
 
 #right-top-line-2 {
-  margin-top: 5px;
+  padding-top: 5px;
   word-wrap: break-word;
+  padding-right: 10px;
 }
 
 #bottom {
@@ -93,6 +92,10 @@
   display: inline-block;
   text-align: center;
   cursor: pointer;
+}
+
+.likedByMe {
+  color: orange;
 }
 
 .button:hover {

@@ -1,9 +1,12 @@
-<div id="post-publish">
-  <app-post-publish [postsComponent]="this"></app-post-publish>
+<div id="container">
+  <div id="post-publish">
+    <app-post-publish [postsComponent]="this"></app-post-publish>
+  </div>
+  <div id="post-list">
+    <div id="no-post-prompt" *ngIf="posts.length == 0">您还没有发布任何推文！</div>
+    <app-posts-list [posts]="posts" [canEdit]="true"></app-posts-list>
+  </div>
 </div>
-<div id="post-list">
-  <div id="no-post-prompt" *ngIf="posts.length == 0">您还没有发布任何推文！</div>
-  <app-posts-list [posts]="posts" [canEdit]="true"></app-posts-list>
-</div>
+
 
 

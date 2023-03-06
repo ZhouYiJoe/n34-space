@@ -53,10 +53,13 @@
 }
 
 .button {
-  width: 50%;
   display: inline-block;
   text-align: center;
   cursor: pointer;
+}
+
+.likedByMe {
+  color: orange;
 }
 
 .button:hover {

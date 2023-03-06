@@ -66,6 +66,18 @@ public class UserController {
         return avatarFilenames.get(0);
     }
 
+    @PostMapping("/wallpaper")
+    public String uploadWallpaper(MultipartFile wallpaperFile) {
+        List<String> wallpaperFilenames = minioService.upload(new MultipartFile[]{wallpaperFile});
+        String currentUserId = springSecurityService.getCurrentUserId();
+        User user = userService.getById(currentUserId);
+        minioService.removeObjects(Collections.singletonList(user.getWallpaperFilename()));
+        LambdaUpdateWrapper<User> cond = new LambdaUpdateWrapper<>();
+        cond.set(User::getWallpaperFilename, wallpaperFilenames.get(0)).eq(User::getId, currentUserId);
+        userService.update(cond);
+        return wallpaperFilenames.get(0);
+    }
+
     @PostMapping("/nickname")
     public Boolean changeNickname(@RequestBody UserDto userDto) {
         LambdaUpdateWrapper<User> cond = new LambdaUpdateWrapper<>();

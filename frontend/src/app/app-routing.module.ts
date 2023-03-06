@@ -19,6 +19,7 @@ import {SearchLatestPageComponent} from "./components/main/search-page/search-la
 import {SearchUserPageComponent} from "./components/main/search-page/search-user-page/search-user-page.component";
 import {HashtagPageComponent} from "./components/main/hashtag-page/hashtag-page.component";
 import {PostPageComponent} from "./components/main/post-page/post-page.component";
+import {CommentPageComponent} from "./components/main/comment-page/comment-page.component";
 
 const routes: Routes = [
   {
@@ -91,6 +92,10 @@ const routes: Routes = [
       {
         path: 'post/:postId',
         component: PostPageComponent
+      },
+      {
+        path: 'comment/:commentId',
+        component: CommentPageComponent
       },
       {
         path: '',
