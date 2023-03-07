@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {ErrorHandleService} from "../../../../services/error-handle.service";
 import {baseUrl} from "../../../../app.module";
 import {catchError} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-list-item',
@@ -15,7 +16,8 @@ export class UserListItemComponent implements OnInit {
   public user: any
 
   constructor(public httpClient: HttpClient,
-              public errorHandleService: ErrorHandleService) {
+              public errorHandleService: ErrorHandleService,
+              public router: Router) {
   }
 
   ngOnInit(): void {
@@ -47,4 +49,9 @@ export class UserListItemComponent implements OnInit {
     }
   }
 
+  onClick(event: any) {
+    if (event.target.id != 'follow-button') {
+      this.router.navigate(['/app/users', this.user.username])
+    }
+  }
 }

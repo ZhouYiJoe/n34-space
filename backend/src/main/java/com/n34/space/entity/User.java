@@ -20,6 +20,9 @@ public class User {
     private String avatarFilename;
     private String filterConfig;
     private String wallpaperFilename;
+    private String introduction;
+    private String location;
+    private String link;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)

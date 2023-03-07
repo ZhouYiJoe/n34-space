@@ -21,7 +21,6 @@ import {InfiniteScrollModule} from "ngx-infinite-scroll";
 import { UserInfoPageComponent } from './components/main/user-info-page/user-info-page.component';
 import { HotPageComponent } from './components/main/hot-page/hot-page.component';
 import { UserPageComponent } from './components/main/user-page/user-page.component';
-import { UserPageHeaderComponent } from './components/main/user-page/user-page-header/user-page-header.component';
 import { FolloweeListPageComponent } from './components/main/followee-list-page/followee-list-page.component';
 import { FolloweeListItemComponent } from './components/main/followee-list-page/followee-list-item/followee-list-item.component';
 import { FolloweePostsPageComponent } from './components/main/followee-posts-page/followee-posts-page.component';
@@ -40,6 +39,7 @@ import {CommentListComponent} from "./components/main/post-page/comment-list/com
 import { CommentPageComponent } from './components/main/comment-page/comment-page.component';
 import { ReplyListComponent } from './components/main/comment-page/reply-list/reply-list.component';
 import { ReplyListItemComponent } from './components/main/comment-page/reply-list/reply-list-item/reply-list-item.component';
+import { FollowerListPageComponent } from './components/main/follower-list-page/follower-list-page.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +60,6 @@ import { ReplyListItemComponent } from './components/main/comment-page/reply-lis
     CommentListItemComponent,
     HotPageComponent,
     UserPageComponent,
-    UserPageHeaderComponent,
     FolloweeListPageComponent,
     FolloweeListItemComponent,
     FolloweePostsPageComponent,
@@ -78,6 +77,7 @@ import { ReplyListItemComponent } from './components/main/comment-page/reply-lis
     CommentPageComponent,
     ReplyListComponent,
     ReplyListItemComponent,
+    FollowerListPageComponent,
   ],
   imports: [
     BrowserModule,

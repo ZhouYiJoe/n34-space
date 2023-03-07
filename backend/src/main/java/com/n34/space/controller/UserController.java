@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +38,18 @@ public class UserController {
         String userId = springSecurityService.getCurrentUserId();
         User user = userService.getById(userId);
         Assert.notNull(user, "用户不存在");
-        return BeanCopyUtils.copyObject(user, UserVo.class);
+        UserVo userVo = BeanCopyUtils.copyObject(user, UserVo.class);
+        LambdaQueryWrapper<Follow> cond = new LambdaQueryWrapper<>();
+        cond.eq(Follow::getFolloweeId, userVo.getId());
+        userVo.setNumFollower(followService.count(cond));
+        cond = new LambdaQueryWrapper<>();
+        cond.eq(Follow::getFollowerId, userVo.getId());
+        userVo.setNumFollowee(followService.count(cond));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(user.getTimeCreated());
+        userVo.setRegisterYear(calendar.get(Calendar.YEAR));
+        userVo.setRegisterMonth(calendar.get(Calendar.MONTH));
+        return userVo;
     }
 
     @GetMapping("/{username}")
@@ -51,6 +63,16 @@ public class UserController {
         cond2.eq(Follow::getFollowerId, springSecurityService.getCurrentUserId())
                 .eq(Follow::getFolloweeId, user.getId());
         userVo.setFollowedByMe(followService.count(cond2) == 1);
+        cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(Follow::getFolloweeId, userVo.getId());
+        userVo.setNumFollower(followService.count(cond2));
+        cond2 = new LambdaQueryWrapper<>();
+        cond2.eq(Follow::getFollowerId, userVo.getId());
+        userVo.setNumFollowee(followService.count(cond2));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(user.getTimeCreated());
+        userVo.setRegisterYear(calendar.get(Calendar.YEAR));
+        userVo.setRegisterMonth(calendar.get(Calendar.MONTH));
         return userVo;
     }
 
@@ -78,26 +100,48 @@ public class UserController {
         return wallpaperFilenames.get(0);
     }
 
-    @PostMapping("/nickname")
-    public Boolean changeNickname(@RequestBody UserDto userDto) {
-        LambdaUpdateWrapper<User> cond = new LambdaUpdateWrapper<>();
-        cond.set(User::getNickname, userDto.getNickname());
-        cond.eq(User::getUsername, userDto.getUsername());
-        return userService.update(cond);
+    @PutMapping
+    public Boolean updateById(@RequestBody UserDto userDto) {
+        User user = BeanCopyUtils.copyObject(userDto, User.class);
+        return userService.updateById(user);
     }
 
-    @GetMapping("/my_followees")
-    public List<UserVo> getFollowees() {
+    @GetMapping("/followee")
+    public List<UserVo> getFollowees(@RequestParam String userId) {
         LambdaQueryWrapper<Follow> cond = new LambdaQueryWrapper<>();
-        cond.eq(Follow::getFollowerId, springSecurityService.getCurrentUserId());
+        cond.eq(Follow::getFollowerId, userId);
         List<Follow> follows = followService.list(cond);
         List<UserVo> followees = new ArrayList<>();
+        String currentUserId = springSecurityService.getCurrentUserId();
         for (Follow follow : follows) {
             User user = userService.getById(follow.getFolloweeId());
             UserVo userVo = BeanCopyUtils.copyObject(user, UserVo.class);
-            followees.add(userVo.setFollowedByMe(true));
+            cond = new LambdaQueryWrapper<>();
+            cond.eq(Follow::getFolloweeId, userVo.getId());
+            cond.eq(Follow::getFollowerId, currentUserId);
+            int count = followService.count(cond);
+            followees.add(userVo.setFollowedByMe(count == 1));
         }
         return followees;
+    }
+
+    @GetMapping("/follower")
+    public List<UserVo> getFollowers(@RequestParam String userId) {
+        LambdaQueryWrapper<Follow> cond = new LambdaQueryWrapper<>();
+        cond.eq(Follow::getFolloweeId, userId);
+        List<Follow> follows = followService.list(cond);
+        List<UserVo> followers = new ArrayList<>();
+        String currentUserId = springSecurityService.getCurrentUserId();
+        for (Follow follow : follows) {
+            User user = userService.getById(follow.getFollowerId());
+            UserVo userVo = BeanCopyUtils.copyObject(user, UserVo.class);
+            cond = new LambdaQueryWrapper<>();
+            cond.eq(Follow::getFolloweeId, userVo.getId());
+            cond.eq(Follow::getFollowerId, currentUserId);
+            int count = followService.count(cond);
+            followers.add(userVo.setFollowedByMe(count == 1));
+        }
+        return followers;
     }
 
     @PostMapping("/filterConfig")
@@ -135,6 +179,7 @@ public class UserController {
         }
         if (sortByFollower != null && sortByFollower) {
             userVos.sort((a, b) -> -Integer.compare(a.getNumFollower(), b.getNumFollower()));
+            userVos = userVos.stream().filter(userVo -> !userVo.getId().equals(currentUserId)).collect(Collectors.toList());
         }
         if (includeFollowed != null && !includeFollowed) {
             userVos = userVos.stream().filter((userVo) -> !userVo.getFollowedByMe()).collect(Collectors.toList());

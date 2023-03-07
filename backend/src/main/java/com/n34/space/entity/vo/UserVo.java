@@ -15,4 +15,10 @@ public class UserVo {
     private Boolean followedByMe;
     private String filterConfig;
     private Integer numFollower;
+    private String introduction;
+    private String location;
+    private String link;
+    private Integer numFollowee;
+    private Integer registerYear;
+    private Integer registerMonth;
 }

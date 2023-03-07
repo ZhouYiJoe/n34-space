@@ -12,4 +12,7 @@ public class UserDto {
     private String email;
     private String nickname;
     private String filterConfig;
+    private String introduction;
+    private String location;
+    private String link;
 }

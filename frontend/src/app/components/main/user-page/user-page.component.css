@@ -3,6 +3,7 @@
   border-left: solid #e5e5e5 1px;
   border-right: solid #e5e5e5 1px;
   min-height: 100vh;
+  position: relative;
 }
 
 #no-content-prompt {
@@ -11,4 +12,118 @@
   margin-top: 75px;
   font-size: 30px;
   font-weight: bold;
+}
+
+#avatar {
+  position: absolute;
+  top: 175px;
+  right: 599px;
+  border-radius: 65px;
+}
+
+#edit-button-div {
+  height: 60px;
+}
+
+#info-div {
+  padding: 0 20px 0;
+  border-bottom: solid #e5e5e5 1px;
+}
+
+#nickname {
+  padding: 2px 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#username {
+  padding: 2px 0;
+  font-size: 16px;
+  color: gray;
+}
+
+#introduction {
+  margin: 20px 0;
+}
+
+#follow-button {
+  float: right;
+  margin-right: 20px;
+  margin-top: 10px;
+  width: 120px;
+  height: 40px;
+  background-color: black;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid #ccc8c5;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+}
+
+#follow-button:hover {
+  background-color: #272c30;
+}
+
+#unfollow-button {
+  float: right;
+  margin-right: 20px;
+  margin-top: 10px;
+  width: 120px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid #c9c9c9;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#unfollow-button:hover {
+  background-color: rgba(255, 0, 0, 0.15);
+  color: red;
+  border: 1px solid #ff9292;
+}
+
+.icon {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  fill: #6c6865;
+  width: 20px;
+  height: 20px;
+}
+
+.text-near-icon {
+  color: #6c6865;
+}
+
+#link {
+  color: orangered;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#link:hover {
+  text-decoration: underline;
+}
+
+#follow-info-div {
+  height: 60px;
+  line-height: 60px;
+  font-size: 14px;
+}
+
+#num-followee, #num-follower {
+  font-weight: bold;
+}
+
+#num-followee-text, #num-follower-text {
+  color: #6c6865;
+}
+
+.follow-link:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }

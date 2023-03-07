@@ -1,17 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseUrl} from "../../../app.module";
-import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {ActivatedRoute} from "@angular/router";
+import {baseUrl} from "../../../app.module";
+import {catchError} from "rxjs";
 
 @Component({
-  selector: 'app-followee-list-page',
-  templateUrl: './followee-list-page.component.html',
-  styleUrls: ['./followee-list-page.component.css']
+  selector: 'app-follower-list-page',
+  templateUrl: './follower-list-page.component.html',
+  styleUrls: ['./follower-list-page.component.css']
 })
-export class FolloweeListPageComponent implements OnInit {
-  public followees: any[] = []
+export class FollowerListPageComponent implements OnInit {
+
+  public followers: any[] = []
 
   constructor(public httpClient: HttpClient,
               public errorHandleService: ErrorHandleService,
@@ -20,11 +21,11 @@ export class FolloweeListPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: any) => {
-      this.httpClient.get(`${baseUrl}/users/followee`,
-        {params: {userId: params.followerId}})
+      this.httpClient.get(`${baseUrl}/users/follower`,
+        {params: {userId: params.followeeId}})
         .pipe(catchError(this.errorHandleService.handleError))
         .subscribe((data: any) => {
-          this.followees = data
+          this.followers = data
         })
     })
 

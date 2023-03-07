@@ -2,7 +2,8 @@
   <a routerLink="/app/home" class="option" id="my-posts">我的推文</a>
   <a routerLink="/app/followee_posts" class="option">关注用户推文</a>
   <a routerLink="/app/hot" class="option">热门推文</a>
-  <a routerLink="/app/followee_list" class="option">我的关注</a>
+  <a [routerLink]="['/app/followee_list/', this.myId]" class="option">我的关注</a>
+  <a [routerLink]="['/app/follower_list/', this.myId]" class="option">我的粉丝</a>
   <a routerLink="/app/user_info" class="option">个人资料</a>
   <a routerLink="/app/config" class="option">设置</a>
   <div id="user-bar-menu" *ngIf="menuVisible" class="show-menu-area">

@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 05/03/2023 21:01:02
+ Date: 07/03/2023 08:09:49
 */
 
 SET NAMES utf8mb4;
@@ -136,9 +136,12 @@ CREATE TABLE `user`  (
   `nickname` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `time_created` datetime(0) NULL DEFAULT NULL,
   `time_updated` datetime(0) NULL DEFAULT NULL,
-  `avatar_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `avatar_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'default_avatar.webp',
   `filter_config` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '000000000000000',
-  `wallpaper_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `wallpaper_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'default_wallpaper.jpg',
+  `introduction` varchar(160) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

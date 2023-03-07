@@ -19,15 +19,19 @@ export class UserInfoPageComponent implements OnInit {
   @ViewChild('avatarFileInput')
   public avatarFileInput: any
 
-  public userInfo: any = {
-    username: '',
-    email: '',
-    nickname: '',
-    avatarFilename: '',
-    wallpaperFilename: ''
-  }
+  public userInfo: any = null
 
-  public editingNickname: boolean = false
+  public nicknameInput: string = ''
+
+  public introductionInput: string = ''
+
+  public locationInput: string = ''
+
+  public linkInput: string = ''
+
+  public posts: any = []
+
+  public showEditWindow: boolean = false
 
   constructor(public httpClient: HttpClient,
               public errorHandleService: ErrorHandleService,
@@ -36,9 +40,31 @@ export class UserInfoPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userInfo = this.userInfoService.getUserInfo()
-    this.userInfo.avatarFilename = `${baseImgUrl}${this.userInfo.avatarFilename}`
-    this.userInfo.wallpaperFilename = `${baseImgUrl}${this.userInfo.wallpaperFilename}`
+    this.httpClient.get(`${baseUrl}/users/self`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((data: any) => {
+        this.userInfo = data
+        this.userInfo.avatarFilename = `${baseImgUrl}${this.userInfo.avatarFilename}`
+        this.userInfo.wallpaperFilename = `${baseImgUrl}${this.userInfo.wallpaperFilename}`
+        this.nicknameInput = this.userInfo.nickname
+        this.introductionInput = this.userInfo.introduction
+        this.locationInput = this.userInfo.location
+        this.linkInput = this.userInfo.link
+        this.httpClient.get(`${baseUrl}/posts`,
+          {params: {authorId: this.userInfo.id, filtered: false}})
+          .pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            this.posts = data
+          })
+      })
+  }
+
+  closeEditWindow() {
+    this.showEditWindow = false
+    this.nicknameInput = this.userInfo.nickname
+    this.introductionInput = this.userInfo.introduction
+    this.locationInput = this.userInfo.location
+    this.linkInput = this.userInfo.link
   }
 
   selectAvatar(): void {
@@ -60,24 +86,24 @@ export class UserInfoPageComponent implements OnInit {
   }
 
   editNickname() {
-    if (this.editingNickname) {
-      this.httpClient.post(`${baseUrl}/users/nickname`, {
-        username: this.userInfo.username,
-        nickname: this.userInfo.nickname
-      })
-        .pipe(catchError((response) => {
-          this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
-          return this.errorHandleService.handleError(response)
-        }))
-        .subscribe((data: any) => {
-          if (!data) {
-            alert('修改失败')
-            this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
-          } else {
-            localStorage.setItem(currentUserNicknameKey, this.userInfo.nickname)
-          }
-        })
-    }
-    this.editingNickname = !this.editingNickname
+    // if (this.editingNickname) {
+    //   this.httpClient.post(`${baseUrl}/users/nickname`, {
+    //     username: this.userInfo.username,
+    //     nickname: this.userInfo.nickname
+    //   })
+    //     .pipe(catchError((response) => {
+    //       this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
+    //       return this.errorHandleService.handleError(response)
+    //     }))
+    //     .subscribe((data: any) => {
+    //       if (!data) {
+    //         alert('修改失败')
+    //         this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
+    //       } else {
+    //         localStorage.setItem(currentUserNicknameKey, this.userInfo.nickname)
+    //       }
+    //     })
+    // }
+    // this.editingNickname = !this.editingNickname
   }
 }

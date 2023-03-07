@@ -20,6 +20,7 @@ import {SearchUserPageComponent} from "./components/main/search-page/search-user
 import {HashtagPageComponent} from "./components/main/hashtag-page/hashtag-page.component";
 import {PostPageComponent} from "./components/main/post-page/post-page.component";
 import {CommentPageComponent} from "./components/main/comment-page/comment-page.component";
+import { FollowerListPageComponent } from './components/main/follower-list-page/follower-list-page.component';
 
 const routes: Routes = [
   {
@@ -56,7 +57,7 @@ const routes: Routes = [
         component: UserPageComponent
       },
       {
-        path: 'followee_list',
+        path: 'followee_list/:followerId',
         component: FolloweeListPageComponent
       },
       {
@@ -66,6 +67,10 @@ const routes: Routes = [
       {
         path: 'config',
         component: ConfigPageComponent
+      },
+      {
+        path: 'follower_list/:followeeId',
+        component: FollowerListPageComponent
       },
       {
         path: 'search',

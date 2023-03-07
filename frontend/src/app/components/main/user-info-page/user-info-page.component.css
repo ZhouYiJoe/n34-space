@@ -9,25 +9,40 @@
 #avatar {
   position: absolute;
   top: 175px;
-  right: 579px;
-  border-radius: 75px;
+  right: 599px;
+  border-radius: 65px;
 }
 
 #edit-button-div {
-  height: 100px;
+  height: 60px;
+}
+
+#info-div {
+  padding: 0 20px 0;
+  border-bottom: solid #e5e5e5 1px;
 }
 
 #nickname {
-  font-size: 30px;
+  padding: 2px 0;
+  font-size: 20px;
   font-weight: bold;
-  margin-left: 20px;
+}
+
+#username {
+  padding: 2px 0;
+  font-size: 16px;
+  color: gray;
+}
+
+#introduction {
+  margin: 20px 0;
 }
 
 #edit-button {
   float: right;
   margin-right: 20px;
   margin-top: 10px;
-  width: 130px;
+  width: 120px;
   height: 40px;
   background-color: white;
   line-height: 40px;
@@ -42,66 +57,222 @@
   background-color: #cccccc;
 }
 
-#upload-avatar-button {
-  position: absolute;
-  top: 300px;
-  background-color: #66bed5;
-  width: 100px;
-  height: 40px;
-  border-radius: 10px;
+.icon {
+  position: relative;
+  top: 5px;
+  right: 5px;
+  fill: #6c6865;
+  width: 20px;
+  height: 20px;
+}
+
+.text-near-icon {
+  color: #6c6865;
+}
+
+#link {
+  color: orangered;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#link:hover {
+  text-decoration: underline;
+}
+
+#follow-info-div {
+  height: 60px;
+  line-height: 60px;
+  font-size: 14px;
+}
+
+#num-followee, #num-follower {
   font-weight: bold;
-  font-size: 20px;
+}
+
+#num-followee-text, #num-follower-text {
+  color: #6c6865;
+}
+
+.follow-link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#dark-background {
+  background-color: rgba(0, 0, 0, 0.25);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+#info-edit-window {
+  background-color: white;
+  position: fixed;
+  width: 600px;
+  height: 650px;
+  left: 50vw;
+  top: 50vh;
+  margin-top: -325px;
+  margin-left: -300px;
+  z-index: 2;
+  border-radius: 20px;
+  overflow: auto;
+}
+
+#window-line-1 {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+#close-button-div {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  cursor: pointer;
+  float: left;
+}
+
+#close-button-div:hover {
+  background-color: #e7e6e6;
+}
+
+#close-button {
+  margin-top: 6px;
+  margin-left: 6px;
+}
+
+#window-title {
+  height: 36px;
+  line-height: 36px;
+  margin-left: 30px;
+  float: left;
+}
+
+#save-button {
+  float: right;
+  width: 70px;
+  height: 36px;
+  line-height: 36px;
+  background-color: black;
+  border-radius: 18px;
   color: white;
   text-align: center;
-  line-height: 40px;
-  left: 50%;
-  margin-left: -50px;
+  margin-right: 20px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-#upload-avatar-button > input {
-  display: none;
+#save-button:hover {
+  background-color: #3a3a3a;
 }
 
-#info-panel {
+#window-line-2 {
+  margin-top: 15px;
+  position: relative;
+}
+
+#change-wallpaper-button-div {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background-color: rgba(0, 0, 0, 0.50);
   position: absolute;
-  top: 390px;
-  left: 250px;
-}
-
-#fields {
-  float: left;
-}
-
-#values {
-  float: left;
-  margin-left: 100px;
-}
-
-.field,
-.value {
-  font-size: 20px;
-  height: 80px;
-  line-height: 80px;
-}
-
-#nickname-value {
-  float: left;
-}
-
-#edit-nickname-button {
-  margin-left: 20px;
-  float: left;
-  font-size: 16px;
-  height: 80px;
-  line-height: 80px;
-  color: blue;
+  left: 50%;
+  top: 50%;
+  margin-top: -22px;
+  margin-left: -22px;
   cursor: pointer;
 }
 
-#edit-nickname-input-box {
-  font-size: 16px;
-  height: 20px;
-  margin-top: 30px;
+#change-wallpaper-button-div:hover {
+  background-color: rgba(114, 114, 114, 0.5);
+}
+
+#change-wallpaper-button {
+  fill: white;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#avatar-in-edit-window {
+  position: absolute;
+  left: 20px;
+  top: 205px;
+  border-radius: 55px;
+}
+
+#darken-avatar {
+  position: absolute;
+  left: 20px;
+  top: 205px;
+  width: 110px;
+  height: 110px;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 1;
+  border-radius: 55px;
+}
+
+#change-avatar-button-div {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background-color: rgba(0, 0, 0, 0.50);
+  position: absolute;
+  left: 53px;
+  top: 238px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#change-avatar-button-div:hover {
+  background-color: rgba(114, 114, 114, 0.5);
+}
+
+#change-avatar-button {
+  fill: white;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+#window-line-3 {
+  margin-top: 80px;
+}
+
+.input-div {
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+.field-name {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #595654;
   float: left;
+}
+
+.char-count {
+  float: right;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 22px;
+  color: #595654;
+}
+
+.input-box {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 556px;
+  border: #ded5cf 1px solid;
+  border-radius: 3px;
+  font-size: 16px;
+  height: 30px;
+  text-indent: 0.5em;
+}
+
+.input-box:focus {
+  outline: #f06e1d 2px solid;
 }

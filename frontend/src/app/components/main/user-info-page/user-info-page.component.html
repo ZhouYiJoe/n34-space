@@ -1,9 +1,87 @@
 <div id="container">
   <img [src]="userInfo.wallpaperFilename" alt="" width="749" height="250">
-  <img id="avatar" [src]="userInfo.avatarFilename" alt="" width="150" height="150">
+  <img id="avatar" [src]="userInfo.avatarFilename" alt="" width="130" height="130">
   <div id="edit-button-div">
-    <div id="edit-button">编辑个人资料</div>
+    <div id="edit-button" (click)="showEditWindow = true">编辑个人资料</div>
   </div>
-  <p id="nickname">{{userInfo.nickname}}</p>
+  <div id="info-div">
+    <p id="nickname">{{userInfo.nickname}}</p>
+    <p id="username">@{{userInfo.username}}</p>
+    <p id="introduction" *ngIf="userInfo.introduction">{{userInfo.introduction}}</p>
+    <span>
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none"
+                                                                                                            d="M0 0h24v24H0z"/><path
+        d="M12 14v2a6 6 0 0 0-6 6H4a8 8 0 0 1 8-8zm0-1c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm8.828 10.071L18 24l-2.828-2.929c-1.563-1.618-1.563-4.24 0-5.858a3.904 3.904 0 0 1 5.656 0c1.563 1.618 1.563 4.24 0 5.858zm-1.438-1.39c.813-.842.813-2.236 0-3.078a1.904 1.904 0 0 0-2.78 0c-.813.842-.813 2.236 0 3.079L18 21.12l1.39-1.44z"/></svg>
+    </span>
+    <span class="text-near-icon">{{userInfo.location}}</span>
+    <span style="margin-left: 15px">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none"
+                                                                                                            d="M0 0h24v24H0z"/><path
+        d="M13.06 8.11l1.415 1.415a7 7 0 0 1 0 9.9l-.354.353a7 7 0 0 1-9.9-9.9l1.415 1.415a5 5 0 1 0 7.071 7.071l.354-.354a5 5 0 0 0 0-7.07l-1.415-1.415 1.415-1.414zm6.718 6.011l-1.414-1.414a5 5 0 1 0-7.071-7.071l-.354.354a5 5 0 0 0 0 7.07l1.415 1.415-1.415 1.414-1.414-1.414a7 7 0 0 1 0-9.9l.354-.353a7 7 0 0 1 9.9 9.9z"/></svg>
+    </span>
+    <span class="text-near-icon">
+      <a [href]="userInfo.link" target="_blank" id="link">{{userInfo.link}}</a>
+    </span>
+    <span style="margin-left: 15px">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none"
+                                                                                                            d="M0 0h24v24H0z"/><path
+        d="M17 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2v2h6V1h2v2zm3 8H4v8h16v-8zm-5-6H9v2H7V5H4v4h16V5h-3v2h-2V5zm-9 8h2v2H6v-2zm5 0h2v2h-2v-2zm5 0h2v2h-2v-2z"/></svg>
+    </span>
+    <span class="text-near-icon">{{userInfo.registerYear}}年{{userInfo.registerMonth}}月&nbsp;加入</span>
+    <div id="follow-info-div">
+      <span class="follow-link" [routerLink]="['/app/followee_list/', userInfo.id]"><span
+        id="num-followee">{{userInfo.numFollowee}}</span>&nbsp;<span id="num-followee-text">正在关注</span></span>&nbsp;&nbsp;&nbsp;
+      <span class="follow-link" [routerLink]="['/app/follower_list/', userInfo.id]"><span
+        id="num-follower">{{userInfo.numFollower}}</span>&nbsp;<span id="num-follower-text">关注者</span></span>
+    </div>
+  </div>
+  <app-posts-list [posts]="posts" [canEdit]="true"></app-posts-list>
 </div>
-
+<div id="dark-background" *ngIf="showEditWindow"></div>
+<div id="info-edit-window" *ngIf="showEditWindow">
+  <div id="window-line-1">
+    <div id="close-button-div" (click)="closeEditWindow()">
+      <svg id="close-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="none" d="M0 0h24v24H0z"/>
+        <path
+          d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/>
+      </svg>
+    </div>
+    <h2 id="window-title">编辑个人资料</h2>
+    <div id="save-button">保存</div>
+    <div style="clear: both;"></div>
+  </div>
+  <div id="window-line-2">
+    <img [src]="userInfo.wallpaperFilename" alt="" width="586" height="250">
+    <div id="change-wallpaper-button-div">
+      <svg id="change-wallpaper-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/></svg>
+    </div>
+    <div id="change-avatar-button-div">
+      <svg id="change-avatar-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/></svg>
+    </div>
+    <img id="avatar-in-edit-window" [src]="userInfo.avatarFilename" alt="" width="110" height="110">
+    <div id="darken-avatar"></div>
+  </div>
+  <div id="window-line-3">
+    <div class="input-div">
+      <p class="field-name">昵称</p>
+      <p class="char-count">{{nicknameInput.length}}&nbsp;/&nbsp;64</p>
+      <input class="input-box" type="text" maxlength="64" [(ngModel)]="nicknameInput">
+    </div>
+    <div class="input-div">
+      <p class="field-name">简介</p>
+      <p class="char-count">{{introductionInput.length}}&nbsp;/&nbsp;160</p>
+      <input class="input-box" type="text" maxlength="160" [(ngModel)]="introductionInput">
+    </div>
+    <div class="input-div">
+      <p class="field-name">位置</p>
+      <p class="char-count">{{locationInput.length}}&nbsp;/&nbsp;30</p>
+      <input class="input-box" type="text" maxlength="30" [(ngModel)]="locationInput">
+    </div>
+    <div class="input-div" style="margin-bottom: 20px;">
+      <p class="field-name">网站</p>
+      <p class="char-count">{{linkInput.length}}&nbsp;/&nbsp;100</p>
+      <input class="input-box" type="text" maxlength="100" [(ngModel)]="linkInput">
+    </div>
+  </div>
+</div>

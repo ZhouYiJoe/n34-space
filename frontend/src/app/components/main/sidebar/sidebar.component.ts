@@ -20,6 +20,7 @@ export class SidebarComponent implements OnInit {
   public currentUserAvatarFilename: string | null = null
   public currentUsername: string | null = null
   public currentUserNickname: string | null = null
+  public myId: string | null = null
   public menuVisible: boolean = false
 
   constructor(public httpClient: HttpClient,
@@ -27,10 +28,11 @@ export class SidebarComponent implements OnInit {
               public errorHandleService: ErrorHandleService) { }
 
   ngOnInit(): void {
+    this.myId = localStorage.getItem(currentUserIdKey)
     this.currentUserAvatarFilename = localStorage.getItem(currentUserAvatarFilenameKey)
     this.currentUsername = localStorage.getItem(currentUsernameKey)
     this.currentUserNickname = localStorage.getItem(currentUserNicknameKey)
-    if (this.currentUserAvatarFilename === null || this.currentUsername === null || this.currentUserNickname === null) {
+    if (this.currentUserAvatarFilename === null || this.currentUsername === null || this.currentUserNickname === null || this.myId == null) {
       this.router.navigate(['login'])
     }
   }

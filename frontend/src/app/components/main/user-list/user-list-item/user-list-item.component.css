@@ -1,26 +1,36 @@
+#container:hover {
+  background-color: #f7f7f7;
+  cursor: pointer;
+}
+
 #avatar {
+  margin-left: 10px;
+  margin-top: 10px;
   width: 48px;
   height: 48px;
   border-radius: 24px;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-right: 10px;
 }
 
 #left {
   float: left;
-}
-
-#middle {
-  float: left;
+  width: 68px;
 }
 
 #right {
+  float: left;
+  width: 679px;
+}
+
+#follow-button-div {
   float: right;
 }
 
-#nickname {
+#nickname-and-username-div {
   margin-top: 10px;
+  float: left;
+}
+
+#nickname {
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
@@ -29,9 +39,14 @@
   color: black;
 }
 
+#nickname:hover {
+  text-decoration: underline;
+}
+
 #username {
   font-size: 14px;
   color: gray;
+  margin-top: 5px;
 }
 
 #follow-button {
@@ -41,14 +56,20 @@
   font-size: 15px;
   line-height: 30px;
   text-align: center;
-  margin-top: 15px;
   font-weight: bold;
   cursor: pointer;
   margin-right: 10px;
+  margin-top: 10px;
 }
 
 .unfollow-button {
   border: 1px solid #c9c9c9;
+}
+
+#bottom-right {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  padding-right: 10px;
 }
 
 .unfollow-button:hover {
@@ -61,4 +82,8 @@
   background-color: black;
   color: white;
   border: none;
+}
+
+.follow-button:hover {
+  background-color: #282828;
 }
