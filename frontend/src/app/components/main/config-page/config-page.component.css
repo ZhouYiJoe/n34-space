@@ -1,38 +1,60 @@
 #container {
-  width: 749px;
+  min-height: 100vh;
   border-left: solid #e5e5e5 1px;
   border-right: solid #e5e5e5 1px;
+  width: 747px;
+}
+
+#setting-menu-div {
+  width: 249px;
   min-height: 100vh;
-  overflow: hidden;
+  float: left;
+  border-right: #e5e5e5 1px solid;
 }
 
-#desc {
-  text-align: center;
-  margin-top: 20px;
+#setting-panel-div {
+  float: left;
 }
 
-.option {
-  text-align: center;
-  margin-top: 15px;
+#config-page-title {
+  padding: 15px;
 }
 
-#save {
-  text-align: center;
-  margin-top: 20px;
-}
-
-#save-button {
-  background-color: #67b9d0;
-  width: 100px;
-  height: 40px;
-  border-radius: 10px;
-  border-style: none;
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
+.setting-option {
+  padding: 10px 0 10px 15px;
   cursor: pointer;
 }
 
-#save-button:hover {
-  background-color: #2a7e8d;
+.setting-option:hover {
+  background-color: #f9f8f7;
+}
+
+.setting-option-left {
+  float: left;
+  width: 190px;
+}
+
+.setting-option-right {
+  float: left;
+}
+
+.selected {
+  border-right: 2px solid orange;
+}
+
+.arrow-icon {
+  margin-top: 16px;
+  margin-left: 10px;
+}
+
+.setting-option-name {
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.setting-option-desc {
+  font-size: 14px;
+  line-height: 18px;
+  color: #8c7e74;
+  height: 36px;
 }

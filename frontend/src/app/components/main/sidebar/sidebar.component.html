@@ -1,23 +1,44 @@
 <div id="container">
-  <a routerLink="/app/home" class="option" id="my-posts">我的推文</a>
-  <a routerLink="/app/followee_posts" class="option">关注用户推文</a>
-  <a routerLink="/app/hot" class="option">热门推文</a>
-  <a [routerLink]="['/app/followee_list/', this.myId]" class="option">我的关注</a>
-  <a [routerLink]="['/app/follower_list/', this.myId]" class="option">我的粉丝</a>
-  <a routerLink="/app/user_info" class="option">个人资料</a>
-  <a routerLink="/app/config" class="option">设置</a>
+  <a routerLink="/app/home" class="option" id="my-posts">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M19 21H5a1 1 0 0 1-1-1v-9H1l10.327-9.388a1 1 0 0 1 1.346 0L23 11h-3v9a1 1 0 0 1-1 1zM6 19h12V9.157l-6-5.454-6 5.454V19z"/></svg>
+    主页
+  </a>
+  <a routerLink="/app/followee_posts" class="option">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16 20V4H4v15a1 1 0 0 0 1 1h11zm3 2H5a3 3 0 0 1-3-3V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7h4v9a3 3 0 0 1-3 3zm-1-10v7a1 1 0 0 0 2 0v-7h-2zM6 6h6v6H6V6zm2 2v2h2V8H8zm-2 5h8v2H6v-2zm0 3h8v2H6v-2z"/></svg>
+    关注用户推文
+  </a>
+  <a routerLink="/app/hot" class="option">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 23a7.5 7.5 0 0 0 7.5-7.5c0-.866-.23-1.697-.5-2.47-1.667 1.647-2.933 2.47-3.8 2.47 3.995-7 1.8-10-4.2-14 .5 5-2.796 7.274-4.138 8.537A7.5 7.5 0 0 0 12 23zm.71-17.765c3.241 2.75 3.257 4.887.753 9.274-.761 1.333.202 2.991 1.737 2.991.688 0 1.384-.2 2.119-.595a5.5 5.5 0 1 1-9.087-5.412c.126-.118.765-.685.793-.71.424-.38.773-.717 1.118-1.086 1.23-1.318 2.114-2.78 2.566-4.462z"/></svg>
+    热门推文
+  </a>
+  <a [routerLink]="['/app/followee_list/', this.myId]" class="option">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M14 14.252v2.09A6 6 0 0 0 6 22l-2-.001a8 8 0 0 1 10-7.748zM12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm5.793 8.914l3.535-3.535 1.415 1.414-4.95 4.95-3.536-3.536 1.415-1.414 2.12 2.121z"/></svg>
+    我的关注
+  </a>
+  <a [routerLink]="['/app/follower_list/', this.myId]" class="option">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M2 22a8 8 0 1 1 16 0h-2a6 6 0 1 0-12 0H2zm8-9c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm8.284 3.703A8.002 8.002 0 0 1 23 22h-2a6.001 6.001 0 0 0-3.537-5.473l.82-1.824zm-.688-11.29A5.5 5.5 0 0 1 21 8.5a5.499 5.499 0 0 1-5 5.478v-2.013a3.5 3.5 0 0 0 1.041-6.609l.555-1.943z"/></svg>
+    我的粉丝
+  </a>
+  <a routerLink="/app/user_info" class="option">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M4 22a8 8 0 1 1 16 0h-2a6 6 0 1 0-12 0H4zm8-9c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6zm0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg>
+    个人资料
+  </a>
+  <a routerLink="/app/config" class="option">
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M8.686 4l2.607-2.607a1 1 0 0 1 1.414 0L15.314 4H19a1 1 0 0 1 1 1v3.686l2.607 2.607a1 1 0 0 1 0 1.414L20 15.314V19a1 1 0 0 1-1 1h-3.686l-2.607 2.607a1 1 0 0 1-1.414 0L8.686 20H5a1 1 0 0 1-1-1v-3.686l-2.607-2.607a1 1 0 0 1 0-1.414L4 8.686V5a1 1 0 0 1 1-1h3.686zM6 6v3.515L3.515 12 6 14.485V18h3.515L12 20.485 14.485 18H18v-3.515L20.485 12 18 9.515V6h-3.515L12 3.515 9.515 6H6zm6 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+    设置
+  </a>
   <div id="user-bar-menu" *ngIf="menuVisible" class="show-menu-area">
-    <div class="user-bar-menu-option" (click)="logout()">登出@{{currentUsername}}</div>
+    <div class="user-bar-menu-option" (click)="logout()">登出@{{myUsername}}</div>
   </div>
   <div id="user-bar" (click)="showOrHideUserBarMenu()">
     <div id="avatar">
       <img id="avatar-img"
-           [src]="currentUserAvatarFilename === 'null' ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + currentUserAvatarFilename"
+           [src]="myAvatarFilename === 'null' ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + myAvatarFilename"
            alt="">
     </div>
     <div id="nickname-and-username">
-      <div id="nickname">{{currentUserNickname}}</div>
-      <div id="username">@{{currentUsername}}</div>
+      <div id="nickname">{{myNickname}}</div>
+      <div id="username">@{{myUsername}}</div>
     </div>
     <div id="more">
       <img src="assets/more.svg" alt="" id="more-button">

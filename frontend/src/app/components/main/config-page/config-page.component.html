@@ -1,10 +1,22 @@
 <div id="container">
-  <div id="desc">如果要屏蔽某个分类下的极端发言，请在对应的分类旁勾选。</div>
-  <div *ngFor="let category of categories; let i = index" class="option">
-    <label [for]="'category' + i">{{category}}&nbsp;&nbsp;</label>
-    <input type="checkbox" [id]="'category' + i" [(ngModel)]="filterConfig[i]">
+  <div id="setting-menu-div">
+    <h2 id="config-page-title">设置</h2>
+    <div class="setting-option" *ngFor="let settingOption of settingOptions" [ngClass]="{'selected': settingOption.selected}" (click)="select(settingOption)">
+      <div class="setting-option-left">
+        <div class="setting-option-name">{{settingOption.name}}</div>
+        <div class="setting-option-desc">{{settingOption.desc}}</div>
+      </div>
+      <div class="setting-option-right">
+        <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z"/></svg>
+      </div>
+      <div style="clear: both"></div>
+    </div>
   </div>
-  <div id="save">
-    <button id="save-button" (click)="changeFilterConfig()">保存设置</button>
+  <div id="setting-panel-div">
+    <app-user-info-setting-page *ngIf="settingOptions[0].selected"></app-user-info-setting-page>
+    <app-change-password-page *ngIf="settingOptions[1].selected"></app-change-password-page>
+    <app-delete-account-page *ngIf="settingOptions[2].selected"></app-delete-account-page>
+    <app-filter-setting-page *ngIf="settingOptions[3].selected"></app-filter-setting-page>
   </div>
 </div>
+

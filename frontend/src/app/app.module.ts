@@ -40,6 +40,10 @@ import { CommentPageComponent } from './components/main/comment-page/comment-pag
 import { ReplyListComponent } from './components/main/comment-page/reply-list/reply-list.component';
 import { ReplyListItemComponent } from './components/main/comment-page/reply-list/reply-list-item/reply-list-item.component';
 import { FollowerListPageComponent } from './components/main/follower-list-page/follower-list-page.component';
+import { FilterSettingPageComponent } from './components/main/config-page/filter-setting-page/filter-setting-page.component';
+import { UserInfoSettingPageComponent } from './components/main/config-page/user-info-setting-page/user-info-setting-page.component';
+import { ChangePasswordPageComponent } from './components/main/config-page/change-password-page/change-password-page.component';
+import { DeleteAccountPageComponent } from './components/main/config-page/delete-account-page/delete-account-page.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +82,10 @@ import { FollowerListPageComponent } from './components/main/follower-list-page/
     ReplyListComponent,
     ReplyListItemComponent,
     FollowerListPageComponent,
+    FilterSettingPageComponent,
+    UserInfoSettingPageComponent,
+    ChangePasswordPageComponent,
+    DeleteAccountPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,11 +101,3 @@ export class AppModule { }
 
 export const baseUrl: string = 'http://localhost:8080'
 export const baseImgUrl: string = 'http://localhost:9090/images/'
-
-export const currentUserIdKey = 'currentUserId'
-export const currentUsernameKey = 'currentUsername'
-export const currentUserEmailKey = 'currentUserEmail'
-export const currentUserNicknameKey = 'currentUserNickname'
-export const currentUserAvatarFilenameKey = 'currentUserAvatarFilename'
-export const currentFilterConfigKey = 'currentFilterConfig'
-export const currentUserWallpaperFilenameKey = 'currentUserWallpaperFilename'

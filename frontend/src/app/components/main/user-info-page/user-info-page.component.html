@@ -39,7 +39,7 @@
 </div>
 <div id="dark-background" *ngIf="showEditWindow"></div>
 <div id="info-edit-window" *ngIf="showEditWindow">
-  <div id="window-line-1">
+  <div id="window-title-bar">
     <div id="close-button-div" (click)="closeEditWindow()">
       <svg id="close-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
         <path fill="none" d="M0 0h24v24H0z"/>
@@ -48,40 +48,45 @@
       </svg>
     </div>
     <h2 id="window-title">编辑个人资料</h2>
-    <div id="save-button">保存</div>
+    <div id="save-button" (click)="saveChange()">保存</div>
     <div style="clear: both;"></div>
   </div>
-  <div id="window-line-2">
-    <img [src]="userInfo.wallpaperFilename" alt="" width="586" height="250">
-    <div id="change-wallpaper-button-div">
-      <svg id="change-wallpaper-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/></svg>
+  <div id="window-inner">
+    <div id="window-line-1">
+      <img id="wallpaper-in-edit-window" [src]="userInfo.wallpaperFilename" alt="" width="586" height="250">
+      <div id="darken-wallpaper"></div>
+      <div id="change-wallpaper-button-div" (click)="selectWallpaper()">
+        <svg id="change-wallpaper-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/></svg>
+        <input type="file" #wallpaperFileInput (change)="uploadWallpaper()" class="file-input">
+      </div>
+      <div id="change-avatar-button-div" (click)="selectAvatar()">
+        <svg id="change-avatar-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/></svg>
+        <input type="file" #avatarFileInput (change)="uploadAvatar()" class="file-input">
+      </div>
+      <img id="avatar-in-edit-window" [src]="userInfo.avatarFilename" alt="" width="110" height="110">
+      <div id="darken-avatar"></div>
     </div>
-    <div id="change-avatar-button-div">
-      <svg id="change-avatar-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/></svg>
-    </div>
-    <img id="avatar-in-edit-window" [src]="userInfo.avatarFilename" alt="" width="110" height="110">
-    <div id="darken-avatar"></div>
-  </div>
-  <div id="window-line-3">
-    <div class="input-div">
-      <p class="field-name">昵称</p>
-      <p class="char-count">{{nicknameInput.length}}&nbsp;/&nbsp;64</p>
-      <input class="input-box" type="text" maxlength="64" [(ngModel)]="nicknameInput">
-    </div>
-    <div class="input-div">
-      <p class="field-name">简介</p>
-      <p class="char-count">{{introductionInput.length}}&nbsp;/&nbsp;160</p>
-      <input class="input-box" type="text" maxlength="160" [(ngModel)]="introductionInput">
-    </div>
-    <div class="input-div">
-      <p class="field-name">位置</p>
-      <p class="char-count">{{locationInput.length}}&nbsp;/&nbsp;30</p>
-      <input class="input-box" type="text" maxlength="30" [(ngModel)]="locationInput">
-    </div>
-    <div class="input-div" style="margin-bottom: 20px;">
-      <p class="field-name">网站</p>
-      <p class="char-count">{{linkInput.length}}&nbsp;/&nbsp;100</p>
-      <input class="input-box" type="text" maxlength="100" [(ngModel)]="linkInput">
+    <div id="window-line-2">
+      <div class="input-div">
+        <p class="field-name">昵称</p>
+        <p class="char-count">{{nicknameInput.length}}&nbsp;/&nbsp;64</p>
+        <input class="input-box" type="text" maxlength="64" [(ngModel)]="nicknameInput">
+      </div>
+      <div class="input-div">
+        <p class="field-name">简介</p>
+        <p class="char-count">{{introductionInput.length}}&nbsp;/&nbsp;160</p>
+        <input class="input-box" type="text" maxlength="160" [(ngModel)]="introductionInput">
+      </div>
+      <div class="input-div">
+        <p class="field-name">位置</p>
+        <p class="char-count">{{locationInput.length}}&nbsp;/&nbsp;30</p>
+        <input class="input-box" type="text" maxlength="30" [(ngModel)]="locationInput">
+      </div>
+      <div class="input-div" style="margin-bottom: 20px;">
+        <p class="field-name">网站</p>
+        <p class="char-count">{{linkInput.length}}&nbsp;/&nbsp;100</p>
+        <input class="input-box" type="text" maxlength="100" [(ngModel)]="linkInput">
+      </div>
     </div>
   </div>
 </div>

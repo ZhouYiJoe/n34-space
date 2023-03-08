@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {ErrorHandleService} from "../../../../../services/error-handle.service";
-import {baseUrl, currentUserIdKey} from "../../../../../app.module";
+import {baseUrl} from "../../../../../app.module";
 import {catchError} from "rxjs";
+import {UserInfoService} from "../../../../../services/user-info.service";
 
 @Component({
   selector: 'app-reply-list-item',
@@ -29,16 +30,16 @@ export class ReplyListItemComponent implements OnInit {
 
   constructor(public router: Router,
               public httpClient: HttpClient,
-              public errorHandleService: ErrorHandleService) {
+              public errorHandleService: ErrorHandleService,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
-    let currentUserId = localStorage.getItem(currentUserIdKey);
-    if (currentUserId === null) {
-      this.router.navigate(['/login'])
-      return
-    }
-    this.showDeleteButton = currentUserId == this.reply.userId
+    this.userInfoService.getUserInfoRequest()
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((userInfo: any) => {
+        this.showDeleteButton = userInfo.id == this.reply.userId
+      })
   }
 
   onClickInReplyContent(event: any) {
@@ -72,27 +73,27 @@ export class ReplyListItemComponent implements OnInit {
   }
 
   submitReply() {
-    let currentUserId = localStorage.getItem(currentUserIdKey)
-    if (currentUserId == null) {
-      this.router.navigate(['/login'])
-      return
-    }
-    this.httpClient.post(`${baseUrl}/comment_replies`,
-      {
-        content: `回复@${this.reply.username}：` + this.replyInputBoxContent,
-        userId: currentUserId,
-        commentId: this.reply.commentId
-      })
+    this.userInfoService.getUserInfoRequest()
       .pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        if (data) {
-          alert('发布成功')
-          this.replyInputWindowVisible = false
-          this.replied.emit()
-        } else {
-          alert('发布失败')
-        }
+      .subscribe((userInfo: any) => {
+        this.httpClient.post(`${baseUrl}/comment_replies`,
+          {
+            content: `回复@${this.reply.username}: ` + this.replyInputBoxContent,
+            userId: userInfo.id,
+            commentId: this.reply.commentId
+          })
+          .pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            if (data) {
+              alert('发布成功')
+              this.replyInputWindowVisible = false
+              this.replied.emit()
+            } else {
+              alert('发布失败')
+            }
+          })
       })
+
   }
 
   closeReplyInputWindow() {

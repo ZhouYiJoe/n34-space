@@ -2,8 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {ErrorHandleService} from "../../services/error-handle.service";
-import {baseUrl, currentUserIdKey} from "../../app.module";
+import {baseUrl} from "../../app.module";
 import {catchError} from "rxjs";
+import {UserInfoService} from "../../services/user-info.service";
 
 @Component({
   selector: 'app-main',
@@ -25,26 +26,28 @@ export class MainComponent implements OnInit {
   constructor(public httpClient: HttpClient,
               public activatedRoute: ActivatedRoute,
               public errorHandleService: ErrorHandleService,
-              public router: Router) {
+              public router: Router,
+              public userInfoService: UserInfoService) {
 
   }
 
   ngOnInit(): void {
-    this.myId = localStorage.getItem(currentUserIdKey)
-    if (this.myId == null) {
-      this.router.navigate(['/login'])
-      return
-    }
     this.httpClient.get(`${baseUrl}/hashtag/top`, {params: {n: 10}})
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((data: any) => {
         this.hotHashtags = data
       })
-    this.httpClient.get(`${baseUrl}/users`, {params: {sortByFollower: true, topN: 5, includeFollowed: false}})
+    this.userInfoService.getUserInfoRequest()
       .pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        this.hotUsers = data.filter((user: any) => user.id != this.myId)
+      .subscribe((userInfo: any) => {
+        this.myId = userInfo.id
+        this.httpClient.get(`${baseUrl}/users`, {params: {sortByFollower: true, topN: 5, includeFollowed: false}})
+          .pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            this.hotUsers = data.filter((user: any) => user.id != this.myId)
+          })
       })
+
   }
 
   search(event: KeyboardEvent) {

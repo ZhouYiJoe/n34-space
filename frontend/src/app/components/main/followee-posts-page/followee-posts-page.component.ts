@@ -25,12 +25,15 @@ export class FolloweePostsPageComponent implements OnInit {
   }
 
   refreshPosts(): void {
-    let currentUserId = this.userInfoService.getUserInfo()?.userId
-    if (currentUserId === undefined) return
-    this.httpClient.get(`${baseUrl}/posts/followee_posts`,)
+    this.userInfoService.getUserInfoRequest()
       .pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        this.posts = data
+      .subscribe((userInfo: any) => {
+        this.httpClient.get(`${baseUrl}/posts/followee_posts`,)
+          .pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            this.posts = data
+          })
       })
+
   }
 }

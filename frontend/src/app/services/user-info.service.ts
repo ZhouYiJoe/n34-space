@@ -1,65 +1,33 @@
-import { Injectable } from '@angular/core';
-import {
-  currentFilterConfigKey,
-  currentUserAvatarFilenameKey,
-  currentUserEmailKey,
-  currentUserIdKey,
-  currentUsernameKey,
-  currentUserNicknameKey, currentUserWallpaperFilenameKey
-} from "../app.module";
+import {Injectable} from '@angular/core';
+import {baseUrl} from "../app.module";
 import {Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserInfoService {
+  public userInfo: any = null
 
-  constructor(public router: Router) { }
+  constructor(public router: Router,
+              public httpClient: HttpClient) {
+  }
 
-  public getUserInfo() {
-    let userId = localStorage.getItem(currentUserIdKey)
-    if (userId === null) {
-      this.router.navigate(['/login'])
-      return null
-    }
-    let username = localStorage.getItem(currentUsernameKey)
-    if (username === null) {
-      this.router.navigate(['/login'])
-      return null
-    }
-    let email = localStorage.getItem(currentUserEmailKey)
-    if (email === null) {
-      this.router.navigate(['/login'])
-      return null
-    }
-    let nickname = localStorage.getItem(currentUserNicknameKey)
-    if (nickname === null) {
-      this.router.navigate(['/login'])
-      return null
-    }
-    let avatarFilename = localStorage.getItem(currentUserAvatarFilenameKey)
-    if (avatarFilename === null) {
-      this.router.navigate(['/login'])
-      return null
-    }
-    let filterConfig = localStorage.getItem(currentFilterConfigKey)
-    if (filterConfig === null) {
-      this.router.navigate(['/login'])
-      return null
-    }
-    let wallpaperFilename = localStorage.getItem(currentUserWallpaperFilenameKey)
-    if (wallpaperFilename === null) {
-      this.router.navigate(['/login'])
-      return null
-    }
-    return {
-      userId: userId,
-      username: username,
-      email: email,
-      nickname: nickname,
-      avatarFilename: avatarFilename,
-      filterConfig: filterConfig,
-      wallpaperFilename: wallpaperFilename
+  public getUserInfoRequest(): Observable<any> {
+    if (this.userInfo == null) {
+      let observable: Observable<any> = this.httpClient.get(`${baseUrl}/users/self`)
+      observable.subscribe((data: any) => {
+        this.userInfo = data
+      })
+      return observable
+    } else {
+      return new Observable<any>(observer => {
+        setTimeout(() => {
+          observer.next(this.userInfo)
+        }, 0)
+      })
     }
   }
+
 }

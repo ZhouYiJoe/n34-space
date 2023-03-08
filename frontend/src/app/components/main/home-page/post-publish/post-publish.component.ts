@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseUrl, currentUserIdKey} from "../../../../app.module";
+import {baseUrl} from "../../../../app.module";
 import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../../services/error-handle.service";
 import {Router} from "@angular/router";
@@ -26,11 +26,6 @@ export class PostPublishComponent implements OnInit {
   }
 
   publishPost(): void {
-    let item = localStorage.getItem(currentUserIdKey)
-    if (item === null) {
-      this.router.navigate(['/login'])
-      return
-    }
     this.httpClient.post(`${baseUrl}/posts`, this.postToPublish)
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe(data => {

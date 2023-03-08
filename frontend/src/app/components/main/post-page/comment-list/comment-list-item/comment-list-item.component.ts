@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
-import {baseUrl, currentUserIdKey} from "../../../../../app.module";
+import {baseUrl} from "../../../../../app.module";
 import {catchError} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {ErrorHandleService} from "../../../../../services/error-handle.service";
+import {UserInfoService} from "../../../../../services/user-info.service";
 
 @Component({
   selector: 'app-comment-list-item',
@@ -21,16 +22,16 @@ export class CommentListItemComponent implements OnInit {
 
   constructor(public router: Router,
               public httpClient: HttpClient,
-              public errorHandleService: ErrorHandleService) {
+              public errorHandleService: ErrorHandleService,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
-    let currentUserId = localStorage.getItem(currentUserIdKey);
-    if (currentUserId === null) {
-      this.router.navigate(['/login'])
-      return
-    }
-    this.showDeleteButton = currentUserId == this.comment.userId
+    this.userInfoService.getUserInfoRequest()
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((userInfo: any) => {
+        this.showDeleteButton = userInfo.id == this.comment.userId
+      })
   }
 
   onClickInCommentContent(event: any) {

@@ -1,10 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {
-  baseImgUrl,
-  baseUrl, currentUserAvatarFilenameKey,
-  currentUserNicknameKey
-} from "../../../app.module";
+import {baseImgUrl, baseUrl} from "../../../app.module";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {catchError} from "rxjs";
 import {Router} from "@angular/router";
@@ -18,6 +14,9 @@ import {UserInfoService} from "../../../services/user-info.service";
 export class UserInfoPageComponent implements OnInit {
   @ViewChild('avatarFileInput')
   public avatarFileInput: any
+
+  @ViewChild('wallpaperFileInput')
+  public wallpaperFileInput: any
 
   public userInfo: any = null
 
@@ -72,38 +71,61 @@ export class UserInfoPageComponent implements OnInit {
   }
 
   uploadAvatar(): void {
+    if (this.avatarFileInput.nativeElement.files.length == 0) {
+      return
+    }
     let formData = new FormData()
     formData.append('avatarFile', this.avatarFileInput.nativeElement.files[0])
     this.httpClient.post(`${baseUrl}/users/avatar`, formData, {responseType: 'text'})
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((data: any) => {
         alert('上传成功')
-        if (data != null) {
-          this.userInfo.avatarFilename = `${baseImgUrl}${data}`
-          localStorage.setItem(currentUserAvatarFilenameKey, data)
-        }
+        this.userInfo.avatarFilename = `${baseImgUrl}${data}`
+        location.reload()
       })
   }
 
-  editNickname() {
-    // if (this.editingNickname) {
-    //   this.httpClient.post(`${baseUrl}/users/nickname`, {
-    //     username: this.userInfo.username,
-    //     nickname: this.userInfo.nickname
-    //   })
-    //     .pipe(catchError((response) => {
-    //       this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
-    //       return this.errorHandleService.handleError(response)
-    //     }))
-    //     .subscribe((data: any) => {
-    //       if (!data) {
-    //         alert('修改失败')
-    //         this.userInfo.nickname = this.userInfoService.getUserInfo()?.nickname
-    //       } else {
-    //         localStorage.setItem(currentUserNicknameKey, this.userInfo.nickname)
-    //       }
-    //     })
-    // }
-    // this.editingNickname = !this.editingNickname
+  selectWallpaper() {
+    this.wallpaperFileInput.nativeElement.click()
+  }
+
+  uploadWallpaper() {
+    if (this.wallpaperFileInput.nativeElement.files.length == 0) {
+      return
+    }
+    let formData = new FormData()
+    formData.append('wallpaperFile', this.wallpaperFileInput.nativeElement.files[0])
+    this.httpClient.post(`${baseUrl}/users/wallpaper`, formData, {responseType: 'text'})
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((data: any) => {
+        alert('上传成功')
+        this.userInfo.wallpaperFilename = `${baseImgUrl}${data}`
+        location.reload()
+      })
+  }
+
+  saveChange() {
+    this.userInfoService.getUserInfoRequest()
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((userInfo: any) => {
+        this.httpClient.put(`${baseUrl}/users`,
+          {
+            id: userInfo.id,
+            nickname: this.nicknameInput,
+            introduction: this.introductionInput,
+            location: this.locationInput,
+            link: this.linkInput
+          })
+          .pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            if (data) {
+              alert('保存成功')
+              this.showEditWindow = false
+              location.reload()
+            } else {
+              alert('保存失败')
+            }
+          })
+      })
   }
 }

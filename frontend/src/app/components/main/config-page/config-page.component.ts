@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseUrl, currentFilterConfigKey} from "../../../app.module";
 import {ErrorHandleService} from "../../../services/error-handle.service";
-import {catchError} from "rxjs";
 import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
@@ -11,8 +9,29 @@ import {UserInfoService} from "../../../services/user-info.service";
   styleUrls: ['./config-page.component.css']
 })
 export class ConfigPageComponent implements OnInit {
-  public categories: string[] = []
-  public filterConfig: boolean[] = []
+
+  public settingOptions: any[] = [
+    {
+      name: '账号信息',
+      selected: false,
+      desc: '查看你的账号信息，例如邮箱地址和注册时间。'
+    },
+    {
+      name: '更改密码',
+      selected: false,
+      desc: '随时更改你的密码。'
+    },
+    {
+      name: '注销账号',
+      selected: false,
+      desc: '了解如何停用账号。'
+    },
+    {
+      name: '内容过滤',
+      selected: false,
+      desc: '选择你想查看以及不想查看的推文。'
+    }
+  ]
 
   constructor(public httpClient: HttpClient,
               public errorHandleService: ErrorHandleService,
@@ -20,51 +39,13 @@ export class ConfigPageComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    let t = this.userInfoService.getUserInfo()?.filterConfig
-    this.httpClient.get(`${baseUrl}/textCategories`)
-      .pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        this.categories = data
-        if (t !== undefined) {
-          this.filterConfig = this.configStrToArray(t)
-        }
-      })
+  ngOnInit() {
   }
 
-  configStrToArray(str: string): boolean[] {
-    let array: boolean[] = []
-    for (let i = 0; i < str.length; i++) {
-      array.push(str[i] === '1')
+  select(settingOption: any) {
+    for (let i = 0; i < this.settingOptions.length; i++) {
+      this.settingOptions[i].selected = this.settingOptions[i] === settingOption
     }
-    return array
-  }
-
-  configArrayToStr(array: boolean[]): string {
-    let t: string = ''
-    for (let i = 0; i < array.length; i++) {
-      t = t + (array[i] ? '1' : '0')
-    }
-    return t
-  }
-
-  changeFilterConfig() {
-    let strConfig = this.configArrayToStr(this.filterConfig)
-    let userId = this.userInfoService.getUserInfo()?.userId
-    this.httpClient.post(`${baseUrl}/users/filterConfig`,
-      {filterConfig: strConfig, id: userId})
-      .pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        if (data) {
-          localStorage.setItem(currentFilterConfigKey, strConfig)
-          alert('保存成功')
-        } else {
-          let strConfig = this.userInfoService.getUserInfo()?.filterConfig
-          if (strConfig !== undefined) {
-            this.filterConfig = this.configStrToArray(strConfig)
-          }
-        }
-      })
   }
 
 }

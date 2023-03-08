@@ -1,13 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {RegexService} from "../../../services/regex.service";
-import {
-  baseUrl, currentFilterConfigKey, currentUserAvatarFilenameKey,
-  currentUserEmailKey,
-  currentUserIdKey,
-  currentUsernameKey,
-  currentUserNicknameKey, currentUserWallpaperFilenameKey
-} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {catchError} from "rxjs";
 import {Router} from "@angular/router";
 import {ErrorHandleService} from "../../../services/error-handle.service";
@@ -49,13 +43,6 @@ export class LoginFormComponent implements OnInit {
         this.httpClient.get(`${baseUrl}/users/self`)
           .pipe(catchError(this.errorHandleService.handleError))
           .subscribe((data: any) => {
-            localStorage.setItem(currentUserIdKey, data.id)
-            localStorage.setItem(currentUsernameKey, data.username)
-            localStorage.setItem(currentUserEmailKey, data.email)
-            localStorage.setItem(currentUserNicknameKey, data.nickname)
-            localStorage.setItem(currentUserAvatarFilenameKey, data.avatarFilename)
-            localStorage.setItem(currentFilterConfigKey, data.filterConfig)
-            localStorage.setItem(currentUserWallpaperFilenameKey, data.wallpaperFilename)
             this.router.navigate(['/app/home'])
           })
       })

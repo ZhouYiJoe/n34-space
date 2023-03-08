@@ -3,19 +3,26 @@
   height: 100vh;
 }
 
+.icon {
+  position: relative;
+  top: 5px;
+  margin-right: 5px;
+}
+
 #my-posts {
   margin-top: 20px;
 }
 
 .option {
   height: 50px;
-  width: 165px;
+  width: 200px;
   display: block;
   font-size: 20px;
   text-decoration: none;
   color: black;
   line-height: 50px;
   margin-left: 20px;
+  margin-bottom: 10px;
   border-radius: 30px;
   text-indent: 1em;
   cursor: pointer;

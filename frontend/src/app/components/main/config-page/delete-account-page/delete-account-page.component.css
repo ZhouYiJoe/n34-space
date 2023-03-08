@@ -1,0 +1,98 @@
+#container {
+  width: 497px;
+}
+
+#panel-title {
+  padding: 15px;
+  margin-bottom: 5px;
+}
+
+#user-bar {
+  width: 497px;
+  height: 68px;
+}
+
+#user-bar:hover {
+  background-color: #f7f7f7;
+  cursor: pointer;
+}
+
+#avatar {
+  margin-top: 10px;
+  margin-left: 15px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+
+#user-bar-left {
+  float: left;
+  width: 68px;
+}
+
+#user-bar-right {
+  float: left;
+}
+
+#follow-button-div {
+  float: right;
+}
+
+#nickname-and-username-div {
+  margin-top: 15px;
+  float: left;
+}
+
+#nickname {
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  color: black;
+}
+
+#username {
+  font-size: 14px;
+  color: gray;
+  margin-top: 3px;
+}
+
+#follow-button {
+  width: 90px;
+  height: 30px;
+  border-radius: 20px;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.unfollow-button {
+  border: 1px solid #c9c9c9;
+}
+
+#bottom-right {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  padding-right: 10px;
+}
+
+.unfollow-button:hover {
+  background-color: rgba(255, 0, 0, 0.15);
+  color: red;
+  border: 1px solid #ff9292;
+}
+
+.follow-button {
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.follow-button:hover {
+  background-color: #282828;
+}

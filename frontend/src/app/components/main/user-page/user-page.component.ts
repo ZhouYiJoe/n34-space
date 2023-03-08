@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {baseImgUrl, baseUrl, currentUserIdKey} from "../../../app.module";
+import {baseImgUrl, baseUrl} from "../../../app.module";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {catchError} from "rxjs";
+import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
   selector: 'app-user-page',
@@ -20,33 +21,33 @@ export class UserPageComponent implements OnInit {
   constructor(public httpClient: HttpClient,
               public activatedRoute: ActivatedRoute,
               public errorHandleService: ErrorHandleService,
-              public router: Router) {
+              public router: Router,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: any) => {
-      let myId = localStorage.getItem(currentUserIdKey)
-      if (myId == null) {
-        this.router.navigate(['/login'])
-        return
-      }
-      this.httpClient.get(`${baseUrl}/users/${params.username}`)
+      this.userInfoService.getUserInfoRequest()
         .pipe(catchError(this.errorHandleService.handleError))
-        .subscribe((data: any) => {
-          if (data == null) {
-            this.router.navigate(['/404'])
-          } else {
-            this.userInfo = data
-            this.isMe = myId == this.userInfo.id
-            this.userInfo.avatarFilename = `${baseImgUrl}${this.userInfo.avatarFilename}`
-            this.userInfo.wallpaperFilename = `${baseImgUrl}${this.userInfo.wallpaperFilename}`
-            this.httpClient.get(`${baseUrl}/posts`,
-              {params: {authorId: this.userInfo.id, filtered: !this.isMe}})
-              .pipe(catchError(this.errorHandleService.handleError))
-              .subscribe((data: any) => {
-                this.posts = data
-              })
-          }
+        .subscribe((userInfo: any) => {
+          this.httpClient.get(`${baseUrl}/users/${params.username}`)
+            .pipe(catchError(this.errorHandleService.handleError))
+            .subscribe((data: any) => {
+              if (data == null) {
+                this.router.navigate(['/404'])
+              } else {
+                this.userInfo = data
+                this.isMe = userInfo.id == this.userInfo.id
+                this.userInfo.avatarFilename = `${baseImgUrl}${this.userInfo.avatarFilename}`
+                this.userInfo.wallpaperFilename = `${baseImgUrl}${this.userInfo.wallpaperFilename}`
+                this.httpClient.get(`${baseUrl}/posts`,
+                  {params: {authorId: this.userInfo.id, filtered: !this.isMe}})
+                  .pipe(catchError(this.errorHandleService.handleError))
+                  .subscribe((data: any) => {
+                    this.posts = data
+                  })
+              }
+            })
         })
     })
   }

@@ -1,0 +1,19 @@
+<div id="container">
+  <h2 id="panel-title">注销账号</h2>
+  <div id="user-bar" routerLink="/app/user_info">
+    <div id="user-bar-left">
+      <img [src]="userInfo.avatarFilename === null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + userInfo.avatarFilename" alt="" id="avatar">
+    </div>
+    <div id="user-bar-right">
+      <div id="nickname-and-username-div">
+        <a id="nickname">{{userInfo.nickname}}</a>
+        <div id="username">@{{userInfo.username}}</div>
+      </div>
+    </div>
+    <div style="clear: both"></div>
+  </div>
+  <h2 style="padding: 15px;">这会停用你的账号</h2>
+  <p style="padding: 15px;">您即将开始您帐号的停用程序。您的账号（包括您的显示名、
+    @用户名和公开个人资料）在本网站上将不再可见。</p>
+</div>

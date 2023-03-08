@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {baseImgUrl, baseUrl, currentUserIdKey} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {HttpClient} from "@angular/common/http";
 import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../services/error-handle.service";
@@ -28,16 +28,19 @@ export class HomePageComponent implements OnInit {
   }
 
   refreshPosts(): void {
-    let currentUserId = this.userInfoService.getUserInfo()?.userId
-    if (currentUserId === undefined) return
-    this.httpClient.get(`${baseUrl}/posts`, {
-      params: {
-        authorId: currentUserId,
-        filtered: false
-      }
-    }).pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        this.posts = data
+    this.userInfoService.getUserInfoRequest()
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((userInfo: any) => {
+        this.httpClient.get(`${baseUrl}/posts`, {
+          params: {
+            authorId: userInfo.id,
+            filtered: false
+          }
+        }).pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            this.posts = data
+          })
       })
+
   }
 }

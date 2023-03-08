@@ -1,0 +1,10 @@
+<div id="container">
+  <div id="desc">如果要屏蔽某个分类下的极端发言，请在对应的分类旁勾选。</div>
+  <div *ngFor="let category of categories; let i = index" class="option">
+    <label [for]="'category' + i">{{category}}&nbsp;&nbsp;</label>
+    <input type="checkbox" [id]="'category' + i" [(ngModel)]="filterConfig[i]">
+  </div>
+  <div id="save">
+    <button id="save-button" (click)="changeFilterConfig()">保存设置</button>
+  </div>
+</div>

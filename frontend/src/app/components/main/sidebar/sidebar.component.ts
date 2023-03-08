@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {
-  baseUrl, currentFilterConfigKey,
-  currentUserAvatarFilenameKey,
-  currentUserEmailKey,
-  currentUserIdKey, currentUsernameKey,
-  currentUserNicknameKey
-} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../services/error-handle.service";
+import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
   selector: 'app-sidebar',
@@ -17,24 +12,24 @@ import {ErrorHandleService} from "../../../services/error-handle.service";
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  public currentUserAvatarFilename: string | null = null
-  public currentUsername: string | null = null
-  public currentUserNickname: string | null = null
+  public myAvatarFilename: string | null = null
+  public myUsername: string | null = null
+  public myNickname: string | null = null
   public myId: string | null = null
   public menuVisible: boolean = false
 
   constructor(public httpClient: HttpClient,
               public router: Router,
-              public errorHandleService: ErrorHandleService) { }
+              public errorHandleService: ErrorHandleService,
+              public userInfoService: UserInfoService) { }
 
   ngOnInit(): void {
-    this.myId = localStorage.getItem(currentUserIdKey)
-    this.currentUserAvatarFilename = localStorage.getItem(currentUserAvatarFilenameKey)
-    this.currentUsername = localStorage.getItem(currentUsernameKey)
-    this.currentUserNickname = localStorage.getItem(currentUserNicknameKey)
-    if (this.currentUserAvatarFilename === null || this.currentUsername === null || this.currentUserNickname === null || this.myId == null) {
-      this.router.navigate(['login'])
-    }
+    this.userInfoService.getUserInfoRequest().subscribe((userInfo: any) => {
+      this.myId = userInfo.id
+      this.myAvatarFilename = userInfo.avatarFilename
+      this.myUsername = userInfo.username
+      this.myNickname = userInfo.nickname
+    })
   }
 
   logout() {
@@ -42,12 +37,6 @@ export class SidebarComponent implements OnInit {
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((data: any) => {})
     localStorage.removeItem('token')
-    localStorage.removeItem(currentUserIdKey)
-    localStorage.removeItem(currentUserEmailKey)
-    localStorage.removeItem(currentUserNicknameKey)
-    localStorage.removeItem(currentUserAvatarFilenameKey)
-    localStorage.removeItem(currentUsernameKey)
-    localStorage.removeItem(currentFilterConfigKey)
     this.router.navigate(['login'])
   }
 

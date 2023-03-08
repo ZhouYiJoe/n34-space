@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ErrorHandleService} from "../../../services/error-handle.service";
-import {baseUrl, currentUserIdKey} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {catchError} from "rxjs";
+import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
   selector: 'app-comment-page',
@@ -21,7 +22,8 @@ export class CommentPageComponent implements OnInit {
   constructor(public httpClient: HttpClient,
               public activatedRoute: ActivatedRoute,
               public errorHandleService: ErrorHandleService,
-              public router: Router) {
+              public router: Router,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
@@ -69,21 +71,24 @@ export class CommentPageComponent implements OnInit {
   }
 
   submitReply() {
-    let currentUserId = localStorage.getItem(currentUserIdKey)
-    this.httpClient.post(`${baseUrl}/comment_replies`, {
-      content: this.replyToPublish.content,
-      userId: currentUserId,
-      commentId: this.comment.id
-    }).pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        if (data) {
-          alert('发布成功')
-          this.replyToPublish.content = ''
-          this.refreshReplies()
-          this.comment.numReply++
-        } else {
-          alert('发布失败')
-        }
+    this.userInfoService.getUserInfoRequest()
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((userInfo: any) => {
+        this.httpClient.post(`${baseUrl}/comment_replies`, {
+          content: this.replyToPublish.content,
+          userId: userInfo.id,
+          commentId: this.comment.id
+        }).pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            if (data) {
+              alert('发布成功')
+              this.replyToPublish.content = ''
+              this.refreshReplies()
+              this.comment.numReply++
+            } else {
+              alert('发布失败')
+            }
+          })
       })
   }
 

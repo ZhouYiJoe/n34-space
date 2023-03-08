@@ -1,0 +1,16 @@
+#panel-title {
+  padding: 15px;
+}
+
+.user-info-item {
+  padding: 15px;
+}
+
+.user-info-item-name {
+  font-size: 15px;
+}
+
+.user-info-item-value {
+  font-size: 14px;
+  color: #8c7e74;
+}

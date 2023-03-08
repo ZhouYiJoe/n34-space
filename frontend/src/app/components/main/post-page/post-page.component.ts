@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ErrorHandleService} from "../../../services/error-handle.service";
-import {baseUrl, currentUserIdKey} from "../../../app.module";
+import {baseUrl} from "../../../app.module";
 import {ActivatedRoute, Router} from "@angular/router";
 import {catchError} from "rxjs";
+import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
   selector: 'app-post-page',
@@ -20,7 +21,8 @@ export class PostPageComponent implements OnInit {
   constructor(public httpClient: HttpClient,
               public activatedRoute: ActivatedRoute,
               public errorHandleService: ErrorHandleService,
-              public router: Router) {
+              public router: Router,
+              public userInfoService: UserInfoService) {
   }
 
   ngOnInit(): void {
@@ -68,22 +70,26 @@ export class PostPageComponent implements OnInit {
   }
 
   submitComment() {
-    let currentUserId = localStorage.getItem(currentUserIdKey)
-    this.httpClient.post(`${baseUrl}/comments`, {
-      content: this.commentToPublish.content,
-      userId: currentUserId,
-      postId: this.post.id
-    }).pipe(catchError(this.errorHandleService.handleError))
-      .subscribe((data: any) => {
-        if (data) {
-          alert('发布成功')
-          this.commentToPublish.content = ''
-          this.refreshComments()
-          this.post.numComment++
-        } else {
-          alert('发布失败')
-        }
+    this.userInfoService.getUserInfoRequest()
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((userInfo: any) => {
+        this.httpClient.post(`${baseUrl}/comments`, {
+          content: this.commentToPublish.content,
+          userId: userInfo.id,
+          postId: this.post.id
+        }).pipe(catchError(this.errorHandleService.handleError))
+          .subscribe((data: any) => {
+            if (data) {
+              alert('发布成功')
+              this.commentToPublish.content = ''
+              this.refreshComments()
+              this.post.numComment++
+            } else {
+              alert('发布失败')
+            }
+          })
       })
+
   }
 
   refreshComments() {
