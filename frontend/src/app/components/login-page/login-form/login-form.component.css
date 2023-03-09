@@ -39,6 +39,7 @@ input {
   border: 1px;
   color: white;
   height: 40px;
+  cursor: pointer;
 }
 
 #register-tip {

@@ -13,7 +13,11 @@
     </div>
     <div style="clear: both"></div>
   </div>
-  <h2 style="padding: 15px;">这会停用你的账号</h2>
-  <p style="padding: 15px;">您即将开始您帐号的停用程序。您的账号（包括您的显示名、
-    @用户名和公开个人资料）在本网站上将不再可见。</p>
+  <h2 style="padding: 15px;">这会停用您的账号</h2>
+  <p style="padding: 15px; color: #8c7e74; font-size: 14px;">您即将开始您帐号的停用程序。您的账号（包括您的显示名、 @用户名和公开个人资料）在本网站上将不再可见。</p>
+  <div class="password-input-box" [ngClass]="{'focused-input-box': inputBoxFocused}">
+    <div class="field-name" [ngClass]="{'focused-field-name': inputBoxFocused}">请输入密码</div>
+    <input type="password" (focusin)="inputBoxFocused = true" (focusout)="inputBoxFocused = false" [(ngModel)]="password">
+  </div>
+  <div id="delete-account-button" (click)="onButtonClick()">停用</div>
 </div>

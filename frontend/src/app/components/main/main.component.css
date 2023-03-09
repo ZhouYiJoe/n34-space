@@ -108,6 +108,10 @@
   color: black;
 }
 
+.hot-user-list-item-nickname:hover {
+  text-decoration: underline;
+}
+
 .hot-user-list-item-username {
   font-size: 14px;
   color: gray;

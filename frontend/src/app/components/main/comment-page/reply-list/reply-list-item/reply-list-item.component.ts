@@ -78,7 +78,7 @@ export class ReplyListItemComponent implements OnInit {
       .subscribe((userInfo: any) => {
         this.httpClient.post(`${baseUrl}/comment_replies`,
           {
-            content: `回复@${this.reply.username}: ` + this.replyInputBoxContent,
+            content: `回复@${this.reply.username} : ` + this.replyInputBoxContent,
             userId: userInfo.id,
             commentId: this.reply.commentId
           })

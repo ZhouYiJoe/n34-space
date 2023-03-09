@@ -23,6 +23,7 @@ public class User {
     private String introduction;
     private String location;
     private String link;
+    private Boolean enabled;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)

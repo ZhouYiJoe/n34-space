@@ -96,3 +96,52 @@
 .follow-button:hover {
   background-color: #282828;
 }
+
+.password-input-box {
+  width: 465px;
+  height: 60px;
+  border: 1px solid #ded7cf;
+  border-radius: 5px;
+  margin: 15px 0 20px 14px;
+}
+
+.focused-input-box {
+  border: 2px solid #f0671d;
+  height: 58px;
+  width: 463px;
+}
+
+.field-name {
+  color: #8c7e74;
+  padding: 5px;
+}
+
+.focused-field-name {
+  color: #f0671d;
+  padding: 4px;
+}
+
+input {
+  border: none;
+  outline: none;
+  width: 458px;
+  text-indent: 5px;
+  font-size: 16px;
+}
+
+#delete-account-button {
+  width: 497px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  color: #f4212e;
+  cursor: pointer;
+}
+
+#delete-account-button:hover {
+  background-color: #fee8ea;
+}
+
+#delete-account-button:active {
+  background-color: #fdd3d5;
+}

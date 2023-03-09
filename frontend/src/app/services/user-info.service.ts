@@ -15,19 +15,7 @@ export class UserInfoService {
   }
 
   public getUserInfoRequest(): Observable<any> {
-    if (this.userInfo == null) {
-      let observable: Observable<any> = this.httpClient.get(`${baseUrl}/users/self`)
-      observable.subscribe((data: any) => {
-        this.userInfo = data
-      })
-      return observable
-    } else {
-      return new Observable<any>(observer => {
-        setTimeout(() => {
-          observer.next(this.userInfo)
-        }, 0)
-      })
-    }
+      return this.httpClient.get(`${baseUrl}/users/self`)
   }
 
 }

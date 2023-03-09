@@ -4,33 +4,50 @@
   overflow: hidden;
 }
 
+#panel-title {
+  padding: 15px;
+  margin-bottom: 5px;
+}
+
 #desc {
-  text-align: center;
-  margin-top: 20px;
+  color: #8c7e74;
+  font-size: 14px;
+  margin-left: 15px;
+  margin-bottom: 10px;
 }
 
 .option {
-  text-align: center;
-  margin-top: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
 }
 
-#save {
-  text-align: center;
-  margin-top: 20px;
+.checked-checkbox {
+  fill: #f08e1d;
 }
 
-#save-button {
-  background-color: #67b9d0;
-  width: 100px;
-  height: 40px;
-  border-radius: 10px;
-  border-style: none;
-  font-size: 20px;
-  color: white;
-  font-weight: bold;
+.category-name {
+  float: left;
   cursor: pointer;
+  color: #0f1419;
 }
 
-#save-button:hover {
-  background-color: #2a7e8d;
+.checkbox-div {
+  float: right;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  cursor: pointer;
+  position: relative;
+  left: 9px;
+  top: -8px;
+}
+
+.checkbox-div:hover {
+  background-color: #fdf1e8;
+}
+
+.checkbox {
+  position: relative;
+  top: 6px;
+  left: 6px;
 }

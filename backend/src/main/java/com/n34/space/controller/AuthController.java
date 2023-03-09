@@ -1,9 +1,13 @@
 package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.n34.space.entity.Comment;
 import com.n34.space.entity.User;
+import com.n34.space.entity.dto.ChangePasswordReq;
 import com.n34.space.entity.dto.NormalUserLoginState;
 import com.n34.space.entity.dto.UserDto;
+import com.n34.space.service.CommentService;
 import com.n34.space.service.SpringSecurityService;
 import com.n34.space.service.UserService;
 import com.n34.space.utils.BeanCopyUtils;
@@ -21,6 +25,7 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final SpringSecurityService springSecurityService;
+    private final CommentService commentService;
 
     @PostMapping("/login")
     public String login(@RequestBody UserDto userDTO) {
@@ -30,6 +35,7 @@ public class AuthController {
         cond.eq(User::getUsername, userDTO.getUsername());
         User user = userService.getOne(cond);
         Assert.notNull(user, "用户不存在");
+        Assert.isTrue(user.getEnabled(), "用户不存在");
         Assert.isTrue(passwordEncoder.matches(userDTO.getPassword(), user.getPassword()), "密码错误");
         NormalUserLoginState loginState = new NormalUserLoginState()
                 .setUserId(user.getId())
@@ -60,6 +66,7 @@ public class AuthController {
 
         User user = BeanCopyUtils.copyObject(userDTO, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
         return userService.save(user);
     }
 
@@ -74,5 +81,30 @@ public class AuthController {
         String userId = springSecurityService.getCurrentUserId();
         springSecurityService.removeLoginState(userId);
         return true;
+    }
+
+    @PostMapping("/changePassword")
+    public Boolean changePassword(@RequestBody ChangePasswordReq req) {
+        Assert.isTrue(StrParamValidationUtils.checkPassword(req.getNewPassword()), "密码不合法");
+        String currentUserId = springSecurityService.getCurrentUserId();
+        User currentUser = userService.getById(currentUserId);
+        Assert.isTrue(passwordEncoder.matches(req.getOldPassword(), currentUser.getPassword()), "密码错误");
+        LambdaUpdateWrapper<User> cond = new LambdaUpdateWrapper<>();
+        cond.set(User::getPassword, passwordEncoder.encode(req.getNewPassword()));
+        cond.eq(User::getId, currentUserId);
+        return userService.update(cond);
+    }
+
+    @PostMapping("/deleteAccount")
+    public Boolean deleteAccount(@RequestBody UserDto userDto) {
+        Assert.isTrue(StrParamValidationUtils.checkPassword(userDto.getPassword()), "密码不合法");
+        String currentUserId = springSecurityService.getCurrentUserId();
+        User currentUser = userService.getById(currentUserId);
+        Assert.isTrue(passwordEncoder.matches(userDto.getPassword(), currentUser.getPassword()), "密码错误");
+        springSecurityService.removeLoginState(currentUserId);
+        LambdaUpdateWrapper<User> cond = new LambdaUpdateWrapper<>();
+        cond.set(User::getEnabled, false);
+        cond.eq(User::getId, currentUserId);
+        return userService.update(cond);
     }
 }

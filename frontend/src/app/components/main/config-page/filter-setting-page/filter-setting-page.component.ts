@@ -53,7 +53,8 @@ export class FilterSettingPageComponent implements OnInit {
     return t
   }
 
-  changeFilterConfig() {
+  changeFilterConfig(i: number) {
+    this.filterConfig[i] = !this.filterConfig[i]
     this.userInfoService.getUserInfoRequest()
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((userInfo: any) => {
@@ -62,13 +63,9 @@ export class FilterSettingPageComponent implements OnInit {
           {filterConfig: strConfig, id: userInfo.id})
           .pipe(catchError(this.errorHandleService.handleError))
           .subscribe((data: any) => {
-            if (data) {
-              alert('保存成功')
-            } else {
+            if (!data) {
               let strConfig = userInfo.filterConfig
-              if (strConfig !== undefined) {
-                this.filterConfig = this.configStrToArray(strConfig)
-              }
+              this.filterConfig = this.configStrToArray(strConfig)
             }
           })
       })
