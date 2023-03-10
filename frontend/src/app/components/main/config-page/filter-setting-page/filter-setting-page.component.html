@@ -1,5 +1,5 @@
 <div id="container">
-  <h2 id="panel-title">更改密码</h2>
+  <h2 id="panel-title">内容过滤</h2>
   <div id="desc">如果要屏蔽某个分类下的极端发言，请在对应的分类旁勾选。</div>
   <div *ngFor="let category of categories; let i = index" class="option">
     <div class="category-name" (click)="changeFilterConfig(i)">{{category}}</div>
