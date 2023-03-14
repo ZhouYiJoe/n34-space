@@ -17,6 +17,7 @@ export class SidebarComponent implements OnInit {
   public myNickname: string | null = null
   public myId: string | null = null
   public menuVisible: boolean = false
+  public numNotification: number = 0
 
   constructor(public httpClient: HttpClient,
               public router: Router,
@@ -30,6 +31,11 @@ export class SidebarComponent implements OnInit {
       this.myUsername = userInfo.username
       this.myNickname = userInfo.nickname
     })
+    this.httpClient.get(`${baseUrl}/mention_notification/countNewNotification`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((data: any) => {
+        this.numNotification = data
+      })
   }
 
   logout() {

@@ -2,7 +2,6 @@ package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.n34.space.entity.Comment;
 import com.n34.space.entity.User;
 import com.n34.space.entity.dto.ChangePasswordReq;
 import com.n34.space.entity.dto.NormalUserLoginState;

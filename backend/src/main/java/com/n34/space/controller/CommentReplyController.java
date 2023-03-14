@@ -1,16 +1,13 @@
 package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.n34.space.entity.*;
+import com.n34.space.entity.CommentReply;
+import com.n34.space.entity.CommentReplyLike;
+import com.n34.space.entity.MentionNotification;
+import com.n34.space.entity.User;
 import com.n34.space.entity.dto.CommentReplyDto;
 import com.n34.space.entity.vo.CommentReplyVo;
-import com.n34.space.entity.vo.PostVo;
-import com.n34.space.service.CommentReplyLikeService;
-import com.n34.space.service.CommentReplyService;
-import com.n34.space.service.SpringSecurityService;
-import com.n34.space.service.UserService;
+import com.n34.space.service.*;
 import com.n34.space.utils.AiUtils;
 import com.n34.space.utils.BeanCopyUtils;
 import com.n34.space.utils.RegexUtils;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,6 +28,7 @@ public class CommentReplyController {
     private final UserService userService;
     private final CommentReplyService commentReplyService;
     private final CommentReplyLikeService commentReplyLikeService;
+    private final MentionNotificationService mentionNotificationService;
 
     @GetMapping("/{id}")
     public CommentReplyVo getById(@PathVariable String id) {
@@ -49,7 +48,7 @@ public class CommentReplyController {
         cond2.eq(CommentReplyLike::getUserId, springSecurityService.getCurrentUserId());
         commentReplyVo.setLikedByMe(commentReplyLikeService.count(cond2) == 1);
 
-        commentReplyVo.setHtml(RegexUtils.parseAtSymbol(commentReplyVo.getContent()));
+        commentReplyVo.setHtml(RegexUtils.parseMentionedUsername(commentReplyVo.getContent()));
         return commentReplyVo;
     }
 
@@ -62,7 +61,24 @@ public class CommentReplyController {
         CommentReply commentReply = BeanCopyUtils.copyObject(commentReplyDto, CommentReply.class);
         commentReply.setCategory(AiUtils.getCategory(commentReply.getContent()));
         commentReply.setExtreme(AiUtils.getSentiment(commentReply.getContent()));
-        return commentReplyService.save(commentReply);
+        if (!commentReplyService.save(commentReply)) {
+            return false;
+        }
+
+        Set<String> mentionedUsernames = RegexUtils.getMentionedUsernames(commentReply.getContent());
+        for (String mentionedUsername : mentionedUsernames) {
+            LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
+            cond.eq(User::getUsername, mentionedUsername);
+            User mentionedUser = userService.getOne(cond);
+            MentionNotification mentionNotification = new MentionNotification()
+                    .setMentionedUserId(mentionedUser.getId())
+                    .setTextId(commentReply.getId())
+                    .setType(MentionNotification.REPLY_TYPE)
+                    .setRead(false);
+            mentionNotificationService.save(mentionNotification);
+        }
+
+        return true;
     }
 
     @GetMapping
@@ -102,7 +118,7 @@ public class CommentReplyController {
             cond2.eq(CommentReplyLike::getUserId, springSecurityService.getCurrentUserId());
             commentReplyVo.setLikedByMe(commentReplyLikeService.count(cond2) == 1);
 
-            commentReplyVo.setHtml(RegexUtils.parseAtSymbol(commentReplyVo.getContent()));
+            commentReplyVo.setHtml(RegexUtils.parseMentionedUsername(commentReplyVo.getContent()));
         }
 
         return commentReplyVos;
@@ -131,6 +147,22 @@ public class CommentReplyController {
         LambdaQueryWrapper<CommentReplyLike> cond = new LambdaQueryWrapper<>();
         cond.eq(CommentReplyLike::getCommentReplyId, id);
         commentReplyLikeService.remove(cond);
-        return commentReplyService.removeById(id);
+        if (!commentReplyService.removeById(id)) {
+            return false;
+        }
+
+        Set<String> mentionedUsernames = RegexUtils.getMentionedUsernames(commentReply.getContent());
+        for (String mentionedUsername : mentionedUsernames) {
+            LambdaQueryWrapper<User> cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(User::getUsername, mentionedUsername);
+            User mentionedUser = userService.getOne(cond2);
+            LambdaQueryWrapper<MentionNotification> cond1 = new LambdaQueryWrapper<>();
+            cond1.eq(MentionNotification::getTextId, commentReply.getId());
+            cond1.eq(MentionNotification::getMentionedUserId, mentionedUser.getId());
+            cond1.eq(MentionNotification::getType, MentionNotification.REPLY_TYPE);
+            mentionNotificationService.remove(cond1);
+        }
+
+        return true;
     }
 }

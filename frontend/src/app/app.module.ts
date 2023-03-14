@@ -44,6 +44,7 @@ import { FilterSettingPageComponent } from './components/main/config-page/filter
 import { UserInfoSettingPageComponent } from './components/main/config-page/user-info-setting-page/user-info-setting-page.component';
 import { ChangePasswordPageComponent } from './components/main/config-page/change-password-page/change-password-page.component';
 import { DeleteAccountPageComponent } from './components/main/config-page/delete-account-page/delete-account-page.component';
+import { NotificationPageComponent } from './components/main/notification-page/notification-page.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { DeleteAccountPageComponent } from './components/main/config-page/delete
     UserInfoSettingPageComponent,
     ChangePasswordPageComponent,
     DeleteAccountPageComponent,
+    NotificationPageComponent,
   ],
   imports: [
     BrowserModule,

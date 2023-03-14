@@ -5,7 +5,6 @@ import com.n34.space.entity.Post;
 import com.n34.space.entity.vo.PostVo;
 import com.n34.space.mapper.PostMapper;
 import com.n34.space.service.PostService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

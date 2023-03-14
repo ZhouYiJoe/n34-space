@@ -7,7 +7,7 @@
     <div id="right-top">
       <div id="right-top-line-1">
         <a id="nickname" [routerLink]="['/app/users', reply.username]">{{reply.nickname}}</a>
-        <div id="usernameAndTime">@{{reply.username}}&nbsp;·&nbsp;{{reply.timeCreated}}</div>
+        <div id="username-and-time">@{{reply.username}}&nbsp;·&nbsp;{{reply.timeCreated}}</div>
         <div style="clear: both"></div>
       </div>
       <div id="right-top-line-2" (click)="onClickInReplyContent($event)" [innerHTML]="reply.html | safeHtml"></div>

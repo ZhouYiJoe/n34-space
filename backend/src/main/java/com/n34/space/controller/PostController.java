@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class PostController {
     private final CommentService commentService;
     private final HashtagService hashtagService;
     private final HashtagPostRelaService hashtagPostRelaService;
+    private final MentionNotificationService mentionNotificationService;
 
     @GetMapping("/{id}")
     public PostVo getById(@PathVariable String id) {
@@ -55,26 +57,29 @@ public class PostController {
         postVo.setNumComment(commentService.count(cond3));
 
         postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
-        postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
+        postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         return postVo;
     }
 
     @PostMapping
     public Boolean postNew(@RequestBody PostDto postDto) {
+        String currentUserId = springSecurityService.getCurrentUserId();
         postDto.setId(null);
         Set<String> hashtagNames = RegexUtils.getAllHashtag(postDto.getContent());
         if (!RegexUtils.checkHashtag(hashtagNames)) {
             throw new RuntimeException("话题标签中不能带有\"@\"");
         }
-        List<String> atUsernames = RegexUtils.getAllAtUsername(postDto.getContent());
-        if (!RegexUtils.checkAtUsername(atUsernames)) {
+        Set<String> atUsernames = RegexUtils.getMentionedUsernames(postDto.getContent());
+        if (!RegexUtils.checkMentionedUsername(atUsernames)) {
             throw new RuntimeException("被@的用户名中不能带有\"#\"");
         }
         Post post = BeanCopyUtils.copyObject(postDto, Post.class);
-        post.setAuthorId(springSecurityService.getCurrentUserId());
+        post.setAuthorId(currentUserId);
         post.setCategory(AiUtils.getCategory(post.getContent()));
         post.setExtreme(AiUtils.getSentiment(post.getContent()));
-        boolean successful = postService.save(post);
+        if (!postService.save(post)) {
+            return false;
+        }
         for (String hashtagName : hashtagNames) {
             LambdaQueryWrapper<Hashtag> cond = new LambdaQueryWrapper<>();
             cond.eq(Hashtag::getName, hashtagName);
@@ -88,7 +93,18 @@ public class PostController {
                     .setPostId(post.getId());
             hashtagPostRelaService.save(hashtagPostRela);
         }
-        return successful;
+        for (String mentionedUsername : atUsernames) {
+            LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
+            cond.eq(User::getUsername, mentionedUsername);
+            User mentionedUser = userService.getOne(cond);
+            MentionNotification mentionNotification = new MentionNotification()
+                    .setMentionedUserId(mentionedUser.getId())
+                    .setTextId(post.getId())
+                    .setType(MentionNotification.POST_TYPE)
+                    .setRead(false);
+            mentionNotificationService.save(mentionNotification);
+        }
+        return true;
     }
 
     @GetMapping
@@ -128,7 +144,7 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
 
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
-            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
+            postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
 
         return postVos;
@@ -142,15 +158,16 @@ public class PostController {
         String currentUserId = springSecurityService.getCurrentUserId();
         Assert.isTrue(currentUserId.equals(post.getAuthorId()), "无权访问");
         Assert.notNull(postDto.getContent(), "博文为null");
+        Set<String> oldHashtagNames = RegexUtils.getAllHashtag(post.getContent());
         Set<String> newHashtagNames = RegexUtils.getAllHashtag(postDto.getContent());
         if (!RegexUtils.checkHashtag(newHashtagNames)) {
             throw new RuntimeException("话题标签中不能带有\"@\"");
         }
-        List<String> newAtUsernames = RegexUtils.getAllAtUsername(postDto.getContent());
-        if (!RegexUtils.checkAtUsername(newAtUsernames)) {
+        Set<String> oldMentionedUsernames = RegexUtils.getMentionedUsernames(post.getContent());
+        Set<String> newMentionedUsernames = RegexUtils.getMentionedUsernames(postDto.getContent());
+        if (!RegexUtils.checkMentionedUsername(newMentionedUsernames)) {
             throw new RuntimeException("被@的用户名中不能带有\"#\"");
         }
-        Set<String> oldHashtagNames = RegexUtils.getAllHashtag(post.getContent());
         for (String hashtagName : oldHashtagNames) {
             LambdaQueryWrapper<Hashtag> cond = new LambdaQueryWrapper<>();
             cond.eq(Hashtag::getName, hashtagName);
@@ -182,7 +199,11 @@ public class PostController {
                     .setPostId(post.getId());
             hashtagPostRelaService.save(hashtagPostRela);
         }
-        postService.updateById(post1);
+        if (!postService.updateById(post1)) {
+            return null;
+        }
+
+        // 构造PostVo
         post = postService.getById(post1.getId());
         PostVo postVo = BeanCopyUtils.copyObject(post, PostVo.class);
         User author = userService.getById(postVo.getAuthorId());
@@ -204,6 +225,34 @@ public class PostController {
         postVo.setNumComment(commentService.count(cond3));
 
         postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+
+        //解析被提及的用户
+        Set<String> addedMentionedUsernames = new HashSet<>(newMentionedUsernames);
+        addedMentionedUsernames.removeAll(oldMentionedUsernames);
+        Set<String> deletedMentionedUsernames = new HashSet<>(oldMentionedUsernames);
+        deletedMentionedUsernames.removeAll(newMentionedUsernames);
+        for (String addedMentionedUsername : addedMentionedUsernames) {
+            LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
+            cond.eq(User::getUsername, addedMentionedUsername);
+            User mentionedUser = userService.getOne(cond);
+            MentionNotification mentionNotification = new MentionNotification()
+                    .setMentionedUserId(mentionedUser.getId())
+                    .setTextId(post.getId())
+                    .setType(MentionNotification.POST_TYPE)
+                    .setRead(false);
+            mentionNotificationService.save(mentionNotification);
+        }
+        for (String deletedMentionedUsername : deletedMentionedUsernames) {
+            LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
+            cond.eq(User::getUsername, deletedMentionedUsername);
+            User mentionedUser = userService.getOne(cond);
+            LambdaQueryWrapper<MentionNotification> cond1 = new LambdaQueryWrapper<>();
+            cond1.eq(MentionNotification::getTextId, postDto.getId());
+            cond1.eq(MentionNotification::getMentionedUserId, mentionedUser.getId());
+            cond1.eq(MentionNotification::getType, MentionNotification.POST_TYPE);
+            mentionNotificationService.remove(cond1);
+        }
+
         return postVo;
     }
 
@@ -212,11 +261,19 @@ public class PostController {
         Post post = postService.getById(id);
         Assert.notNull(post, "博文不存在");
         Assert.isTrue(springSecurityService.getCurrentUserId().equals(post.getAuthorId()), "无权访问");
+
+        LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
+        cond.eq(PostLike::getPostId, id);
+        postLikeService.remove(cond);
+        if (!postService.removeById(id)) {
+            return false;
+        }
+
         Set<String> hashtagNames = RegexUtils.getAllHashtag(post.getContent());
         for (String hashtagName : hashtagNames) {
-            LambdaQueryWrapper<Hashtag> cond = new LambdaQueryWrapper<>();
-            cond.eq(Hashtag::getName, hashtagName);
-            Hashtag hashtag = hashtagService.getOne(cond);
+            LambdaQueryWrapper<Hashtag> cond1 = new LambdaQueryWrapper<>();
+            cond1.eq(Hashtag::getName, hashtagName);
+            Hashtag hashtag = hashtagService.getOne(cond1);
             LambdaQueryWrapper<HashtagPostRela> cond2 = new LambdaQueryWrapper<>();
             cond2.eq(HashtagPostRela::getPostId, post.getId());
             cond2.eq(HashtagPostRela::getHashtagId, hashtag.getId());
@@ -229,10 +286,19 @@ public class PostController {
             }
         }
 
-        LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
-        cond.eq(PostLike::getPostId, id);
-        postLikeService.remove(cond);
-        return postService.removeById(id);
+        Set<String> mentionedUsernames = RegexUtils.getMentionedUsernames(post.getContent());
+        for (String mentionedUsername : mentionedUsernames) {
+            LambdaQueryWrapper<User> cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(User::getUsername, mentionedUsername);
+            User mentionedUser = userService.getOne(cond2);
+            LambdaQueryWrapper<MentionNotification> cond1 = new LambdaQueryWrapper<>();
+            cond1.eq(MentionNotification::getTextId, post.getId());
+            cond1.eq(MentionNotification::getMentionedUserId, mentionedUser.getId());
+            cond1.eq(MentionNotification::getType, MentionNotification.POST_TYPE);
+            mentionNotificationService.remove(cond1);
+        }
+
+        return true;
     }
 
     @GetMapping("/hot")
@@ -254,7 +320,7 @@ public class PostController {
                     .eq(PostLike::getUserId, springSecurityService.getCurrentUserId());
             postVo.setLikedByMe(postLikeService.count(cond) == 1);
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
-            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
+            postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
         return postVos;
     }
@@ -287,7 +353,7 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
 
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
-            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
+            postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
 
         return postVos;
@@ -333,7 +399,7 @@ public class PostController {
             postVo.setNumComment(commentService.count(cond3));
 
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
-            postVo.setHtml(RegexUtils.parseAtSymbol(postVo.getHtml()));
+            postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
         return postVos;
     }

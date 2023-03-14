@@ -1,0 +1,24 @@
+<div id="container">
+  <div id="navi-bar">
+    <div id="navi-comment" class="navi-option" (click)="commentNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 1 ? 'orange' : '#e5e5e5'}">评论</div>
+    <div id="navi-mention" class="navi-option" (click)="mentionNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 2 ? 'orange' : '#e5e5e5'}">提及</div>
+  </div>
+  <div class="mention-notifications" *ngIf="selectedIndex == 2">
+    <div class="mention-notification-content" *ngFor="let mentionNotification of mentionNotifications">
+      <div class="mention-top">
+        <div class="mention-left-top">
+          <img class="mention-avatar" [src]="mentionNotification.authorAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + mentionNotification.authorAvatarFilename" alt="">
+        </div>
+        <div class="mention-right-top">
+          <div class="mention-right-top-line-1">
+            <a class="mention-nickname" [routerLink]="['/app/users', mentionNotification.authorUsername]">{{mentionNotification.authorNickname}}</a>
+            <div class="mention-username-and-time">@{{mentionNotification.authorUsername}}&nbsp;·&nbsp;{{mentionNotification.textTimeCreated}}</div>
+            <div style="clear: both"></div>
+          </div>
+          <div class="mention-right-top-line-2" (click)="onClickInMentionNotification($event, mentionNotification)" [innerHTML]="mentionNotification.text | safeHtml"></div>
+        </div>
+        <div style="clear: both"></div>
+      </div>
+    </div>
+  </div>
+</div>

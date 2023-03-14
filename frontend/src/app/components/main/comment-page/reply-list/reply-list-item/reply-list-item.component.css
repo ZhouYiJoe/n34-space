@@ -42,15 +42,10 @@
   cursor: pointer;
 }
 
-#usernameAndTime {
+#username-and-time {
   float: left;
   margin-left: 5px;
   color: gray;
-}
-
-#content {
-  margin-top: 5px;
-  word-wrap: break-word;
 }
 
 #right-top-line-2 {

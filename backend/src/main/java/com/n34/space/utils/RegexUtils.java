@@ -2,7 +2,9 @@ package com.n34.space.utils;
 
 import cn.hutool.core.util.ReUtil;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class RegexUtils {
@@ -33,15 +35,15 @@ public class RegexUtils {
         return ReUtil.replaceAll(searchText, "[#@]", "");
     }
 
-    public static List<String> getAllAtUsername(String post) {
-        return ReUtil.findAll("@(\\S+)", post, 1, new ArrayList<>());
+    public static Set<String> getMentionedUsernames(String post) {
+        return ReUtil.findAll("@(\\S+)", post, 1, new HashSet<>());
     }
 
-    public static String parseAtSymbol(String post) {
+    public static String parseMentionedUsername(String post) {
         return ReUtil.replaceAll(post, "@(\\S+)", "<span class=\"at-symbol-class\" style=\"color: orangered; cursor: pointer;\" link=\"/app/users/\" param=\"$1\">@$1</span>");
     }
 
-    public static boolean checkAtUsername(Collection<String> usernames) {
+    public static boolean checkMentionedUsername(Collection<String> usernames) {
         for (String username : usernames) {
             if (username.contains("#")) {
                 return false;

@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 10/03/2023 09:22:42
+ Date: 14/03/2023 09:48:25
 */
 
 SET NAMES utf8mb4;
@@ -97,6 +97,19 @@ CREATE TABLE `hashtag_post_rela`  (
   `hashtag_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `post_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`hashtag_id`, `post_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for mention_notification
+-- ----------------------------
+DROP TABLE IF EXISTS `mention_notification`;
+CREATE TABLE `mention_notification`  (
+  `mentioned_user_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `text_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `type` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `time_created` datetime(0) NULL DEFAULT NULL,
+  `read` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`mentioned_user_id`, `text_id`, `type`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

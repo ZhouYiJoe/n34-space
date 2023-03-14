@@ -21,6 +21,7 @@ import {HashtagPageComponent} from "./components/main/hashtag-page/hashtag-page.
 import {PostPageComponent} from "./components/main/post-page/post-page.component";
 import {CommentPageComponent} from "./components/main/comment-page/comment-page.component";
 import { FollowerListPageComponent } from './components/main/follower-list-page/follower-list-page.component';
+import {NotificationPageComponent} from "./components/main/notification-page/notification-page.component";
 
 const routes: Routes = [
   {
@@ -40,6 +41,10 @@ const routes: Routes = [
     component: MainComponent,
     canActivate: [ComponentAuthService],
     children: [
+      {
+        path: 'notification',
+        component: NotificationPageComponent
+      },
       {
         path: 'home',
         component: HomePageComponent

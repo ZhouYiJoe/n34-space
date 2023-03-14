@@ -26,10 +26,26 @@
   border-radius: 30px;
   text-indent: 1em;
   cursor: pointer;
+  position: relative;
 }
 
 .option:hover {
   background-color: #e7e7e8;
+}
+
+#num-notification {
+  text-indent: 0;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: orangered;
+  border-radius: 9px;
+  left: 34px;
+  top: 26px;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  line-height: 18px;
 }
 
 #user-bar {

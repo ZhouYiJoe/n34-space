@@ -2,11 +2,8 @@ package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.n34.space.entity.*;
 import com.n34.space.entity.dto.CommentDto;
-import com.n34.space.entity.vo.CommentReplyVo;
 import com.n34.space.entity.vo.CommentVo;
 import com.n34.space.service.*;
 import com.n34.space.utils.AiUtils;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +29,7 @@ public class CommentController {
     private final SpringSecurityService springSecurityService;
     private final UserService userService;
     private final CommentReplyService commentReplyService;
+    private final MentionNotificationService mentionNotificationService;
 
     @GetMapping("/{id}")
     public CommentVo getById(@PathVariable String id) {
@@ -54,7 +53,7 @@ public class CommentController {
         cond3.eq(CommentReply::getCommentId, commentVo.getId());
         commentVo.setNumReply(commentReplyService.count(cond3));
 
-        commentVo.setHtml(RegexUtils.parseAtSymbol(commentVo.getContent()));
+        commentVo.setHtml(RegexUtils.parseMentionedUsername(commentVo.getContent()));
         return commentVo;
     }
 
@@ -67,7 +66,24 @@ public class CommentController {
         Comment comment = BeanCopyUtils.copyObject(commentDto, Comment.class);
         comment.setCategory(AiUtils.getCategory(comment.getContent()));
         comment.setExtreme(AiUtils.getSentiment(comment.getContent()));
-        return commentService.save(comment);
+        if (!commentService.save(comment)) {
+            return false;
+        }
+
+        Set<String> mentionedUsernames = RegexUtils.getMentionedUsernames(comment.getContent());
+        for (String mentionedUsername : mentionedUsernames) {
+            LambdaQueryWrapper<User> cond = new LambdaQueryWrapper<>();
+            cond.eq(User::getUsername, mentionedUsername);
+            User mentionedUser = userService.getOne(cond);
+            MentionNotification mentionNotification = new MentionNotification()
+                    .setMentionedUserId(mentionedUser.getId())
+                    .setTextId(comment.getId())
+                    .setType(MentionNotification.COMMENT_TYPE)
+                    .setRead(false);
+            mentionNotificationService.save(mentionNotification);
+        }
+
+        return true;
     }
 
     @GetMapping
@@ -110,7 +126,7 @@ public class CommentController {
             cond3.eq(CommentReply::getCommentId, commentVo.getId());
             commentVo.setNumReply(commentReplyService.count(cond3));
 
-            commentVo.setHtml(RegexUtils.parseAtSymbol(commentVo.getContent()));
+            commentVo.setHtml(RegexUtils.parseMentionedUsername(commentVo.getContent()));
         }
 
         return commentVos;
@@ -140,6 +156,22 @@ public class CommentController {
         LambdaQueryWrapper<CommentLike> cond = new LambdaQueryWrapper<>();
         cond.eq(CommentLike::getCommentId, id);
         commentLikeService.remove(cond);
-        return commentService.removeById(id);
+        if (!commentService.removeById(id)) {
+            return false;
+        }
+
+        Set<String> mentionedUsernames = RegexUtils.getMentionedUsernames(comment.getContent());
+        for (String mentionedUsername : mentionedUsernames) {
+            LambdaQueryWrapper<User> cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(User::getUsername, mentionedUsername);
+            User mentionedUser = userService.getOne(cond2);
+            LambdaQueryWrapper<MentionNotification> cond1 = new LambdaQueryWrapper<>();
+            cond1.eq(MentionNotification::getTextId, comment.getId());
+            cond1.eq(MentionNotification::getMentionedUserId, mentionedUser.getId());
+            cond1.eq(MentionNotification::getType, MentionNotification.COMMENT_TYPE);
+            mentionNotificationService.remove(cond1);
+        }
+
+        return true;
     }
 }
