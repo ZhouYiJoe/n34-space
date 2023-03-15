@@ -225,6 +225,7 @@ public class PostController {
         postVo.setNumComment(commentService.count(cond3));
 
         postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
+        postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
 
         //解析被提及的用户
         Set<String> addedMentionedUsernames = new HashSet<>(newMentionedUsernames);

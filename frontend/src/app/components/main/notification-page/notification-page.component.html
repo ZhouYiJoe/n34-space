@@ -4,7 +4,9 @@
     <div id="navi-mention" class="navi-option" (click)="mentionNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 2 ? 'orange' : '#e5e5e5'}">提及</div>
   </div>
   <div class="mention-notifications" *ngIf="selectedIndex == 2">
-    <div class="mention-notification-content" *ngFor="let mentionNotification of mentionNotifications">
+    <div class="mention-notification-content"
+         *ngFor="let mentionNotification of mentionNotifications"
+         [ngClass]="{'unread': !mentionNotification.read}">
       <div class="mention-top">
         <div class="mention-left-top">
           <img class="mention-avatar" [src]="mentionNotification.authorAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + mentionNotification.authorAvatarFilename" alt="">

@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 14/03/2023 09:48:25
+ Date: 15/03/2023 15:53:41
 */
 
 SET NAMES utf8mb4;
@@ -135,6 +135,21 @@ CREATE TABLE `post_like`  (
   `user_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `post_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`user_id`, `post_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for reply_notification
+-- ----------------------------
+DROP TABLE IF EXISTS `reply_notification`;
+CREATE TABLE `reply_notification`  (
+  `replied_user_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `reply_user_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `replied_text_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `reply_text_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `time_created` datetime(0) NULL DEFAULT NULL,
+  `read` tinyint(4) NULL DEFAULT NULL,
+  `type` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`replied_text_id`, `reply_text_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

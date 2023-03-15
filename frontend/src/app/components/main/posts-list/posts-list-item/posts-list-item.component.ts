@@ -103,8 +103,10 @@ export class PostsListItemComponent implements OnInit {
   }
 
   onClickInPostContent(event: any) {
-    if (!event.target.attributes.link) return
-    if (!event.target.attributes.param) return
+    if (!event.target.attributes.link || !event.target.attributes.param) {
+      this.clickReplyButton()
+      return
+    }
     let link = event.target.attributes.link.value
     let param = event.target.attributes.param.value
     this.router.navigate([link, param])

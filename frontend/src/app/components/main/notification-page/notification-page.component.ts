@@ -46,8 +46,10 @@ export class NotificationPageComponent implements OnInit {
   }
 
   onClickInMentionNotification(event: any, mentionNotification: any) {
-    if (!event.target.attributes.link) this.jumpToMention(mentionNotification)
-    if (!event.target.attributes.param) this.jumpToMention(mentionNotification)
+    if (!event.target.attributes.link || !event.target.attributes.param) {
+      this.jumpToMention(mentionNotification)
+      return
+    }
     let link = event.target.attributes.link.value
     let param = event.target.attributes.param.value
     this.router.navigate([link, param])

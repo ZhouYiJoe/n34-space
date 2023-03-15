@@ -36,6 +36,10 @@
   background-color: #f7f7f7;
 }
 
+.unread {
+  background-color: #ecf2f3;
+}
+
 .mention-left-top {
   width: 70px;
   float: left;
