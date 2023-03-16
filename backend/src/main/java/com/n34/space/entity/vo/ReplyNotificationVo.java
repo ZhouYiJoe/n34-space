@@ -16,9 +16,11 @@ public class ReplyNotificationVo {
     private String replyNickname;
     private String replyAvatarFilename;
     private String repliedTextId;
+    private String repliedText;
     private String replyTextId;
     private String replyText;
-    private String replyTextTimeCreated;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date replyTextTimeCreated;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date timeCreated;
     private Boolean read;

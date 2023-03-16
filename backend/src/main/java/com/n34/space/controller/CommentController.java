@@ -30,6 +30,8 @@ public class CommentController {
     private final UserService userService;
     private final CommentReplyService commentReplyService;
     private final MentionNotificationService mentionNotificationService;
+    private final PostService postService;
+    private final ReplyNotificationService replyNotificationService;
 
     @GetMapping("/{id}")
     public CommentVo getById(@PathVariable String id) {
@@ -62,7 +64,8 @@ public class CommentController {
         Assert.notNull(commentDto.getUserId(), "userId为null");
         Assert.notNull(commentDto.getPostId(), "postId为null");
         Assert.isNull(commentDto.getId(), "无权访问");
-        Assert.isTrue(commentDto.getUserId().equals(springSecurityService.getCurrentUserId()), "无权访问");
+        String currentUserId = springSecurityService.getCurrentUserId();
+        Assert.isTrue(commentDto.getUserId().equals(currentUserId), "无权访问");
         Comment comment = BeanCopyUtils.copyObject(commentDto, Comment.class);
         comment.setCategory(AiUtils.getCategory(comment.getContent()));
         comment.setExtreme(AiUtils.getSentiment(comment.getContent()));
@@ -82,6 +85,17 @@ public class CommentController {
                     .setRead(false);
             mentionNotificationService.save(mentionNotification);
         }
+
+        Post post = postService.getById(commentDto.getPostId());
+        User repliedUser = userService.getById(post.getAuthorId());
+        ReplyNotification replyNotification = new ReplyNotification()
+                .setRepliedUserId(repliedUser.getId())
+                .setReplyUserId(currentUserId)
+                .setRepliedTextId(post.getId())
+                .setReplyTextId(comment.getId())
+                .setRead(false)
+                .setType(ReplyNotification.COMMENT_TYPE);
+        replyNotificationService.save(replyNotification);
 
         return true;
     }
@@ -171,6 +185,11 @@ public class CommentController {
             cond1.eq(MentionNotification::getType, MentionNotification.COMMENT_TYPE);
             mentionNotificationService.remove(cond1);
         }
+
+        replyNotificationService.lambdaQuery()
+                .eq(ReplyNotification::getRepliedTextId, comment.getPostId())
+                .eq(ReplyNotification::getReplyTextId, comment.getId())
+                .eq(ReplyNotification::getType, ReplyNotification.COMMENT_TYPE);
 
         return true;
     }

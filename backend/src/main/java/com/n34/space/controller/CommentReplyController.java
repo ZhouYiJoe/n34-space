@@ -1,10 +1,7 @@
 package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.n34.space.entity.CommentReply;
-import com.n34.space.entity.CommentReplyLike;
-import com.n34.space.entity.MentionNotification;
-import com.n34.space.entity.User;
+import com.n34.space.entity.*;
 import com.n34.space.entity.dto.CommentReplyDto;
 import com.n34.space.entity.vo.CommentReplyVo;
 import com.n34.space.service.*;
@@ -29,6 +26,8 @@ public class CommentReplyController {
     private final CommentReplyService commentReplyService;
     private final CommentReplyLikeService commentReplyLikeService;
     private final MentionNotificationService mentionNotificationService;
+    private final CommentService commentService;
+    private final ReplyNotificationService replyNotificationService;
 
     @GetMapping("/{id}")
     public CommentReplyVo getById(@PathVariable String id) {
@@ -57,7 +56,8 @@ public class CommentReplyController {
         Assert.notNull(commentReplyDto.getUserId(), "userId为null");
         Assert.notNull(commentReplyDto.getCommentId(), "commentId为null");
         Assert.isNull(commentReplyDto.getId(), "无权访问");
-        Assert.isTrue(commentReplyDto.getUserId().equals(springSecurityService.getCurrentUserId()), "无权访问");
+        String currentUserId = springSecurityService.getCurrentUserId();
+        Assert.isTrue(commentReplyDto.getUserId().equals(currentUserId), "无权访问");
         CommentReply commentReply = BeanCopyUtils.copyObject(commentReplyDto, CommentReply.class);
         commentReply.setCategory(AiUtils.getCategory(commentReply.getContent()));
         commentReply.setExtreme(AiUtils.getSentiment(commentReply.getContent()));
@@ -77,6 +77,17 @@ public class CommentReplyController {
                     .setRead(false);
             mentionNotificationService.save(mentionNotification);
         }
+
+        Comment comment = commentService.getById(commentReplyDto.getCommentId());
+        User repliedUser = userService.getById(comment.getUserId());
+        ReplyNotification replyNotification = new ReplyNotification()
+                .setRepliedUserId(repliedUser.getId())
+                .setReplyUserId(currentUserId)
+                .setRepliedTextId(comment.getId())
+                .setReplyTextId(commentReply.getId())
+                .setRead(false)
+                .setType(ReplyNotification.REPLY_TYPE);
+        replyNotificationService.save(replyNotification);
 
         return true;
     }
@@ -162,6 +173,11 @@ public class CommentReplyController {
             cond1.eq(MentionNotification::getType, MentionNotification.REPLY_TYPE);
             mentionNotificationService.remove(cond1);
         }
+
+        replyNotificationService.lambdaQuery()
+                .eq(ReplyNotification::getRepliedTextId, commentReply.getCommentId())
+                .eq(ReplyNotification::getReplyTextId, commentReply.getId())
+                .eq(ReplyNotification::getType, ReplyNotification.REPLY_TYPE);
 
         return true;
     }
