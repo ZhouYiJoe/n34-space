@@ -174,10 +174,11 @@ public class CommentReplyController {
             mentionNotificationService.remove(cond1);
         }
 
-        replyNotificationService.lambdaQuery()
+        replyNotificationService.lambdaUpdate()
                 .eq(ReplyNotification::getRepliedTextId, commentReply.getCommentId())
                 .eq(ReplyNotification::getReplyTextId, commentReply.getId())
-                .eq(ReplyNotification::getType, ReplyNotification.REPLY_TYPE);
+                .eq(ReplyNotification::getType, ReplyNotification.REPLY_TYPE)
+                .remove();
 
         return true;
     }

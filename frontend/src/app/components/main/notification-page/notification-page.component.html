@@ -1,23 +1,47 @@
 <div id="container">
   <div id="navi-bar">
-    <div id="navi-comment" class="navi-option" (click)="commentNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 1 ? 'orange' : '#e5e5e5'}">评论</div>
+    <div id="navi-comment" class="navi-option" (click)="replyNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 1 ? 'orange' : '#e5e5e5'}">回复</div>
     <div id="navi-mention" class="navi-option" (click)="mentionNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 2 ? 'orange' : '#e5e5e5'}">提及</div>
   </div>
-  <div class="mention-notifications" *ngIf="selectedIndex == 2">
-    <div class="mention-notification-content"
-         *ngFor="let mentionNotification of mentionNotifications"
-         [ngClass]="{'unread': !mentionNotification.read}">
-      <div class="mention-top">
-        <div class="mention-left-top">
-          <img class="mention-avatar" [src]="mentionNotification.authorAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + mentionNotification.authorAvatarFilename" alt="">
+  <div class="notifications" *ngIf="selectedIndex == 1">
+    <div class="notification"
+         *ngFor="let replyNotification of replyNotifications"
+         [ngClass]="{'unread': !replyNotification.read}">
+      <div class="notification-top">
+        <div class="notification-left-top">
+          <img class="notification-avatar" [src]="replyNotification.replyAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + replyNotification.replyAvatarFilename" alt="">
         </div>
-        <div class="mention-right-top">
-          <div class="mention-right-top-line-1">
-            <a class="mention-nickname" [routerLink]="['/app/users', mentionNotification.authorUsername]">{{mentionNotification.authorNickname}}</a>
-            <div class="mention-username-and-time">@{{mentionNotification.authorUsername}}&nbsp;·&nbsp;{{mentionNotification.textTimeCreated}}</div>
+        <div class="notification-right-top">
+          <div class="notification-right-top-line-1">
+            <a class="notification-nickname" [routerLink]="['/app/users', replyNotification.replyUsername]">{{replyNotification.replyNickname}}</a>
+            <div class="notification-username-and-time">@{{replyNotification.replyUsername}}&nbsp;·&nbsp;{{replyNotification.replyTextTimeCreated}}</div>
             <div style="clear: both"></div>
           </div>
-          <div class="mention-right-top-line-2" (click)="onClickInMentionNotification($event, mentionNotification)" [innerHTML]="mentionNotification.text | safeHtml"></div>
+          <div class="notification-right-top-line-2" (click)="onClickInReplyText($event, replyNotification)" [innerHTML]="replyNotification.replyText | safeHtml"></div>
+        </div>
+        <div style="clear: both"></div>
+      </div>
+      <div class="replied-text-div">
+        <span class="replied-username" [routerLink]="['/app/users/', replyNotification.repliedUsername]">@{{replyNotification.repliedUsername}}</span>:&nbsp;
+        <span class="replied-text" [innerHTML]="replyNotification.repliedText | safeHtml" (click)="onClickInRepliedText($event, replyNotification)"></span>
+      </div>
+    </div>
+  </div>
+  <div class="notifications" *ngIf="selectedIndex == 2">
+    <div class="notification"
+         *ngFor="let mentionNotification of mentionNotifications"
+         [ngClass]="{'unread': !mentionNotification.read}">
+      <div class="notification-top">
+        <div class="notification-left-top">
+          <img class="notification-avatar" [src]="mentionNotification.authorAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + mentionNotification.authorAvatarFilename" alt="">
+        </div>
+        <div class="notification-right-top">
+          <div class="notification-right-top-line-1">
+            <a class="notification-nickname" [routerLink]="['/app/users', mentionNotification.authorUsername]">{{mentionNotification.authorNickname}}</a>
+            <div class="notification-username-and-time">@{{mentionNotification.authorUsername}}&nbsp;·&nbsp;{{mentionNotification.textTimeCreated}}</div>
+            <div style="clear: both"></div>
+          </div>
+          <div class="notification-right-top-line-2" (click)="onClickInMentionNotification($event, mentionNotification)" [innerHTML]="mentionNotification.text | safeHtml"></div>
         </div>
         <div style="clear: both"></div>
       </div>

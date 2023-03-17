@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 15/03/2023 15:53:41
+ Date: 17/03/2023 08:19:46
 */
 
 SET NAMES utf8mb4;
@@ -148,8 +148,8 @@ CREATE TABLE `reply_notification`  (
   `reply_text_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `time_created` datetime(0) NULL DEFAULT NULL,
   `read` tinyint(4) NULL DEFAULT NULL,
-  `type` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`replied_text_id`, `reply_text_id`) USING BTREE
+  `type` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`replied_text_id`, `reply_text_id`, `type`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
