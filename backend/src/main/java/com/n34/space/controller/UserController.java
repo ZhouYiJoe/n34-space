@@ -72,7 +72,7 @@ public class UserController {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(user.getTimeCreated());
         userVo.setRegisterYear(calendar.get(Calendar.YEAR));
-        userVo.setRegisterMonth(calendar.get(Calendar.MONTH));
+        userVo.setRegisterMonth(calendar.get(Calendar.MONTH) + 1);
         return userVo;
     }
 

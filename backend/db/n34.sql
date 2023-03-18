@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 17/03/2023 08:19:46
+ Date: 18/03/2023 09:16:29
 */
 
 SET NAMES utf8mb4;
@@ -110,6 +110,22 @@ CREATE TABLE `mention_notification`  (
   `time_created` datetime(0) NULL DEFAULT NULL,
   `read` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`mentioned_user_id`, `text_id`, `type`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for message
+-- ----------------------------
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message`  (
+  `id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sender_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `receiver_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `content` varchar(140) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `time_created` datetime(0) NULL DEFAULT NULL,
+  `category` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `read` tinyint(4) NULL DEFAULT NULL,
+  `extreme` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
