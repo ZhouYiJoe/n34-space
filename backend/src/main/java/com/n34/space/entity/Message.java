@@ -19,6 +19,7 @@ public class Message {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date timeCreated;
     private String category;
+    @TableField("`read`")
     private Boolean read;
     private Boolean extreme;
 }

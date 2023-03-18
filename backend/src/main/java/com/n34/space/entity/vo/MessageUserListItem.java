@@ -11,5 +11,5 @@ public class MessageUserListItem {
     private String nickname;
     private String avatarFilename;
     private String latestMessageContent;
-    private Integer numNewMessage;
+    private Long numNewMessage;
 }

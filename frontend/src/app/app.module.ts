@@ -45,6 +45,7 @@ import { UserInfoSettingPageComponent } from './components/main/config-page/user
 import { ChangePasswordPageComponent } from './components/main/config-page/change-password-page/change-password-page.component';
 import { DeleteAccountPageComponent } from './components/main/config-page/delete-account-page/delete-account-page.component';
 import { NotificationPageComponent } from './components/main/notification-page/notification-page.component';
+import { MessagePageComponent } from './components/main/message-page/message-page.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { NotificationPageComponent } from './components/main/notification-page/n
     ChangePasswordPageComponent,
     DeleteAccountPageComponent,
     NotificationPageComponent,
+    MessagePageComponent,
   ],
   imports: [
     BrowserModule,

@@ -22,6 +22,7 @@ import {PostPageComponent} from "./components/main/post-page/post-page.component
 import {CommentPageComponent} from "./components/main/comment-page/comment-page.component";
 import { FollowerListPageComponent } from './components/main/follower-list-page/follower-list-page.component';
 import {NotificationPageComponent} from "./components/main/notification-page/notification-page.component";
+import {MessagePageComponent} from "./components/main/message-page/message-page.component";
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
       {
         path: 'hot',
         component: HotPageComponent
+      },
+      {
+        path: 'message',
+        component: MessagePageComponent
       },
       {
         path: 'user_info',

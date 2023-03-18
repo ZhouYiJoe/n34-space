@@ -1,0 +1,43 @@
+<div id="container">
+  <div id="message-user-list">
+    <div class="message-user-list-item"
+         *ngFor="let messageUserListItem of messageUserList; let i = index"
+         [ngClass]="{'selected': selectedIndex == i}"
+         (click)="select(i)">
+      <div class="message-user-list-item-left">
+        <img class="message-user-list-item-avatar" [src]="messageUserListItem.avatarFilename === null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + messageUserListItem.avatarFilename" alt="">
+      </div>
+      <div class="message-user-list-item-right">
+        <div class="message-user-list-item-nickname">{{messageUserListItem.nickname}}</div>
+        <div class="message-user-list-item-latest-message-content">{{messageUserListItem.latestMessageContent}}</div>
+      </div>
+      <div style="clear: both"></div>
+    </div>
+  </div>
+  <div id="message-window" *ngIf="user">
+    <div id="message-window-top" [routerLink]="['/app/users/', user.username]">
+      <img id="message-window-avatar" [src]="user.avatarFilename === null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + user.avatarFilename" alt="">
+      <div id="message-window-nickname">{{user.nickname}}</div>
+      <div id="message-window-username">@{{user.username}}</div>
+    </div>
+    <div id="messages" #messagesDiv>
+      <div class="message-div" *ngFor="let message of messages">
+        <div class="message-box-div">
+          <div class="message-box" [ngClass]="{'message-sent-by-me-box': message.senderId == myId, 'message-received-by-me-box': message.senderId != myId}">{{message.content}}</div>
+          <div style="clear: both"></div>
+        </div>
+        <div class="message-time-div">
+          <div class="message-time" [ngClass]="{'message-sent-by-me-time': message.senderId == myId, 'message-received-by-me-time': message.senderId != myId}">{{message.timeCreated}}</div>
+          <div style="clear: both"></div>
+        </div>
+      </div>
+    </div>
+    <div id="message-window-bottom">
+      <textarea id="message-input-box" placeholder="创建一条私信" [(ngModel)]="messageInput" maxlength="140"></textarea>
+      <div>
+        <div id="char-count">{{messageInput.length}}/140</div>
+        <div id="submit-button" (click)="sendMessage()">发送</div>
+      </div>
+    </div>
+  </div>
+</div>

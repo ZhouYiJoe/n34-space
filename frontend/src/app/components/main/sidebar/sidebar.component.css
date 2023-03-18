@@ -48,6 +48,21 @@
   line-height: 18px;
 }
 
+#num-message {
+  text-indent: 0;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: orangered;
+  border-radius: 9px;
+  left: 34px;
+  top: 26px;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  line-height: 18px;
+}
+
 #user-bar {
   position: absolute;
   top: 100vh;

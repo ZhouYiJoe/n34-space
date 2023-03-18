@@ -18,6 +18,7 @@ export class SidebarComponent implements OnInit {
   public myId: string | null = null
   public menuVisible: boolean = false
   public numNotification: number = 0
+  public numMessage: number = 0
 
   constructor(public httpClient: HttpClient,
               public router: Router,
@@ -39,6 +40,11 @@ export class SidebarComponent implements OnInit {
           .subscribe((numReplyNotification: any) => {
             this.numNotification = numMentionNotification + numReplyNotification
           })
+      })
+    this.httpClient.get(`${baseUrl}/message/countNewMessagesToMe`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((numMessage: any) => {
+        this.numMessage = numMessage
       })
   }
 

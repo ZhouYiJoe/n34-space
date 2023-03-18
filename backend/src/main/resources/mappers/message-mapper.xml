@@ -4,8 +4,7 @@
 <!-- namespace用来指定该映射文件所对应Mapper接口的全限定名 -->
 <mapper namespace="com.n34.space.mapper.MessageMapper">
     <select id="getMessagesBetweenTwoUsers" resultType="Message">
-        select sender_id, receiver_id, content, time_created, category, `read`, extreme
-        from message
+        select * from message
         where (sender_id = #{user1Id} and receiver_id = #{user2Id}) or (sender_id = #{user2Id} and receiver_id = #{user1Id})
         order by time_created;
     </select>

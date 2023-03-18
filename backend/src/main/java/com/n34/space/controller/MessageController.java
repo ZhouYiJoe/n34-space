@@ -1,5 +1,6 @@
 package com.n34.space.controller;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.n34.space.entity.Message;
 import com.n34.space.entity.User;
 import com.n34.space.entity.vo.MessageUserListItem;
@@ -8,6 +9,8 @@ import com.n34.space.service.SpringSecurityService;
 import com.n34.space.service.UserService;
 import com.n34.space.utils.AiUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ public class MessageController {
 
     @PostMapping
     public Message save(@RequestBody Message message) {
+        Assert.isTrue(StringUtils.hasText(message.getContent()), "私信内容不能为空");
         message.setRead(false);
         message.setCategory(AiUtils.getCategory(message.getContent()));
         message.setExtreme(AiUtils.getSentiment(message.getContent()));
@@ -63,8 +67,9 @@ public class MessageController {
         String filterConfig = currentUser.getFilterConfig();
         List<String> categories = AiUtils.getAllCategories();
         List<Message> messages = messageService.lambdaQuery()
-                .select(Message::getContent)
+                .select(Message::getExtreme, Message::getCategory)
                 .eq(Message::getReceiverId, currentUserId)
+                .eq(Message::getRead, false)
                 .list();
         return messages.stream().filter(message -> !message.getExtreme()
                         || filterConfig.charAt(categories.indexOf(message.getCategory())) == '0')
@@ -74,6 +79,9 @@ public class MessageController {
     @GetMapping("/getMessageUserList")
     public List<MessageUserListItem> getMessageUserList() {
         String currentUserId = springSecurityService.getCurrentUserId();
+        User currentUser = userService.getById(currentUserId);
+        String filterConfig = currentUser.getFilterConfig();
+        List<String> categories = AiUtils.getAllCategories();
         List<Message> messagesSentByMe = messageService.lambdaQuery()
                 .select(Message::getReceiverId)
                 .eq(Message::getSenderId, currentUserId)
@@ -90,19 +98,23 @@ public class MessageController {
         userIds.addAll(receiverIds);
         userIds.addAll(senderIds);
         List<MessageUserListItem> messageUserList = new ArrayList<>();
-        for (User sender : senders) {
-            messagesReceivedByMe = messageService.getMessagesBetweenTwoUsers(sender.getId(), currentUserId);
-            Message latestMessage = messagesReceivedByMe.get(messagesReceivedByMe.size() - 1);
-            Integer numNewMessage = messageService.lambdaQuery()
-                    .eq(Message::getSenderId, sender.getId())
-                    .eq(Message::getReceiverId, currentUserId)
-                    .eq(Message::getRead, false)
+        for (String userId : userIds) {
+            List<Message> messages = messageService.getMessagesBetweenTwoUsers(userId, currentUserId);
+            messages = messages.stream().filter(message -> !message.getExtreme()
+                            || message.getSenderId().equals(currentUserId)
+                            || filterConfig.charAt(categories.indexOf(message.getCategory())) == '0')
+                    .collect(Collectors.toList());
+            if (messages.isEmpty()) continue;
+            Message latestMessage = messages.get(messages.size() - 1);
+            long numNewMessage = messages.stream()
+                    .filter(message -> !message.getRead() && currentUserId.equals(message.getReceiverId()))
                     .count();
+            User user = userService.getById(userId);
             MessageUserListItem messageUserListItem = new MessageUserListItem()
-                    .setUserId(sender.getId())
-                    .setUsername(sender.getUsername())
-                    .setNickname(sender.getNickname())
-                    .setAvatarFilename(sender.getAvatarFilename())
+                    .setUserId(userId)
+                    .setUsername(user.getUsername())
+                    .setNickname(user.getNickname())
+                    .setAvatarFilename(user.getAvatarFilename())
                     .setLatestMessageContent(latestMessage.getContent())
                     .setNumNewMessage(numNewMessage);
             messageUserList.add(messageUserListItem);

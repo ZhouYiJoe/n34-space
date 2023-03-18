@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {baseImgUrl, baseUrl} from "../../../app.module";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {catchError} from "rxjs";
 import {UserInfoService} from "../../../services/user-info.service";
@@ -76,5 +76,10 @@ export class UserPageComponent implements OnInit {
           }
         })
     }
+  }
+
+  toMessagePage() {
+    let navigationExtras: NavigationExtras = {queryParams: {to: this.userInfo.username}}
+    this.router.navigate(['/app/message'], navigationExtras)
   }
 }
