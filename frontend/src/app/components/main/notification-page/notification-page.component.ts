@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {baseUrl} from "../../../app.module";
 import {catchError} from "rxjs";
 import {ErrorHandleService} from "../../../services/error-handle.service";
 import {Router} from "@angular/router";
+import {UserInfoService} from "../../../services/user-info.service";
 
 @Component({
   selector: 'app-notification-page',
@@ -14,13 +15,21 @@ export class NotificationPageComponent implements OnInit {
   public selectedIndex: number = 0
   public mentionNotifications: any[] = []
   public replyNotifications: any[] = []
+  public invitationNotifications: any[] = []
+  public myId: string = ''
 
   constructor(public httpClient: HttpClient,
               public errorHandleService: ErrorHandleService,
-              public router: Router) { }
+              public router: Router,
+              public userInfoService: UserInfoService) { }
 
   ngOnInit(): void {
     this.replyNaviSelected()
+    this.userInfoService.getUserInfoRequest()
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((user: any) => {
+        this.myId = user.id
+      })
   }
 
   replyNaviSelected() {
@@ -38,6 +47,15 @@ export class NotificationPageComponent implements OnInit {
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((data: any) => {
         this.mentionNotifications = data
+      })
+  }
+
+  invitationNaviSelected() {
+    this.selectedIndex = 3
+    this.httpClient.get(`${baseUrl}/invitation_notification/getNewNotification`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((data: any) => {
+        this.invitationNotifications = data
       })
   }
 
@@ -97,4 +115,35 @@ export class NotificationPageComponent implements OnInit {
     this.router.navigate([link, param])
   }
 
+  acceptInvitation(invitationNotification: any) {
+    if (invitationNotification.state == 'waiting') {
+      this.httpClient.get(`${baseUrl}/circle/newMembership`, {
+        params: {
+          circleId: invitationNotification.circleId,
+          memberId: this.myId
+        }
+      }).pipe(catchError(this.errorHandleService.handleError))
+        .subscribe((data: any) => {
+          this.httpClient.put(`${baseUrl}/invitation_notification`, {
+            id: invitationNotification.id,
+            state: 'accepted'
+          }).pipe(catchError(this.errorHandleService.handleError))
+            .subscribe((data: any) => {
+              invitationNotification.state = 'accepted'
+            })
+        })
+    }
+  }
+
+  rejectInvitation(invitationNotification: any) {
+    if (invitationNotification.state == 'waiting') {
+      this.httpClient.put(`${baseUrl}/invitation_notification`, {
+        id: invitationNotification.id,
+        state: 'rejected'
+      }).pipe(catchError(this.errorHandleService.handleError))
+        .subscribe((data: any) => {
+          invitationNotification.state = 'rejected'
+        })
+    }
+  }
 }

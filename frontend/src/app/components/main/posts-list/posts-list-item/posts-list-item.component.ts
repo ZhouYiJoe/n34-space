@@ -25,6 +25,9 @@ export class PostsListItemComponent implements OnInit {
   @Input()
   public canEdit: boolean = false
 
+  @Input()
+  public canDelete: boolean = false
+
   @Output()
   public deleted: EventEmitter<any> = new EventEmitter<any>()
 

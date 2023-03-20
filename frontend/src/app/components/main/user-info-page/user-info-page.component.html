@@ -35,7 +35,7 @@
         id="num-follower">{{userInfo.numFollower}}</span>&nbsp;<span id="num-follower-text">关注者</span></span>
     </div>
   </div>
-  <app-posts-list [posts]="posts" [canEdit]="true"></app-posts-list>
+  <app-posts-list [posts]="posts" [canEdit]="true" [canDelete]="true"></app-posts-list>
 </div>
 <div id="dark-background" *ngIf="showEditWindow"></div>
 <div id="info-edit-window" *ngIf="showEditWindow">

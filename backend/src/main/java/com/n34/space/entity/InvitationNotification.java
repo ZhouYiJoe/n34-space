@@ -21,6 +21,7 @@ public class InvitationNotification {
     private String inviteeId;
     private String circleId;
     private String state;
+    @TableField("`read`")
     private Boolean read;
     @TableField(fill = FieldFill.INSERT)
     private Date timeCreated;

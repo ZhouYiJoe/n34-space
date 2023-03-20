@@ -2,10 +2,12 @@ package com.n34.space.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.n34.space.entity.CircleMembership;
 import com.n34.space.entity.Follow;
 import com.n34.space.entity.User;
 import com.n34.space.entity.dto.UserDto;
 import com.n34.space.entity.vo.UserVo;
+import com.n34.space.service.CircleMembershipService;
 import com.n34.space.service.FollowService;
 import com.n34.space.service.SpringSecurityService;
 import com.n34.space.service.UserService;
@@ -32,6 +34,7 @@ public class UserController {
     private final SpringSecurityService springSecurityService;
     private final MinioService minioService;
     private final FollowService followService;
+    private final CircleMembershipService circleMembershipService;
 
     @GetMapping("/self")
     public UserVo getSelfInfo() {
@@ -185,5 +188,28 @@ public class UserController {
             userVos = userVos.stream().filter((userVo) -> !userVo.getFollowedByMe()).collect(Collectors.toList());
         }
         return topN == null ? userVos : userVos.subList(0, Math.min(topN, userVos.size()));
+    }
+
+    @GetMapping("/getCircleMembers")
+    public List<UserVo> getCircleMembers(@RequestParam String circleId) {
+        String currentUserId = springSecurityService.getCurrentUserId();
+        List<CircleMembership> circleMemberships = circleMembershipService.lambdaQuery()
+                .eq(CircleMembership::getCircleId, circleId)
+                .list();
+        List<String> memberIds = circleMemberships.stream()
+                .map(CircleMembership::getMemberId)
+                .collect(Collectors.toList());
+        List<User> users = userService.lambdaQuery()
+                .in(User::getId, memberIds)
+                .list();
+        List<UserVo> userVos = BeanCopyUtils.copyList(users, UserVo.class);
+        for (UserVo userVo : userVos) {
+            LambdaQueryWrapper<Follow> cond2 = new LambdaQueryWrapper<>();
+            cond2.eq(Follow::getFolloweeId, userVo.getId());
+            cond2.eq(Follow::getFollowerId, currentUserId);
+            int count = followService.count(cond2);
+            userVo.setFollowedByMe(count == 1);
+        }
+        return userVos;
     }
 }

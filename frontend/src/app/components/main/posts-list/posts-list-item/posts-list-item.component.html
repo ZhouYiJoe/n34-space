@@ -8,10 +8,10 @@
       <div id="right-top-line-1">
         <a id="nickname" [routerLink]="['/app/users', post.authorUsername]">{{post.authorNickname}}</a>
         <div id="usernameAndTime">@{{post.authorUsername}}&nbsp;·&nbsp;{{post.timeCreated}}</div>
-        <img src="assets/more.svg" alt="" id="more" (click)="showOrHideMenu()" *ngIf="this.canEdit">
+        <img src="assets/more.svg" alt="" id="more" (click)="showOrHideMenu()" *ngIf="this.canDelete">
         <div id="menu" *ngIf="menuVisible">
-          <div class="menu-item" (click)="edit()">修改</div>
-          <div class="menu-item" (click)="delete()">删除</div>
+          <div class="menu-item" (click)="edit()" *ngIf="canEdit">修改</div>
+          <div class="menu-item" (click)="delete()" *ngIf="canDelete">删除</div>
         </div>
         <div style="clear: both"></div>
       </div>

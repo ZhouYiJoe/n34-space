@@ -1,0 +1,73 @@
+<div id="container">
+  <div id="left">
+    <img [src]="circle.avatarFilename === null ? 'assets/group-2-fill.png' :
+    'http://localhost:9090/images/' + circle.avatarFilename" alt="" id="avatar">
+  </div>
+  <div id="right">
+    <div id="top-right">
+      <div id="name-and-creator-div">
+        <a id="name" [routerLink]="['/app/circle/', circle.id]">{{circle.name}}</a>
+        <div id="creator">创建者：<span id="creator-username"
+                                    [routerLink]="['/app/users/', circle.creatorUsername]">@{{circle.creatorUsername}}</span>
+        </div>
+      </div>
+      <div id="more-button" (click)="showMenu = !showMenu">
+        <div id="menu" *ngIf="showMenu">
+          <div class="menu-item" (click)="openInviteeWindow()">邀请新成员</div>
+          <div class="menu-item" (click)="delete()" *ngIf="this.circle.creatorId == myId">解散圈子</div>
+          <div class="menu-item" (click)="quitCircle()" *ngIf="this.circle.creatorId != myId">退出圈子</div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z"/>
+          <path
+            d="M4.5 10.5c-.825 0-1.5.675-1.5 1.5s.675 1.5 1.5 1.5S6 12.825 6 12s-.675-1.5-1.5-1.5zm15 0c-.825 0-1.5.675-1.5 1.5s.675 1.5 1.5 1.5S21 12.825 21 12s-.675-1.5-1.5-1.5zm-7.5 0c-.825 0-1.5.675-1.5 1.5s.675 1.5 1.5 1.5 1.5-.675 1.5-1.5-.675-1.5-1.5-1.5z"/>
+        </svg>
+      </div>
+      <div style="clear: both"></div>
+    </div>
+    <div id="bottom-right">
+      {{circle.introduction}}
+    </div>
+  </div>
+  <div style="clear: both"></div>
+</div>
+<div id="dark-background" *ngIf="showInviteeWindow"></div>
+<div id="invitee-window" *ngIf="showInviteeWindow">
+  <div id="window-title-bar">
+    <div id="close-button-div" (click)="showInviteeWindow = false">
+      <svg id="close-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="none" d="M0 0h24v24H0z"/>
+        <path
+          d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/>
+      </svg>
+    </div>
+    <h2 id="window-title">邀请新成员</h2>
+    <div style="clear: both;"></div>
+  </div>
+  <div id="window-menu-bar">
+    <div class="window-menu-bar-option" [ngClass]="{'selected': selectedIndex == 1}" (click)="followeeSelected()">我的关注
+    </div>
+    <div class="window-menu-bar-option" [ngClass]="{'selected': selectedIndex == 2}" (click)="followerSelected()">我的粉丝
+    </div>
+  </div>
+  <div id="invitees">
+    <div *ngFor="let invitee of invitees" class="invitee">
+      <div class="invitee-left">
+        <img [src]="invitee.avatarFilename === null ? 'assets/default_avatar.webp' :
+    'http://localhost:9090/images/' + invitee.avatarFilename" alt="" class="invitee-avatar">
+      </div>
+      <div class="invitee-middle">
+        <a class="invitee-nickname">{{invitee.nickname}}</a>
+        <div class="invitee-username">@{{invitee.username}}</div>
+      </div>
+      <div class="invitee-right">
+        <div class="invitee-button"
+             (click)="sendInvitation(invitee)">
+          邀请
+        </div>
+      </div>
+      <div style="clear: both"></div>
+    </div>
+  </div>
+</div>
+

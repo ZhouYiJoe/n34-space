@@ -1,8 +1,5 @@
 package com.n34.space.controller;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.n34.space.entity.Circle;
 import com.n34.space.entity.CircleMembership;
 import com.n34.space.entity.User;
@@ -10,14 +7,15 @@ import com.n34.space.entity.dto.CircleDto;
 import com.n34.space.entity.vo.CircleVo;
 import com.n34.space.service.CircleMembershipService;
 import com.n34.space.service.CircleService;
+import com.n34.space.service.SpringSecurityService;
 import com.n34.space.service.UserService;
 import com.n34.space.service.impl.MinioService;
 import com.n34.space.utils.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +29,7 @@ public class CircleController {
     private final UserService userService;
     private final CircleMembershipService circleMembershipService;
     private final MinioService minioService;
+    private final SpringSecurityService springSecurityService;
 
     private CircleVo doToVo(Circle circle, boolean requireNumMember) {
         CircleVo circleVo = BeanCopyUtils.copyObject(circle, CircleVo.class);
@@ -53,6 +52,7 @@ public class CircleController {
     public CircleVo save(@RequestBody CircleDto circleDto) {
         Circle circle = BeanCopyUtils.copyObject(circleDto, Circle.class);
         if (!circleService.save(circle)) return null;
+        newMembership(circle.getId(), circleDto.getCreatorId());
         return doToVo(circle, false);
     }
 
@@ -118,20 +118,25 @@ public class CircleController {
         return doToVo(circle, true);
     }
 
-    @GetMapping
-    public List<CircleVo> findList(@RequestParam(required = false) String keyword,
-                                   @RequestParam(required = false) String creatorId) {
-        LambdaQueryWrapper<Circle> cond = new LambdaQueryWrapper<>();
-        if (StringUtils.hasText(keyword)) {
-            cond.like(Circle::getName, keyword);
-            cond.or();
-            cond.like(Circle::getIntroduction, keyword);
-        }
-        List<Circle> circles = circleService.list(cond);
-        if (StringUtils.hasText(creatorId)) {
-            circles = circles.stream()
-                    .filter(circle -> creatorId.equals(circle.getCreatorId()))
+    @GetMapping("/circlesIJoined")
+    public List<CircleVo> getCirclesIJoined() {
+        String currentUserId = springSecurityService.getCurrentUserId();
+        List<Circle> circlesOwnedByMe = circleService.lambdaQuery()
+                .eq(Circle::getCreatorId, currentUserId)
+                .list();
+        List<Circle> circles = new ArrayList<>(circlesOwnedByMe);
+        List<CircleMembership> circleMemberships = circleMembershipService.lambdaQuery()
+                .eq(CircleMembership::getMemberId, currentUserId)
+                .list();
+        if (!circleMemberships.isEmpty()) {
+            List<String> circleIds = circleMemberships.stream()
+                    .map(CircleMembership::getCircleId)
                     .collect(Collectors.toList());
+            List<Circle> circlesNotOwnedByMe = circleService.lambdaQuery()
+                    .in(Circle::getId, circleIds)
+                    .ne(Circle::getCreatorId, currentUserId)
+                    .list();
+            circles.addAll(circlesNotOwnedByMe);
         }
         return circles.stream().map(circle -> doToVo(circle, false)).collect(Collectors.toList());
     }

@@ -23,6 +23,9 @@ import {CommentPageComponent} from "./components/main/comment-page/comment-page.
 import { FollowerListPageComponent } from './components/main/follower-list-page/follower-list-page.component';
 import {NotificationPageComponent} from "./components/main/notification-page/notification-page.component";
 import {MessagePageComponent} from "./components/main/message-page/message-page.component";
+import {MyCirclePageComponent} from "./components/main/my-circle-page/my-circle-page.component";
+import {CirclePageComponent} from "./components/main/circle-page/circle-page.component";
+import {CircleMemberPageComponent} from "./components/main/circle-member-page/circle-member-page.component";
 
 const routes: Routes = [
   {
@@ -111,6 +114,18 @@ const routes: Routes = [
       {
         path: 'comment/:commentId',
         component: CommentPageComponent
+      },
+      {
+        path: 'my_circle',
+        component: MyCirclePageComponent
+      },
+      {
+        path: 'circle/:circleId',
+        component: CirclePageComponent
+      },
+      {
+        path: 'circle_member/:circleId',
+        component: CircleMemberPageComponent
       },
       {
         path: '',

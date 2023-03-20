@@ -9,7 +9,7 @@
         <a id="nickname">{{user.nickname}}</a>
         <div id="username">@{{user.username}}</div>
       </div>
-      <div id="follow-button-div">
+      <div id="follow-button-div" *ngIf="user.id != myId">
         <div id="follow-button" (click)="onFollowButtonClick()" [ngClass]="{'follow-button': !this.user.followedByMe, 'unfollow-button': this.user.followedByMe}">
           {{user.followedByMe ? '取消关注' : '关注'}}
         </div>

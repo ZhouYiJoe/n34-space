@@ -74,23 +74,22 @@
   border: solid 1px #c9c9c9;
   background-color: white;
   width: 100px;
-  height: 50px;
   left: 560px;
   top: 20px;
   border-radius: 10px;
   box-shadow: #b6b6b6 0 0 3px;
+  overflow: hidden;
 }
 
 .menu-item {
-  border-radius: 10px;
   height: 25px;
   font-size: 15px;
   line-height: 25px;
   text-align: center;
+  cursor: pointer;
 }
 
 .menu-item:hover {
-  cursor: pointer;
   background-color: #f7f7f7;
 }
 

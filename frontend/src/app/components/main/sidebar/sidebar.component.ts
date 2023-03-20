@@ -35,11 +35,17 @@ export class SidebarComponent implements OnInit {
     this.httpClient.get(`${baseUrl}/mention_notification/countNewNotification`)
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((numMentionNotification: any) => {
-        this.httpClient.get(`${baseUrl}/reply_notification/countNewNotification`)
-          .pipe(catchError(this.errorHandleService.handleError))
-          .subscribe((numReplyNotification: any) => {
-            this.numNotification = numMentionNotification + numReplyNotification
-          })
+        this.numNotification += numMentionNotification
+      })
+    this.httpClient.get(`${baseUrl}/reply_notification/countNewNotification`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((numReplyNotification: any) => {
+        this.numNotification += numReplyNotification
+      })
+    this.httpClient.get(`${baseUrl}/invitation_notification/countNewNotification`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((numInvitationNotification: any) => {
+        this.numNotification += numInvitationNotification
       })
     this.httpClient.get(`${baseUrl}/message/countNewMessagesToMe`)
       .pipe(catchError(this.errorHandleService.handleError))

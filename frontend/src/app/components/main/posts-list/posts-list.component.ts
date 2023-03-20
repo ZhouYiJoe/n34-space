@@ -12,6 +12,9 @@ export class PostsListComponent implements OnInit {
   @Input()
   public canEdit: boolean = false
 
+  @Input()
+  public canDelete: boolean = false
+
   constructor() { }
 
   ngOnInit(): void {

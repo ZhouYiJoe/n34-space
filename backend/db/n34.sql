@@ -11,11 +11,37 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 19/03/2023 09:04:40
+ Date: 20/03/2023 22:28:41
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for circle
+-- ----------------------------
+DROP TABLE IF EXISTS `circle`;
+CREATE TABLE `circle`  (
+  `id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creator_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `introduction` varchar(160) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `avatar_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'group-2-fill.png',
+  `wallpaper_filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'default_wallpaper.jpg',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `time_created` datetime(0) NULL DEFAULT NULL,
+  `time_updated` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for circle_membership
+-- ----------------------------
+DROP TABLE IF EXISTS `circle_membership`;
+CREATE TABLE `circle_membership`  (
+  `circle_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `member_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`circle_id`, `member_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for comment
@@ -100,6 +126,21 @@ CREATE TABLE `hashtag_post_rela`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for invitation_notification
+-- ----------------------------
+DROP TABLE IF EXISTS `invitation_notification`;
+CREATE TABLE `invitation_notification`  (
+  `id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `inviter_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `invitee_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `circle_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `state` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `read` tinyint(4) NULL DEFAULT NULL,
+  `time_created` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for mention_notification
 -- ----------------------------
 DROP TABLE IF EXISTS `mention_notification`;
@@ -140,6 +181,7 @@ CREATE TABLE `post`  (
   `time_updated` datetime(0) NULL DEFAULT NULL,
   `category` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `extreme` tinyint(4) NULL DEFAULT NULL,
+  `circle_id` char(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

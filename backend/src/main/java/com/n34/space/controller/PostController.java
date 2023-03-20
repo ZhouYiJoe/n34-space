@@ -264,7 +264,6 @@ public class PostController {
     public Boolean remove(@NotNull @PathVariable String id) {
         Post post = postService.getById(id);
         Assert.notNull(post, "博文不存在");
-        Assert.isTrue(springSecurityService.getCurrentUserId().equals(post.getAuthorId()), "无权访问");
 
         LambdaQueryWrapper<PostLike> cond = new LambdaQueryWrapper<>();
         cond.eq(PostLike::getPostId, id);

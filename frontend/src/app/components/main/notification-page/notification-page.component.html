@@ -1,7 +1,14 @@
 <div id="container">
   <div id="navi-bar">
-    <div id="navi-comment" class="navi-option" (click)="replyNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 1 ? 'orange' : '#e5e5e5'}">回复</div>
-    <div id="navi-mention" class="navi-option" (click)="mentionNaviSelected()" [ngStyle]="{'border-bottom-color': selectedIndex == 2 ? 'orange' : '#e5e5e5'}">提及</div>
+    <div id="navi-comment" class="navi-option" (click)="replyNaviSelected()"
+         [ngStyle]="{'border-bottom-color': selectedIndex == 1 ? 'orange' : '#e5e5e5'}">回复
+    </div>
+    <div id="navi-mention" class="navi-option" (click)="mentionNaviSelected()"
+         [ngStyle]="{'border-bottom-color': selectedIndex == 2 ? 'orange' : '#e5e5e5'}">提及
+    </div>
+    <div id="navi-invitation" class="navi-option" (click)="invitationNaviSelected()"
+         [ngStyle]="{'border-bottom-color': selectedIndex == 3 ? 'orange' : '#e5e5e5'}">邀请
+    </div>
   </div>
   <div class="notifications" *ngIf="selectedIndex == 1">
     <div class="notification"
@@ -9,21 +16,28 @@
          [ngClass]="{'unread': !replyNotification.read}">
       <div class="notification-top">
         <div class="notification-left-top">
-          <img class="notification-avatar" [src]="replyNotification.replyAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + replyNotification.replyAvatarFilename" alt="">
+          <img class="notification-avatar"
+               [src]="replyNotification.replyAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + replyNotification.replyAvatarFilename"
+               alt="">
         </div>
         <div class="notification-right-top">
           <div class="notification-right-top-line-1">
-            <a class="notification-nickname" [routerLink]="['/app/users', replyNotification.replyUsername]">{{replyNotification.replyNickname}}</a>
-            <div class="notification-username-and-time">@{{replyNotification.replyUsername}}&nbsp;·&nbsp;{{replyNotification.replyTextTimeCreated}}</div>
+            <a class="notification-nickname"
+               [routerLink]="['/app/users', replyNotification.replyUsername]">{{replyNotification.replyNickname}}</a>
+            <div class="notification-username-and-time">
+              @{{replyNotification.replyUsername}}&nbsp;·&nbsp;{{replyNotification.replyTextTimeCreated}}</div>
             <div style="clear: both"></div>
           </div>
-          <div class="notification-right-top-line-2" (click)="onClickInReplyText($event, replyNotification)" [innerHTML]="replyNotification.replyText | safeHtml"></div>
+          <div class="notification-right-top-line-2" (click)="onClickInReplyText($event, replyNotification)"
+               [innerHTML]="replyNotification.replyText | safeHtml"></div>
         </div>
         <div style="clear: both"></div>
       </div>
       <div class="replied-text-div">
-        <span class="replied-username" [routerLink]="['/app/users/', replyNotification.repliedUsername]">@{{replyNotification.repliedUsername}}</span>:&nbsp;
-        <span class="replied-text" [innerHTML]="replyNotification.repliedText | safeHtml" (click)="onClickInRepliedText($event, replyNotification)"></span>
+        <span class="replied-username"
+              [routerLink]="['/app/users/', replyNotification.repliedUsername]">@{{replyNotification.repliedUsername}}</span>:&nbsp;
+        <span class="replied-text" [innerHTML]="replyNotification.repliedText | safeHtml"
+              (click)="onClickInRepliedText($event, replyNotification)"></span>
       </div>
     </div>
   </div>
@@ -33,17 +47,54 @@
          [ngClass]="{'unread': !mentionNotification.read}">
       <div class="notification-top">
         <div class="notification-left-top">
-          <img class="notification-avatar" [src]="mentionNotification.authorAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + mentionNotification.authorAvatarFilename" alt="">
+          <img class="notification-avatar"
+               [src]="mentionNotification.authorAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + mentionNotification.authorAvatarFilename"
+               alt="">
         </div>
         <div class="notification-right-top">
           <div class="notification-right-top-line-1">
-            <a class="notification-nickname" [routerLink]="['/app/users', mentionNotification.authorUsername]">{{mentionNotification.authorNickname}}</a>
-            <div class="notification-username-and-time">@{{mentionNotification.authorUsername}}&nbsp;·&nbsp;{{mentionNotification.textTimeCreated}}</div>
+            <a class="notification-nickname"
+               [routerLink]="['/app/users', mentionNotification.authorUsername]">{{mentionNotification.authorNickname}}</a>
+            <div class="notification-username-and-time">
+              @{{mentionNotification.authorUsername}}&nbsp;·&nbsp;{{mentionNotification.textTimeCreated}}</div>
             <div style="clear: both"></div>
           </div>
-          <div class="notification-right-top-line-2" (click)="onClickInMentionNotification($event, mentionNotification)" [innerHTML]="mentionNotification.text | safeHtml"></div>
+          <div class="notification-right-top-line-2" (click)="onClickInMentionNotification($event, mentionNotification)"
+               [innerHTML]="mentionNotification.text | safeHtml"></div>
         </div>
         <div style="clear: both"></div>
+      </div>
+    </div>
+  </div>
+  <div class="notifications" *ngIf="selectedIndex == 3">
+    <div class="notification"
+         *ngFor="let invitationNotification of invitationNotifications"
+         [ngClass]="{'unread': !invitationNotification.read}">
+      <div class="notification-top">
+        <div class="notification-left-top">
+          <img class="notification-avatar"
+               [src]="invitationNotification.inviterAvatarFilename == null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + invitationNotification.inviterAvatarFilename"
+               alt="">
+        </div>
+        <div class="invitation-notification-right-top">
+          <a class="invitation-notification-nickname"
+             [routerLink]="['/app/users', invitationNotification.inviterUsername]">{{invitationNotification.inviterNickname}}</a>
+          <div class="invitation-notification-username">@{{invitationNotification.inviterUsername}}</div>
+        </div>
+        <div style="clear: both"></div>
+      </div>
+      <div class="invitation-notification-content">
+        邀请你加入圈子<b>{{invitationNotification.circleName}}</b>。
+        <div class="accept-button invitation-button"
+             [ngClass]="{'disabled': invitationNotification.state == 'rejected'}"
+             (click)="acceptInvitation(invitationNotification)">
+          {{invitationNotification.state == 'accepted' ? '已接受' : '接受'}}
+        </div>
+        <div class="reject-button invitation-button"
+             [ngClass]="{'disabled': invitationNotification.state == 'accepted'}"
+             (click)="rejectInvitation(invitationNotification)">
+          {{invitationNotification.state == 'rejected' ? '已拒绝' : '拒绝'}}
+        </div>
       </div>
     </div>
   </div>

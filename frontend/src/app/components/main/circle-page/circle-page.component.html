@@ -1,0 +1,88 @@
+<div id="container">
+  <img [src]="circle.wallpaperFilename" alt="" width="749" height="250">
+  <img id="avatar" [src]="circle.avatarFilename" alt="" width="130" height="130">
+  <div id="edit-button-div">
+    <div id="edit-button" (click)="showEditWindow = true" *ngIf="this.circle.creatorId == myId">编辑圈子信息</div>
+  </div>
+  <div id="info-div">
+    <p id="name">{{circle.name}}</p>
+    <p id="creator">由<span id="creator-username" [routerLink]="['/app/users/', circle.creatorUsername]">@{{circle.creatorUsername}}</span>创建</p>
+    <p id="introduction" *ngIf="circle.introduction">{{circle.introduction}}</p>
+    <span style="margin-left: 2px">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none"
+                                                                                                            d="M0 0h24v24H0z"/><path
+        d="M17 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2v2h6V1h2v2zm3 8H4v8h16v-8zm-5-6H9v2H7V5H4v4h16V5h-3v2h-2V5zm-9 8h2v2H6v-2zm5 0h2v2h-2v-2zm5 0h2v2h-2v-2z"/></svg>
+    </span>
+    <span class="text-near-icon">{{circle.timeCreatedYear}}年{{circle.timeCreatedMonth}}月&nbsp;创建</span>
+    <div id="num-member-div">
+      <span class="circle-member-link" [routerLink]="['/app/circle_member/', circle.id]"><span
+        id="num-member">{{circle.numMember}}</span>&nbsp;<span id="num-member-text">位成员</span></span>
+    </div>
+  </div>
+  <div id="post-publish-div">
+    <textarea id="post-input-box" rows="5" maxlength="140" placeholder="有什么新鲜事？" [(ngModel)]="postToPublishContent"></textarea>
+    <p id="post-length">{{postToPublishContent.length}}/140</p>
+    <button id="post-publish-button" (click)="publishPost()">发布</button>
+    <div style="clear: both"></div>
+  </div>
+  <div id="menu-bar">
+    <div class="menu-bar-option" [ngClass]="{'selected': menuOptionSelected == 1}" (click)="hotSelected()">热门</div>
+    <div class="menu-bar-option" [ngClass]="{'selected': menuOptionSelected == 2}" (click)="latestSelected()">最新</div>
+  </div>
+  <app-posts-list-item *ngFor="let post of posts"
+                       [post]="post"
+                       [canEdit]="post.authorId == myId"
+                       [canDelete]="post.authorId == myId || circle.creatorId == myId"
+                       (deleted)="deletePost($event)"></app-posts-list-item>
+</div>
+<div id="dark-background" *ngIf="showEditWindow"></div>
+<div id="info-edit-window" *ngIf="showEditWindow">
+  <div id="window-title-bar">
+    <div id="close-button-div" (click)="closeEditWindow()">
+      <svg id="close-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="none" d="M0 0h24v24H0z"/>
+        <path
+          d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/>
+      </svg>
+    </div>
+    <h2 id="window-title">编辑圈子信息</h2>
+    <div id="save-button" (click)="saveChange()">保存</div>
+    <div style="clear: both;"></div>
+  </div>
+  <div id="window-inner">
+    <div id="window-line-1">
+      <img id="wallpaper-in-edit-window" [src]="circle.wallpaperFilename" alt="" width="600" height="250">
+      <div id="darken-wallpaper"></div>
+      <div id="change-wallpaper-button-div" (click)="selectWallpaper()">
+        <svg id="change-wallpaper-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z"/>
+          <path
+            d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/>
+        </svg>
+        <input type="file" #wallpaperFileInput (change)="uploadWallpaper()" class="file-input">
+      </div>
+      <div id="change-avatar-button-div" (click)="selectAvatar()">
+        <svg id="change-avatar-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z"/>
+          <path
+            d="M15 4H5v16h14V8h-4V4zM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992zM13 12v4h-2v-4H8l4-4 4 4h-3z"/>
+        </svg>
+        <input type="file" #avatarFileInput (change)="uploadAvatar()" class="file-input">
+      </div>
+      <img id="avatar-in-edit-window" [src]="circle.avatarFilename" alt="" width="110" height="110">
+      <div id="darken-avatar"></div>
+    </div>
+    <div id="window-line-2">
+      <div class="input-div">
+        <p class="field-name">名称</p>
+        <p class="char-count">{{nameInput.length}}&nbsp;/&nbsp;64</p>
+        <input class="input-box" type="text" maxlength="64" [(ngModel)]="nameInput">
+      </div>
+      <div class="input-div">
+        <p class="field-name">简介</p>
+        <p class="char-count">{{introductionInput.length}}&nbsp;/&nbsp;160</p>
+        <input class="input-box" type="text" maxlength="160" [(ngModel)]="introductionInput">
+      </div>
+    </div>
+  </div>
+</div>

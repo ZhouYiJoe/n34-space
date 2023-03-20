@@ -15,6 +15,9 @@ export class UserListItemComponent implements OnInit {
   @Input()
   public user: any
 
+  @Input()
+  public myId: string = ''
+
   constructor(public httpClient: HttpClient,
               public errorHandleService: ErrorHandleService,
               public router: Router) {

@@ -1,0 +1,37 @@
+<div id="container">
+  <div id="page-title-bar">
+    <h2 id="page-title">我的圈子</h2>
+    <div id="create-circle-button" (click)="showCreateCircleWindow = true">新建圈子</div>
+    <div style="clear: both"></div>
+  </div>
+  <app-circle-list-item [myId]="myId" *ngFor="let circle of circles" [canRemove]="circle.creatorId == myId" [circle]="circle" (deleted)="deleteCircle($event)"></app-circle-list-item>
+</div>
+<div id="dark-background" *ngIf="showCreateCircleWindow"></div>
+<div id="create-circle-window" *ngIf="showCreateCircleWindow">
+  <div id="window-title-bar">
+    <div id="close-button-div" (click)="showCreateCircleWindow = false">
+      <svg id="close-button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="none" d="M0 0h24v24H0z"/>
+        <path
+          d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/>
+      </svg>
+    </div>
+    <h2 id="window-title">新建圈子</h2>
+    <div id="create-button" (click)="createCircle()">完成</div>
+    <div style="clear: both;"></div>
+  </div>
+  <div id="window-inner">
+    <div id="window-line-1">
+      <div class="input-div">
+        <p class="field-name">名称</p>
+        <p class="char-count">{{nameInput.length}}&nbsp;/&nbsp;64</p>
+        <input class="input-box" type="text" maxlength="64" [(ngModel)]="nameInput">
+      </div>
+      <div class="input-div">
+        <p class="field-name">简介</p>
+        <p class="char-count">{{introductionInput.length}}&nbsp;/&nbsp;160</p>
+        <input class="input-box" type="text" maxlength="160" [(ngModel)]="introductionInput">
+      </div>
+    </div>
+  </div>
+</div>

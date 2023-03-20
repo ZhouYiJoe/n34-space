@@ -1,0 +1,148 @@
+#container {
+  width: 749px;
+  border-left: solid #e5e5e5 1px;
+  border-right: solid #e5e5e5 1px;
+  min-height: 100vh;
+}
+
+#page-title-bar {
+  padding: 15px;
+  border-bottom: solid #e5e5e5 1px;
+}
+
+#page-title {
+  float: left;
+}
+
+#create-circle-button {
+  float: right;
+  margin-top: 3px;
+  width: 100px;
+  height: 30px;
+  background-color: black;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 15px;
+  border: 1px solid #e3dcd7;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+}
+
+#create-circle-button:hover {
+  background-color: #272c30;
+}
+
+#dark-background {
+  background-color: rgba(0, 0, 0, 0.25);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+#create-circle-window {
+  background-color: white;
+  position: fixed;
+  width: 600px;
+  left: 50vw;
+  top: 50vh;
+  margin-top: -113px;
+  margin-left: -300px;
+  z-index: 2;
+  border-radius: 20px;
+}
+
+#window-title-bar {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+#close-button-div {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  cursor: pointer;
+  float: left;
+}
+
+#close-button-div:hover {
+  background-color: #e7e6e6;
+}
+
+#close-button {
+  margin-top: 6px;
+  margin-left: 6px;
+}
+
+#window-title {
+  height: 36px;
+  line-height: 36px;
+  margin-left: 30px;
+  float: left;
+}
+
+#create-button {
+  float: right;
+  width: 70px;
+  height: 36px;
+  line-height: 36px;
+  background-color: black;
+  border-radius: 18px;
+  color: white;
+  text-align: center;
+  margin-right: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#create-button:hover {
+  background-color: #3a3a3a;
+}
+
+#window-inner {
+  overflow: auto;
+  padding-bottom: 20px;
+}
+
+#window-line-1 {
+  margin-top: 10px;
+}
+
+.input-div {
+  margin-left: 20px;
+  font-size: 14px;
+}
+
+.field-name {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #595654;
+  float: left;
+}
+
+.char-count {
+  float: right;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 22px;
+  color: #595654;
+}
+
+.input-box {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 556px;
+  border: #ded5cf 1px solid;
+  border-radius: 3px;
+  font-size: 16px;
+  height: 30px;
+  text-indent: 0.5em;
+}
+
+.input-box:focus {
+  outline: #f06e1d 2px solid;
+}

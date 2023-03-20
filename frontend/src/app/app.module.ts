@@ -46,6 +46,10 @@ import { ChangePasswordPageComponent } from './components/main/config-page/chang
 import { DeleteAccountPageComponent } from './components/main/config-page/delete-account-page/delete-account-page.component';
 import { NotificationPageComponent } from './components/main/notification-page/notification-page.component';
 import { MessagePageComponent } from './components/main/message-page/message-page.component';
+import { CirclePageComponent } from './components/main/circle-page/circle-page.component';
+import { MyCirclePageComponent } from './components/main/my-circle-page/my-circle-page.component';
+import { CircleListItemComponent } from './components/main/my-circle-page/circle-list-item/circle-list-item.component';
+import { CircleMemberPageComponent } from './components/main/circle-member-page/circle-member-page.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +94,10 @@ import { MessagePageComponent } from './components/main/message-page/message-pag
     DeleteAccountPageComponent,
     NotificationPageComponent,
     MessagePageComponent,
+    CirclePageComponent,
+    MyCirclePageComponent,
+    CircleListItemComponent,
+    CircleMemberPageComponent,
   ],
   imports: [
     BrowserModule,

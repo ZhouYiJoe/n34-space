@@ -1,0 +1,252 @@
+#container:hover {
+  background-color: #f7f7f7;
+  cursor: pointer;
+}
+
+#avatar {
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+
+#left {
+  float: left;
+  width: 68px;
+}
+
+#right {
+  float: left;
+  width: 679px;
+}
+
+#follow-button-div {
+  float: right;
+}
+
+#name-and-creator-div {
+  margin-top: 12px;
+  float: left;
+}
+
+#name {
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  color: black;
+}
+
+#name:hover {
+  text-decoration: underline;
+}
+
+#creator {
+  font-size: 14px;
+  color: gray;
+  margin-top: 5px;
+}
+
+#creator-username {
+  color: orangered;
+}
+
+#creator-username:hover {
+  text-decoration: underline;
+}
+
+#more-button {
+  float: right;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 10px;
+  position: relative;
+}
+
+#more-button:hover {
+  background-color: #e3e3e3;
+}
+
+#bottom-right {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  padding-right: 10px;
+  font-size: 15px;
+}
+
+#menu {
+  position: absolute;
+  border: solid 1px #c9c9c9;
+  background-color: white;
+  width: 100px;
+  left: -76px;
+  top: 24px;
+  border-radius: 10px;
+  box-shadow: #b6b6b6 0 0 3px;
+  overflow: hidden;
+}
+
+.menu-item {
+  font-weight: normal;
+  height: 25px;
+  font-size: 15px;
+  line-height: 25px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #f7f7f7;
+}
+
+#dark-background {
+  background-color: rgba(0, 0, 0, 0.25);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+#invitee-window {
+  background-color: white;
+  position: fixed;
+  width: 600px;
+  height: 650px;
+  left: 50vw;
+  top: 50vh;
+  margin-top: -325px;
+  margin-left: -300px;
+  z-index: 2;
+  border-radius: 20px;
+}
+
+#window-title-bar {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+#close-button-div {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  cursor: pointer;
+  float: left;
+}
+
+#close-button-div:hover {
+  background-color: #e7e6e6;
+}
+
+#close-button {
+  margin-top: 6px;
+  margin-left: 6px;
+}
+
+#window-title {
+  height: 36px;
+  line-height: 36px;
+  margin-left: 30px;
+  float: left;
+}
+
+#window-inner {
+  overflow: auto;
+}
+
+#window-menu-bar {
+  height: 40px;
+  line-height: 40px;
+}
+
+.window-menu-bar-option {
+  display: inline-block;
+  width: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border-top: solid #e5e5e5 1px;
+  border-bottom: solid #e5e5e5 1px;
+  cursor: pointer;
+}
+
+.window-menu-bar-option:hover {
+  background-color: #efefef;
+}
+
+.selected {
+  background-color: #e5e5e5;
+}
+
+.invitee-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.invitee-left {
+  float: left;
+}
+
+.invitee-middle {
+  float: left;
+}
+
+.invitee-right {
+  float: right;
+}
+
+.invitee-nickname {
+  margin-top: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+  color: black;
+}
+
+.invitee-nickname:hover {
+  text-decoration: underline;
+}
+
+.invitee-username {
+  font-size: 14px;
+  color: gray;
+}
+
+.invitee-button {
+  width: 90px;
+  height: 30px;
+  border-radius: 20px;
+  font-size: 15px;
+  line-height: 30px;
+  text-align: center;
+  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.invitee-button {
+  margin-top: 20px;
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.invitee-button:hover {
+  background-color: #272c30;
+}
+
+.invitee {
+  padding-left: 15px;
+  padding-right: 15px;
+}

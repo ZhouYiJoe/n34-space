@@ -10,9 +10,7 @@ import com.n34.space.service.SpringSecurityService;
 import com.n34.space.service.UserService;
 import com.n34.space.utils.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +22,21 @@ public class InvitationNotificationController {
     private final InvitationNotificationService invitationNotificationService;
     private final UserService userService;
     private final CircleService circleService;
+
+    @PostMapping("/sendInvitation")
+    public void sendInvitation(@RequestBody InvitationNotification invitationNotification) {
+
+        String currentUserId = springSecurityService.getCurrentUserId();
+        invitationNotification.setState(InvitationNotification.WAITING)
+                .setInviterId(currentUserId)
+                .setRead(false);
+        invitationNotificationService.save(invitationNotification);
+    }
+
+    @PutMapping
+    public void updateById(@RequestBody InvitationNotification invitationNotification) {
+        invitationNotificationService.updateById(invitationNotification);
+    }
 
     @GetMapping("/countNewNotification")
     public Integer countNewNotification() {

@@ -34,7 +34,7 @@ export class PostPublishComponent implements OnInit {
         } else {
           alert('发布成功！')
           this.postToPublish.content = ''
-          this.postsComponent.refreshPosts()
+          location.reload()
         }
       })
   }
