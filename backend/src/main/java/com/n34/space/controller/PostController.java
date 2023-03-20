@@ -1,5 +1,6 @@
 package com.n34.space.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.n34.space.entity.*;
@@ -146,6 +147,8 @@ public class PostController {
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
             postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
+
+        postVos = filterByCircle(postVos, null);
 
         return postVos;
     }
@@ -304,7 +307,8 @@ public class PostController {
 
     @GetMapping("/hot")
     public List<PostVo> findHot(@RequestParam(required = false) String searchText,
-                                @RequestParam(required = false) String hashtag) {
+                                @RequestParam(required = false) String hashtag,
+                                @RequestParam(required = false) String circleId) {
         if (!StringUtils.hasText(searchText)) {
             searchText = null;
         }
@@ -323,6 +327,7 @@ public class PostController {
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
             postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
+        postVos = filterByCircle(postVos, circleId);
         return postVos;
     }
 
@@ -356,13 +361,14 @@ public class PostController {
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
             postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
-
+        postVos = filterByCircle(postVos, null);
         return postVos;
     }
 
     @GetMapping("/latest")
     public List<PostVo> getLatest(@RequestParam(required = false) String searchText,
-                                  @RequestParam(required = false) String hashtag) {
+                                  @RequestParam(required = false) String hashtag,
+                                  @RequestParam(required = false) String circleId) {
         LambdaQueryWrapper<Post> cond = new LambdaQueryWrapper<>();
         cond.orderByDesc(Post::getTimeUpdated);
         if (StringUtils.hasText(searchText)) {
@@ -402,6 +408,13 @@ public class PostController {
             postVo.setHtml(RegexUtils.parseHashtag(postVo.getContent()));
             postVo.setHtml(RegexUtils.parseMentionedUsername(postVo.getHtml()));
         }
+        postVos = filterByCircle(postVos, circleId);
         return postVos;
+    }
+
+    private List<PostVo> filterByCircle(List<PostVo> postVos, String circleId) {
+        return postVos.stream()
+                .filter(postVo -> StrUtil.equals(postVo.getCircleId(), circleId))
+                .collect(Collectors.toList());
     }
 }

@@ -21,4 +21,5 @@ public class Post {
     private Date timeCreated;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date timeUpdated;
+    private String circleId;
 }

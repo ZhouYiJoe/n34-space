@@ -23,4 +23,5 @@ public class PostVo {
     private Integer numComment;
     private Boolean likedByMe;
     private String html;
+    private String circleId;
 }

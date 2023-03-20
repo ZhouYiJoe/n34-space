@@ -3,7 +3,6 @@ package com.n34.space.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -11,17 +10,18 @@ import java.util.Date;
 
 @Data
 @Accessors(chain = true)
-public class Message {
+public class InvitationNotification {
+    public static final String WAITING = "waiting";
+    public static final String ACCEPTED = "accepted";
+    public static final String REJECTED = "rejected";
+
     @TableId
     private String id;
-    private String senderId;
-    private String receiverId;
-    private String content;
-    @TableField(fill = FieldFill.INSERT)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date timeCreated;
-    private String category;
-    @TableField("`read`")
+    private String inviterId;
+    private String inviteeId;
+    private String circleId;
+    private String state;
     private Boolean read;
-    private Boolean extreme;
+    @TableField(fill = FieldFill.INSERT)
+    private Date timeCreated;
 }

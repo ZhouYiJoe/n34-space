@@ -5,8 +5,9 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class PostDto {
+public class CircleDto {
     private String id;
-    private String content;
-    private String circleId;
+    private String creatorId;
+    private String name;
+    private String introduction;
 }
