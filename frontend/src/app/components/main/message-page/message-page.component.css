@@ -29,11 +29,19 @@
   float: left;
 }
 
-.message-user-list-item-right {
+.message-user-list-item-middle {
   margin-top: 10px;
   margin-bottom: 10px;
   float: left;
   margin-left: 10px;
+  width: 153px;
+}
+
+.message-user-list-item-right {
+  float: left;
+  line-height: 50px;
+  margin: 10px 5px 10px 10px;
+  color: red;
 }
 
 .message-user-list-item-avatar {

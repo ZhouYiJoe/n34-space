@@ -7,9 +7,12 @@
       <div class="message-user-list-item-left">
         <img class="message-user-list-item-avatar" [src]="messageUserListItem.avatarFilename === null ? 'assets/default_avatar.webp' : 'http://localhost:9090/images/' + messageUserListItem.avatarFilename" alt="">
       </div>
-      <div class="message-user-list-item-right">
+      <div class="message-user-list-item-middle">
         <div class="message-user-list-item-nickname">{{messageUserListItem.nickname}}</div>
         <div class="message-user-list-item-latest-message-content">{{messageUserListItem.latestMessageContent}}</div>
+      </div>
+      <div class="message-user-list-item-right" [ngStyle]="{'visibility': messageUserListItem.numNewMessage > 0 ? 'visible' : 'hidden'}">
+        {{messageUserListItem.numNewMessage}}
       </div>
       <div style="clear: both"></div>
     </div>

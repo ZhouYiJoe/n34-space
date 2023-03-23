@@ -1,13 +1,22 @@
 <div id="container">
   <div id="navi-bar">
-    <div id="navi-comment" class="navi-option" (click)="replyNaviSelected()"
-         [ngStyle]="{'border-bottom-color': selectedIndex == 1 ? 'orange' : '#e5e5e5'}">回复
+    <div id="navi-comment"
+         class="navi-option"
+         (click)="replyNaviSelected()"
+         [ngStyle]="{'border-bottom-color': selectedIndex == 1 ? 'orange' : '#e5e5e5'}">
+      回复<span *ngIf="numReplyNotification > 0" style="color: red;font-size: 14px;">{{numReplyNotification}}</span>
     </div>
-    <div id="navi-mention" class="navi-option" (click)="mentionNaviSelected()"
-         [ngStyle]="{'border-bottom-color': selectedIndex == 2 ? 'orange' : '#e5e5e5'}">提及
+    <div id="navi-mention"
+         class="navi-option"
+         (click)="mentionNaviSelected()"
+         [ngStyle]="{'border-bottom-color': selectedIndex == 2 ? 'orange' : '#e5e5e5'}">
+      提及<span *ngIf="numMentionNotification > 0" style="color: red;font-size: 14px;">{{numMentionNotification}}</span>
     </div>
-    <div id="navi-invitation" class="navi-option" (click)="invitationNaviSelected()"
-         [ngStyle]="{'border-bottom-color': selectedIndex == 3 ? 'orange' : '#e5e5e5'}">邀请
+    <div id="navi-invitation"
+         class="navi-option"
+         (click)="invitationNaviSelected()"
+         [ngStyle]="{'border-bottom-color': selectedIndex == 3 ? 'orange' : '#e5e5e5'}">
+      邀请<span *ngIf="numInvitationNotification > 0" style="color: red;font-size: 14px;">{{numInvitationNotification}}</span>
     </div>
   </div>
   <div class="notifications" *ngIf="selectedIndex == 1">

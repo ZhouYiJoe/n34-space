@@ -16,6 +16,9 @@ export class NotificationPageComponent implements OnInit {
   public mentionNotifications: any[] = []
   public replyNotifications: any[] = []
   public invitationNotifications: any[] = []
+  public numMentionNotification: number = 0
+  public numReplyNotification: number = 0
+  public numInvitationNotification: number = 0
   public myId: string = ''
 
   constructor(public httpClient: HttpClient,
@@ -29,6 +32,21 @@ export class NotificationPageComponent implements OnInit {
       .pipe(catchError(this.errorHandleService.handleError))
       .subscribe((user: any) => {
         this.myId = user.id
+      })
+    this.httpClient.get(`${baseUrl}/mention_notification/countNewNotification`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((numMentionNotification: any) => {
+        this.numMentionNotification = numMentionNotification
+      })
+    this.httpClient.get(`${baseUrl}/reply_notification/countNewNotification`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((numReplyNotification: any) => {
+        this.numReplyNotification = numReplyNotification
+      })
+    this.httpClient.get(`${baseUrl}/invitation_notification/countNewNotification`)
+      .pipe(catchError(this.errorHandleService.handleError))
+      .subscribe((numInvitationNotification: any) => {
+        this.numInvitationNotification = numInvitationNotification
       })
   }
 
