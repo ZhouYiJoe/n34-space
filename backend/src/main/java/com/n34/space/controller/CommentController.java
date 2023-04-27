@@ -187,9 +187,16 @@ public class CommentController {
         }
 
         replyNotificationService.lambdaUpdate()
-                .eq(ReplyNotification::getRepliedTextId, comment.getPostId())
-                .eq(ReplyNotification::getReplyTextId, comment.getId())
+                .eq(ReplyNotification::getReplyTextId, id)
                 .eq(ReplyNotification::getType, ReplyNotification.COMMENT_TYPE)
+                .remove();
+        replyNotificationService.lambdaUpdate()
+                .eq(ReplyNotification::getRepliedTextId, id)
+                .eq(ReplyNotification::getType, ReplyNotification.REPLY_TYPE)
+                .remove();
+        mentionNotificationService.lambdaUpdate()
+                .eq(MentionNotification::getTextId, id)
+                .eq(MentionNotification::getType, MentionNotification.COMMENT_TYPE)
                 .remove();
 
         return true;

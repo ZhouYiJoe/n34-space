@@ -34,6 +34,7 @@ public class PostController {
     private final HashtagService hashtagService;
     private final HashtagPostRelaService hashtagPostRelaService;
     private final MentionNotificationService mentionNotificationService;
+    private final ReplyNotificationService replyNotificationService;
 
     @GetMapping("/{id}")
     public PostVo getById(@PathVariable String id) {
@@ -300,6 +301,15 @@ public class PostController {
             cond1.eq(MentionNotification::getType, MentionNotification.POST_TYPE);
             mentionNotificationService.remove(cond1);
         }
+
+        replyNotificationService.lambdaUpdate()
+                .eq(ReplyNotification::getRepliedTextId, id)
+                .eq(ReplyNotification::getType, ReplyNotification.COMMENT_TYPE)
+                .remove();
+        mentionNotificationService.lambdaUpdate()
+                .eq(MentionNotification::getTextId, id)
+                .eq(MentionNotification::getType, MentionNotification.POST_TYPE)
+                .remove();
 
         return true;
     }

@@ -175,9 +175,12 @@ public class CommentReplyController {
         }
 
         replyNotificationService.lambdaUpdate()
-                .eq(ReplyNotification::getRepliedTextId, commentReply.getCommentId())
                 .eq(ReplyNotification::getReplyTextId, commentReply.getId())
                 .eq(ReplyNotification::getType, ReplyNotification.REPLY_TYPE)
+                .remove();
+        mentionNotificationService.lambdaUpdate()
+                .eq(MentionNotification::getTextId, id)
+                .eq(MentionNotification::getType, MentionNotification.REPLY_TYPE)
                 .remove();
 
         return true;
